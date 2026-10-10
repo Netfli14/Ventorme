@@ -1,0 +1,467 @@
+{
+  "meta": {
+    "name": "Ventorme next step · light",
+    "description": "Palette measured from the supplied reference; typography, layout and motion chosen from the user brief. Static palette does not establish observed animation.",
+    "source_references": [
+      "image(1).png",
+      "Authorized Ventorme implementation brief"
+    ],
+    "created_at": "2026-10-10"
+  },
+  "design_system": {
+    "color": {
+      "palette_type": "complementary blue and warm yellow",
+      "primary": {
+        "hex": "#3d5da1",
+        "role": "direction, selected example tab"
+      },
+      "secondary": {
+        "hex": "#f5c774",
+        "role": "primary action and step markers"
+      },
+      "accent": {
+        "hex": "#3d5da1",
+        "role": "measured accent; implementation uses pale blue for dark text links"
+      },
+      "neutral": {
+        "scale": [
+          "#ffffff",
+          "#ecf0f5",
+          "#b5bbc4",
+          "#535f76",
+          "#232540"
+        ],
+        "usage": "Foreground #232540; backgrounds #ecf0f5; adjusted muted and control values are documented in MASTER.md."
+      },
+      "semantic": {
+        "success": "#3d5da1",
+        "warning": "#f5c774",
+        "error": "#3d5da1",
+        "info": "#3d5da1"
+      },
+      "surface": {
+        "background": "#ecf0f5",
+        "card": "#ffffff",
+        "elevated": "#ffffff"
+      },
+      "contrast_strategy": "Measured foreground and background retained; body text >=4.5:1 and controls >=3:1; decorative dividers exempt.",
+      "measurement": {
+        "k": 8,
+        "sampling": {
+          "method": "deterministic_stratified",
+          "max_pixels": 160000,
+          "sampled_pixels": 160000
+        }
+      },
+      "measured_palette": [
+        {
+          "hex": "#ecf0f5",
+          "coverage": 0.9178,
+          "role": "background"
+        },
+        {
+          "hex": "#3d5da1",
+          "coverage": 0.0227,
+          "role": "accent"
+        },
+        {
+          "hex": "#b5bbc4",
+          "coverage": 0.0213,
+          "role": "unassigned"
+        },
+        {
+          "hex": "#f5c774",
+          "coverage": 0.0156,
+          "role": "unassigned"
+        },
+        {
+          "hex": "#6f9dc2",
+          "coverage": 0.0137,
+          "role": "unassigned"
+        },
+        {
+          "hex": "#232540",
+          "coverage": 0.0073,
+          "role": "text"
+        },
+        {
+          "hex": "#9c694e",
+          "coverage": 0.0016,
+          "role": "unassigned"
+        },
+        {
+          "hex": "#0acf83",
+          "coverage": 0,
+          "role": "unassigned"
+        }
+      ]
+    },
+    "typography": {
+      "type_scale": {
+        "display": {
+          "size": "58px desktop / 32–38px mobile",
+          "weight": 650,
+          "line_height": 1.13,
+          "tracking": "-0.045em"
+        },
+        "heading_1": {
+          "size": "34–48px",
+          "weight": 650,
+          "line_height": 1.2,
+          "tracking": "-0.04em"
+        },
+        "heading_2": {
+          "size": "28–38px",
+          "weight": 650,
+          "line_height": 1.2,
+          "tracking": "-0.03em"
+        },
+        "heading_3": {
+          "size": "19–20px",
+          "weight": 650,
+          "line_height": 1.2,
+          "tracking": "normal"
+        },
+        "body": {
+          "size": "16px",
+          "weight": 400,
+          "line_height": 1.6,
+          "tracking": "normal"
+        },
+        "body_small": {
+          "size": "14–15px; 16px mobile content",
+          "weight": 400,
+          "line_height": 1.6,
+          "tracking": "normal"
+        },
+        "caption": {
+          "size": "12–14px",
+          "weight": 500,
+          "line_height": 1.5,
+          "tracking": "normal"
+        },
+        "overline": {
+          "size": "13px",
+          "weight": 600,
+          "line_height": 1.5,
+          "tracking": "normal"
+        }
+      },
+      "font_families": {
+        "heading": "Ventorme Sans (local Noto Sans; CJK glyph subset)",
+        "body": "Ventorme Sans (local Noto Sans; CJK glyph subset)",
+        "mono": "system monospace; not used in product UI"
+      },
+      "font_style_notes": "Humanist sans; alphabet support checked from font cmap, browser shaping not visually verified."
+    },
+    "spacing": {
+      "base_unit": "4px",
+      "scale": [
+        4,
+        8,
+        12,
+        16,
+        20,
+        24,
+        32,
+        40,
+        48,
+        64,
+        96
+      ],
+      "content_density": "comfortable",
+      "section_rhythm": "64–96px desktop, 32–48px mobile"
+    },
+    "layout": {
+      "grid_system": "CSS grid; asymmetrical hero, single-column mobile",
+      "max_content_width": "1180px",
+      "columns": "Hero 1.2:1 desktop, one mobile; feature list two desktop, one mobile",
+      "gutter": "40px desktop outer; 18px mobile outer; 16–64px inner",
+      "breakpoints": [
+        "600px",
+        "900px",
+        "1200px"
+      ],
+      "alignment_tendency": "left aligned; strict shared container"
+    },
+    "shape": {
+      "border_radius": {
+        "small": "10px",
+        "medium": "16px",
+        "large": "24px",
+        "pill": "50% for numbered markers only"
+      },
+      "border_usage": "subtle 1px divider; stronger 1px accessible controls",
+      "divider_style": "solid muted divider"
+    },
+    "elevation": {
+      "shadow_style": "soft diffused",
+      "levels": {
+        "low": "surface color separation",
+        "medium": "0 14px 36px rgba(35,37,64,.07)",
+        "high": "0 22px 60px rgba(35,37,64,.14)"
+      },
+      "depth_cues": "surface contrast and subtle card/menu shadows"
+    },
+    "iconography": {
+      "style": "outline",
+      "stroke_weight": "2px Lucide default",
+      "size_scale": [
+        16,
+        18,
+        20,
+        24,
+        26,
+        44
+      ],
+      "preferred_set": "Lucide"
+    },
+    "motion": {
+      "easing": "cubic-bezier(.2,0,0,1); GSAP power2.out for hero",
+      "duration_scale": {
+        "micro": "150ms",
+        "normal": "240ms",
+        "macro": "400ms"
+      },
+      "entrance_pattern": "small transform and fade, 80ms stagger",
+      "exit_pattern": "short opacity fade",
+      "philosophy": "purposeful, brief; reduced-motion disables translation and decoration"
+    },
+    "components": {
+      "button_style": "warm primary, outlined direct registration; explicit disabled state before team setup",
+      "input_style": "native radio and checkbox inside large labelled choices",
+      "card_style": "thin borders, 16px or 24px corners",
+      "navigation_pattern": "sticky header; local language select; mobile focus-managed menu; one action panel per route",
+      "modal_style": "mobile menu only; Escape and outside click; no forced gate",
+      "list_style": "three numbered next actions and compact feature rows",
+      "component_notes": "Examples and equal situation cards are explicitly required by the brief; no invented testimonials or numeric claims."
+    }
+  },
+  "design_style": {
+    "aesthetic": {
+      "mood": [
+        "calm",
+        "clear",
+        "encouraging"
+      ],
+      "visual_metaphor": "compass and next-step route",
+      "era_influence": "contemporary educational product",
+      "genre": "education guidance landing",
+      "personality_traits": [
+        "approachable",
+        "precise",
+        "patient"
+      ],
+      "adjectives": [
+        "spacious",
+        "quiet",
+        "readable"
+      ]
+    },
+    "visual_language": {
+      "complexity": "moderate",
+      "ornamentation": "small compass accent only",
+      "whitespace_usage": "clear section separation and short readable lines",
+      "visual_weight_distribution": "headline and primary action; example secondary",
+      "focal_strategy": "clear hero task, then ordered explanation",
+      "contrast_level": "high text contrast with quiet surfaces",
+      "texture_usage": "none"
+    },
+    "composition": {
+      "hierarchy_method": "type scale, spacing and color roles",
+      "balance_type": "asymmetric desktop, stacked mobile",
+      "flow_direction": "top to bottom",
+      "grouping_strategy": "one context question per screen; related actions grouped",
+      "negative_space_role": "reduce competing decisions"
+    },
+    "imagery": {
+      "photo_treatment": "no photography required",
+      "illustration_style": "thin line compass",
+      "graphic_elements": [
+        "compass",
+        "three ordered action markers"
+      ],
+      "pattern_usage": "none",
+      "image_shape": "1200×630 share graphic"
+    },
+    "interaction_feel": {
+      "feedback_style": "visible selection indicator and gentle inline status",
+      "hover_behavior": "3px card lift on fine pointer only",
+      "transition_personality": "short smooth fade",
+      "loading_style": "brief hydration status only; no artificial analysis delay",
+      "microinteraction_density": "low"
+    },
+    "brand_voice_in_ui": {
+      "tone": "supportive and factual",
+      "formality": "friendly student-facing language",
+      "cta_style": "direct task invitation",
+      "empty_state_approach": "explain and invite six-question quiz",
+      "error_tone": "calm, actionable, no alarming screen"
+    }
+  },
+  "visual_effects": {
+    "overview": {
+      "effect_intensity": "subtle-accent",
+      "performance_tier": "medium SVG on desktop, lightweight mobile",
+      "fallback_strategy": "static Lucide compass; content always available",
+      "primary_technology": "GSAP + Motion; lazy Three.js SVGRenderer"
+    },
+    "background_effects": {
+      "enabled": false,
+      "type": "none",
+      "description": "flat measured background",
+      "technology": "CSS",
+      "params": {
+        "color_palette": [
+          "#ecf0f5"
+        ],
+        "speed": 0,
+        "density": 0,
+        "opacity": 1,
+        "blend_mode": "normal"
+      }
+    },
+    "particle_systems": {
+      "enabled": false,
+      "type": "none",
+      "description": "no particles",
+      "technology": "none",
+      "params": {
+        "count": 0,
+        "shape": "none",
+        "size_range": [
+          0,
+          0
+        ],
+        "movement_pattern": "none",
+        "color_behavior": "none",
+        "interaction": "none",
+        "spawn_area": "none"
+      }
+    },
+    "3d_elements": {
+      "enabled": true,
+      "type": "abstract compass geometry",
+      "description": "one pointer-reactive small compass; chosen for the route metaphor, not observed in palette reference",
+      "technology": "Three.js + GSAP",
+      "params": {
+        "renderer": "SVGRenderer, no WebGL context",
+        "lighting": "unlit line materials",
+        "camera": "PerspectiveCamera 40°, z=7",
+        "materials": "LineBasicMaterial with token colors",
+        "geometry": "three rings and a direction needle",
+        "post_processing": [],
+        "interaction_model": "small rotation on desktop pointer; no perpetual loop"
+      }
+    },
+    "shader_effects": {
+      "enabled": false,
+      "type": "none",
+      "description": "no shaders",
+      "technology": "none",
+      "params": {
+        "uniforms": {},
+        "vertex_manipulation": "none",
+        "fragment_output": "none",
+        "noise_type": "none",
+        "distortion": "none"
+      }
+    },
+    "scroll_effects": {
+      "parallax": {
+        "enabled": false,
+        "layers": 0,
+        "depth_range": [
+          0,
+          0
+        ],
+        "speed_curve": "none"
+      },
+      "scroll_triggered_animations": {
+        "enabled": true,
+        "trigger_points": "12% intersection, once per section",
+        "animation_type": "fade and 10px translateY",
+        "scrub_behavior": "none"
+      },
+      "scroll_morphing": {
+        "enabled": false,
+        "description": "no scroll morphing"
+      }
+    },
+    "text_effects": {
+      "enabled": false,
+      "type": "none",
+      "description": "regular readable text",
+      "technology": "CSS",
+      "params": {
+        "split_strategy": "none",
+        "animation_per_unit": "none",
+        "stagger": 0,
+        "effect_style": "none"
+      }
+    },
+    "cursor_effects": {
+      "enabled": false,
+      "type": "none",
+      "description": "native cursor; no trails or magnetic buttons",
+      "params": {
+        "shape": "native",
+        "size": "native",
+        "blend_mode": "normal",
+        "trail": "none",
+        "interaction_zone": "none"
+      }
+    },
+    "image_effects": {
+      "enabled": false,
+      "type": "none",
+      "description": "share images are static",
+      "technology": "PNG",
+      "params": {
+        "filter_pipeline": [],
+        "hover_transform": "none",
+        "reveal_animation": "none",
+        "distortion_type": "none"
+      }
+    },
+    "glassmorphism_neumorphism": {
+      "enabled": false,
+      "style": "none",
+      "params": {
+        "blur_radius": 0,
+        "transparency": 0,
+        "border_treatment": "solid",
+        "shadow_type": "soft standard shadow",
+        "light_source_angle": "not applicable"
+      }
+    },
+    "canvas_drawings": {
+      "enabled": false,
+      "type": "none",
+      "description": "no canvas renderer",
+      "technology": "none",
+      "params": {
+        "draw_method": "none",
+        "animation_loop": "none",
+        "color_scheme": [
+          "#3d5da1",
+          "#f5c774"
+        ],
+        "responsiveness": "none",
+        "interaction": "none"
+      }
+    },
+    "svg_animations": {
+      "enabled": true,
+      "type": "pointer-reactive compass",
+      "description": "SVG output re-rendered only on resize or pointer tween",
+      "params": {
+        "animation_method": "GSAP transform of Three.js group and SVGRenderer render",
+        "path_morphing": "none",
+        "stroke_animation": "none",
+        "filter_effects": "none"
+      }
+    },
+    "composite_notes": "Palette measurements are exact. Layout, type and motion are implementation decisions from the brief. Reduced-motion and mobile use static icons. Browser screenshots and per-color coverage verification have not been performed."
+  }
+}

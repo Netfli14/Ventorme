@@ -1,0 +1,339 @@
+{
+  "meta": {
+    "title": "Ventorme · Universitetga yo‘l aniq rejadan boshlanadi",
+    "description": "10–12-sinf o‘quvchilari uchun. Vaziyating haqida olti savolga javob ber va universitetga kirish uchun uchta keyingi qadamni bil."
+  },
+  "nav": {
+    "how": "Qanday ishlaydi",
+    "features": "Imkoniyatlar",
+    "faq": "Savollar"
+  },
+  "common": {
+    "quiz": "Yo‘limni tuzish",
+    "register": "Ventorme’da ro‘yxatdan o‘tish",
+    "example": "Misolni ko‘rish",
+    "share": "Ulashish",
+    "copied": "Havola nusxalandi",
+    "shareError": "Ulashib bo‘lmadi. Sahifa manzilini brauzerdan nusxala.",
+    "next": "Keyingi",
+    "back": "Orqaga",
+    "result": "Yo‘limni ko‘rsatish",
+    "edit": "Javoblarni o‘zgartirish",
+    "restart": "Qaytadan boshlash",
+    "home": "Bosh sahifaga",
+    "exit": "So‘rovnomadan chiqish",
+    "menu": "Menyuni ochish",
+    "closeMenu": "Menyuni yopish",
+    "chooseLanguage": "Tilni tanlash",
+    "lightTheme": "Yorug‘ mavzuni yoqish",
+    "darkTheme": "Qorong‘i mavzuni yoqish",
+    "pauseAnimation": "Fon animatsiyasini to‘xtatish",
+    "resumeAnimation": "Fon animatsiyasini davom ettirish",
+    "resultEmpty": "Vaziyatingdan boshlaymiz",
+    "resultEmptyBody": "Dastlabki yo‘lingni ko‘rish uchun olti savolga javob ber.",
+    "loading": "Yo‘ling ochilmoqda…",
+    "previewLabel": "Ko‘rib chiqish versiyasi",
+    "registerUnavailable": "Ro‘yxatdan o‘tish hozircha mavjud emas. Jamoa havolasi hali sozlanmagan.",
+    "questionProgress": "{total} savoldan {current}-savol",
+    "selectedCount": "Tanlandi: {count} / {max}",
+    "maxChoices": "{max} tagacha variant tanlash mumkin. Yangi variant uchun bittasini olib tashla.",
+    "singleChoice": "Bitta variantni tanla",
+    "multiChoice": "{max} tagacha variantni tanla",
+    "resume": "Javoblaring shu oynada saqlangan. Davom et yoki qaytadan boshla.",
+    "privacy": "Maxfiylik",
+    "terms": "Foydalanish shartlari",
+    "platform": "Ventorme’ni ochish",
+    "footerNote": "Maktab o‘quvchilari uchun universitetga kirishning dastlabki yo‘li. Hacknext jamoasining sahifasi.",
+    "gradeLabel": "{grade}-sinf",
+    "optional": "Ixtiyoriy",
+    "ibPrompt": "DP fanlari tanlanganmi?",
+    "explain": "Nega shu yo‘l",
+    "checked": "Tanlangan",
+    "resetNotice": "Javoblar o‘chirildi. Qaytadan boshlash mumkin.",
+    "skip": "Mazmunga o‘tish"
+  },
+  "landing": {
+    "eyebrow": "10–12-sinf o‘quvchilari uchun",
+    "titleStart": "Universitetga yo‘l",
+    "titleEnd": "aniq rejadan boshlanadi.",
+    "lead": "Kasb, universitet, fanlar va imtihonlar: hozir nima muhimligini aniqlab ol. 6 savolga javob ber va keyingi qadamingni bil.",
+    "note": "6 savol. Bu sahifada akkaunt kerak emas.",
+    "exampleLabel": "Yo‘l misoli",
+    "previewHeading": "Keyingi qadam uchun uchta harakat",
+    "tabs": [
+      "Kasb tanlayapman",
+      "Universitet tanlayapman",
+      "Fanlarni aniqlayapman"
+    ],
+    "scenarios": [
+      "10-sinf · qiziqishlarni o‘rganyapman",
+      "11-sinf · yo‘nalish taxminan tanlangan",
+      "10-sinf · IB DP rejalashtiryapman"
+    ],
+    "situationTitle": "Nimadan boshlaymiz?",
+    "situationIntro": "Hammasini birdan hal qilish shart emas. Hozir seni o‘ylantirayotgan savolni tanla.",
+    "situations": [
+      {
+        "title": "Qiziqishlar ko‘p. Yo‘nalishni qanday tanlayman?",
+        "text": "Nima qilishni yoqtirishingni o‘rgan. Tajriba bilan tanlovni aniqlashtirish mumkin."
+      },
+      {
+        "title": "Universitetlar ko‘p. Qanday solishtiraman?",
+        "text": "O‘zing uchun muhim mezonlarni belgilab ol: dastur, joy va to‘liq xarajat."
+      },
+      {
+        "title": "Talablar turlicha. Qaysi fanlarni tekshirish kerak?",
+        "text": "Maktab fanlari va imtihonlarni aniq universitet dasturlari bilan solishtir."
+      }
+    ],
+    "howTitle": "Savoldan keyingi qadamga",
+    "howSteps": [
+      {
+        "title": "Vaziyatingni aytib ber",
+        "text": "Sinf, dastur, qiziqishlar va hozirgi qiyinchiliklar haqida olti savol."
+      },
+      {
+        "title": "Keyingi harakatlarni ko‘r",
+        "text": "Javoblaring asosida dastlabki yo‘l va uchta bajariladigan qadam."
+      },
+      {
+        "title": "Ventorme’da davom et",
+        "text": "Platformaga o‘t, ro‘yxatdan o‘t va boshlang‘ich tanishuvni yakunla."
+      }
+    ],
+    "howBoundary": "Bu sahifada dastlabki yo‘l beriladi. Akkaunt va platforma funksiyalari Ventorme’ning o‘zida mavjud.",
+    "featuresTitle": "Turli bosqichlarda yordam",
+    "featuresIntro": "Ventorme’ning qaysi imkoniyatlari vazifangga mosligini ko‘r.",
+    "featuresNote": "Funksiyalar mavjudligi va shartlarini platformada tekshir.",
+    "faqTitle": "Berish mumkin bo‘lgan savollar",
+    "finalTitle": "Hammasini birdan hal qilish shart emas.",
+    "finalAccent": "Keyingi qadamdan boshla.",
+    "finalText": "Yo‘lingni qayta ko‘rib chiqishing mumkin. Hozir nima qilishni bilish muhim.",
+    "compassLabel": "Harakat yo‘nalishini tanla",
+    "compassHint": "Har bir yo‘lning o‘z boshlanish nuqtasi bor"
+  },
+  "questions": {
+    "grade": {
+      "title": "Nechanchi sinfda o‘qiysan?",
+      "help": "Bu keyingi harakatlarni tanlashga yordam beradi."
+    },
+    "program": {
+      "title": "Qaysi dasturda o‘qiysan yoki o‘qishni rejalashtiryapsan?",
+      "help": "Qabul talablari universitetning aniq dasturiga bog‘liq."
+    },
+    "stage": {
+      "title": "Hozir qaysi bosqichdasan?",
+      "help": "Vaziyatingni eng yaxshi tasvirlaydigan variantni tanla."
+    },
+    "regions": {
+      "title": "Qayerda o‘qishni ko‘rib chiqyapsan?",
+      "help": "Bu izlash uchun yo‘nalish, qabul talablari ro‘yxati emas."
+    },
+    "interests": {
+      "title": "Qaysi yo‘nalishlar seni qiziqtiradi?",
+      "help": "Qiziqishlar o‘zgarishi mumkin. To‘g‘ri javob yo‘q."
+    },
+    "challenges": {
+      "title": "Hozir eng qiyin narsa nima?",
+      "help": "Birinchi tanloving asosiy vazifa bo‘ladi. Ikkinchisini ham hisobga olamiz."
+    }
+  },
+  "choices": {
+    "grade": {
+      "10": "10-sinf",
+      "11": "11-sinf",
+      "12": "12-sinf"
+    },
+    "program": {
+      "kz": "Qozog‘iston maktab dasturi / UNT",
+      "ib": "IB / IB DP rejalashtiryapman",
+      "alevel": "A-level",
+      "other": "Boshqa dastur",
+      "unknown": "Hali bilmayman"
+    },
+    "ibStatus": {
+      "choosing": "Tanlayapman",
+      "chosen": "Tanlangan",
+      "unknown": "Hali bilmayman"
+    },
+    "stage": {
+      "direction": "Kasb yoki yo‘nalish tanlayapman",
+      "universities": "Yo‘nalish taxminan tanlangan, universitet izlayapman",
+      "requirements": "Universitetlar bor, talablarni o‘rganyapman",
+      "documents": "Imtihonlar va hujjatlarni tayyorlayapman",
+      "unknown": "Hozircha aniqlash qiyin"
+    },
+    "regions": {
+      "kz": "Qozog‘iston",
+      "europe": "Kontinental Yevropa",
+      "uk": "Buyuk Britaniya",
+      "northAmerica": "AQSh va Kanada",
+      "asia": "Osiyo",
+      "turkey": "Turkiya",
+      "unknown": "Hali qaror qilmadim"
+    },
+    "interests": {
+      "engineering": "Muhandislik",
+      "science": "Tabiiy fanlar",
+      "health": "Tibbiyot va salomatlik",
+      "it": "IT",
+      "business": "Biznes va iqtisodiyot",
+      "humanities": "Ijtimoiy va gumanitar fanlar",
+      "art": "San’at va dizayn",
+      "unknown": "Hali tanlayapman"
+    },
+    "challenges": {
+      "direction": "Yo‘nalish tanlash",
+      "universities": "Universitetlarni solishtirish",
+      "subjects": "Maktab fanlari talablarini tushunish",
+      "funding": "Xarajat va moliyalashtirishni tushunish",
+      "exams": "Imtihonlarni rejalashtirish",
+      "documents": "Hujjatlar va muddatlarni aniqlash",
+      "start": "Nimadan boshlashni bilish"
+    }
+  },
+  "features": {
+    "orientation": {
+      "title": "Kasb yo‘nalishini aniqlash",
+      "text": "Qiziqishlaringni o‘rgan va mumkin bo‘lgan yo‘nalishlar haqida bil."
+    },
+    "universities": {
+      "title": "Universitet tanlash",
+      "text": "Solishtirish va batafsil o‘rganishga arziydigan dasturlarni top."
+    },
+    "exams": {
+      "title": "IELTS va SAT",
+      "text": "Bu imtihonlar kerak bo‘lsa, tayyorgarlik imkoniyatlarini o‘rgan."
+    },
+    "grants": {
+      "title": "UNT bo‘yicha grantlar",
+      "text": "Shu yo‘lni ko‘rib chiqsang, UNT grant kalkulyatorini o‘rgan."
+    },
+    "essays": {
+      "title": "Essega yordam",
+      "text": "Tajribang va motivatsiyang haqida qanday aytishni mashq qil."
+    },
+    "venti": {
+      "title": "Venti sun’iy intellekt yordamchisi",
+      "text": "Yo‘nalish tanlash va keyingi qadamlar haqidagi savollarni muhokama qil."
+    }
+  },
+  "faq": [
+    {
+      "q": "Kelajakdagi kasbimni hozir bilishim kerakmi?",
+      "a": "Yo‘q. Qiziqishlardan boshlab, bir nechta yo‘nalishni solishtirish mumkin. Kasb tanlovi butun hayotingni belgilamaydi: tajriba bilan uni aniqlashtirasan."
+    },
+    {
+      "q": "Bu so‘rovnoma kasb testidan nimasi bilan farq qiladi?",
+      "a": "U vaziyating va yaqin vazifalaringni aniqlaydi. Bu psixologik tashxis yoki qobiliyat bahosi emas. Kasb testini Ventorme’da alohida o‘rganish mumkin."
+    },
+    {
+      "q": "Olti savoldan keyin nimani ko‘raman?",
+      "a": "Asosiy vazifa, qisqa tushuntirish va uchta keyingi harakat. Natija ro‘yxatdan o‘tishdan oldin ko‘rinadi. Ism, elektron pochta yoki telefon so‘ramaymiz."
+    },
+    {
+      "q": "Ventorme’ga o‘tgach nima bo‘ladi?",
+      "a": "Ventorme’ning haqiqiy ro‘yxatdan o‘tish sahifasi ochiladi. Akkaunt yarat va platformadagi boshlang‘ich tanishuvni yakunla. Javoblaring avtomatik yuborilmaydi. Funksiya shartlarini platformada tekshir."
+    },
+    {
+      "q": "Fanlar va imtihon talablarini qanday tekshiraman?",
+      "a": "Aniq dasturning rasmiy sahifasidan qabul yiling uchun talablarni tekshir. IB uchun fanlar, HL/SL darajalari va ballarni solishtir. Barcha universitetlar uchun yagona qoida yo‘q."
+    }
+  ],
+  "result": {
+    "title": "Sening keyingi qadaming",
+    "subtitle": "Javoblaring asosida dastlabki yo‘l",
+    "stepsTitle": "Uchta keyingi harakat",
+    "more": "Yana bir ustuvor vazifa",
+    "featuresTitle": "Ventorme’da nimalarni o‘rganish mumkin",
+    "handoff": "Havoladan o‘tgach, Ventorme’da akkaunt yarat va boshlang‘ich tanishuvni yakunla. Bu javoblar shu oynada qoladi.",
+    "disclaimer": "Bu dastlabki reja, universitet talablariga moslik tasdig‘i emas.",
+    "regionContext": "Dasturlar izlash uchun ko‘rib chiqyapsan: {regions}.",
+    "unknownRegion": "Avval bir nechta o‘qish joyining sharoitini solishtir, keyin izlashni toraytir.",
+    "interestContext": "Qiziqishlaringni boshlanish nuqtasi qil: {interests}.",
+    "unknownInterests": "Sinab ko‘rishni yoqtiradigan mashg‘ulotlardan boshlash mumkin.",
+    "years": {
+      "10": "10-sinfda yo‘nalishlarni o‘rganish va maktab fanlarini tanlashdan boshla.",
+      "11": "11-sinfda dasturlar variantlarini to‘pla va talablarni aniqlashtir.",
+      "12": "12-sinfda avval dasturlarning rasmiy sahifalaridagi yaqin muddatlarni tekshir."
+    },
+    "focus": {
+      "direction": {
+        "title": "Qiziqishlardan yo‘nalishlarga",
+        "why": "Yo‘nalishni aniqlamoqchisan. Aniq mashg‘ulotlar va o‘z mezonlaringdan boshlaymiz.",
+        "steps": [
+          "Chuqurroq o‘rganishni istagan 2–3 mashg‘ulot yoki mavzuni yoz.",
+          "Bir nechta kasb va o‘quv dasturi mazmunini ko‘r.",
+          "Yo‘nalishlarni o‘z mezonlaring bilan solishtir va keyingi o‘rganish uchun bittasini tanla."
+        ],
+        "extra": "Yo‘nalishlarni solishtirish mezonlarini yoz."
+      },
+      "universities": {
+        "title": "Universitetlarning qisqa ro‘yxati",
+        "why": "Ro‘yxatni toraytirib, dasturlarni bir xil mezonlar bilan solishtirish foydali.",
+        "steps": [
+          "Yo‘nalishing bo‘yicha 3–5 aniq o‘quv dasturini top.",
+          "Mazmun, ta’lim tili, joy va to‘liq xarajatni solishtir.",
+          "Har bir dasturning qabul yiling uchun rasmiy talablarini och."
+        ],
+        "extra": "Dasturlar ro‘yxatiga solishtirish mezonlarini qo‘sh."
+      },
+      "subjects": {
+        "title": "Aniq dasturlar uchun fanlar",
+        "why": "Talablar turlicha. Avval aniq dasturlarni, keyin maktab fanlarini tekshiramiz.",
+        "steps": [
+          "O‘rganish uchun bir nechta aniq dastur tanla.",
+          "Rasmiy sahifalarda fanlar va imtihon talablarini tekshir.",
+          "Talablarni o‘quv dasturing bilan solishtir va farqlarni maslahatchi bilan muhokama qil."
+        ],
+        "extra": "Rasmiy dastur sahifalarida maktab fanlarini tekshir."
+      },
+      "funding": {
+        "title": "Xarajatlarning aniq ko‘rinishi",
+        "why": "Narxni tushunish muhim. To‘liq xarajat va moliyalashtirish shartlarini solishtiramiz.",
+        "steps": [
+          "Bir nechta dastur uchun o‘qish, yashash va majburiy xarajatlarni yoz.",
+          "Stipendiya va grantlarning rasmiy sahifalari hamda shartlarini tekshir.",
+          "Har bir moliyalashtirish yo‘li uchun muddat, hujjat va yetishmayotgan ma’lumotni belgilab qo‘y."
+        ],
+        "extra": "Solishtirishga to‘liq xarajat va moliyalashtirish shartlarini qo‘sh."
+      },
+      "exams": {
+        "title": "Imtihonlarning tushunarli tartibi",
+        "why": "Imtihonlarni rejalashtirmoqchisan. Avval qaysi biri kerakligini aniqlaymiz.",
+        "steps": [
+          "Tanlangan dastur sahifalarida kerakli imtihon va ballarni tekshir.",
+          "Natija chiqish sanalarini ariza muddatlari bilan solishtir.",
+          "Boshlang‘ich darajangni bahola va bajariladigan tayyorgarlik rejasini tuz."
+        ],
+        "extra": "Tayyorgarlikni tanlashdan oldin kerakli imtihonlarni tekshir."
+      },
+      "documents": {
+        "title": "Hujjatlar va muddatlar bir rejada",
+        "why": "Arizalarni tayyorlayapsan. Yaqin muddat va yetishmayotgan hujjatlarni ko‘rish muhim.",
+        "steps": [
+          "Har bir dastur uchun hujjat talablari va yaqin muddatlarni to‘pla.",
+          "Arizalar, imtihonlar va tavsiyanomalar taqvimini tuz.",
+          "Qaysi hujjat, tarjima va esselar hali tayyorlanishi kerakligini tekshir."
+        ],
+        "extra": "Yetishmayotgan hujjatlar va tayyorlash muddatlarini yoz."
+      },
+      "start": {
+        "title": "Bitta aniq boshlanish nuqtasi",
+        "why": "Birinchi qadamni tanlash qiyin. Yo‘ling haqidagi qisqa savollar ro‘yxatidan boshla.",
+        "steps": [
+          "Nimalar ma’lum va nimalar tushunarsiz ekanini yoz.",
+          "Birinchi o‘rganish uchun bitta yo‘nalish yoki dastur tanla.",
+          "Rasmiy sahifasini ochib, keyingi kichik harakatni belgila."
+        ],
+        "extra": "Yaqin vaqt uchun bitta kichik, bajariladigan harakat tanla."
+      }
+    },
+    "ibSteps": [
+      "Qiziqqan yo‘nalishingda bir nechta aniq dastur top.",
+      "Rasmiy sahifalarda kerakli fanlar, HL/SL darajalari va ballarni tekshir.",
+      "Talablarni hozirgi yoki rejalashtirilgan DP fanlaring bilan solishtir va maktab maslahatchisi bilan muhokama qil."
+    ],
+    "universalProgram": "Dasturing boshqa yoki hali noma’lum bo‘lsa, universitet maktab attestating yoki diplomingni qanday baholashini aniqlashtir."
+  }
+}

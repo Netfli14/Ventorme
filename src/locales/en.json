@@ -1,0 +1,339 @@
+{
+  "meta": {
+    "title": "Ventorme · University starts with a clear plan",
+    "description": "For students in grades 10–12. Answer six questions about your situation and find three practical next steps towards university."
+  },
+  "nav": {
+    "how": "How it works",
+    "features": "Features",
+    "faq": "Questions"
+  },
+  "common": {
+    "quiz": "Build my route",
+    "register": "Register with Ventorme",
+    "example": "See an example",
+    "share": "Share",
+    "copied": "Link copied",
+    "shareError": "Could not share. Copy this page’s address from your browser.",
+    "next": "Next",
+    "back": "Back",
+    "result": "Show my route",
+    "edit": "Edit answers",
+    "restart": "Start again",
+    "home": "Home",
+    "exit": "Exit quiz",
+    "menu": "Open menu",
+    "closeMenu": "Close menu",
+    "chooseLanguage": "Choose language",
+    "lightTheme": "Switch to light theme",
+    "darkTheme": "Switch to dark theme",
+    "pauseAnimation": "Pause background animation",
+    "resumeAnimation": "Resume background animation",
+    "resultEmpty": "Let’s start with your situation",
+    "resultEmptyBody": "Answer six questions to see your preliminary route.",
+    "loading": "Opening your route…",
+    "previewLabel": "Preview version",
+    "registerUnavailable": "Registration is unavailable for now. The team’s link has not been configured.",
+    "questionProgress": "Question {current} of {total}",
+    "selectedCount": "Selected: {count} of {max}",
+    "maxChoices": "Choose up to {max} options. Remove one to add another.",
+    "singleChoice": "Choose one option",
+    "multiChoice": "Choose up to {max} options",
+    "resume": "Your answers are saved in this tab. Continue or start again.",
+    "privacy": "Privacy",
+    "terms": "Terms of use",
+    "platform": "Open Ventorme",
+    "footerNote": "A preliminary university route for school students. A Hacknext team landing page.",
+    "gradeLabel": "Grade {grade}",
+    "optional": "Optional",
+    "ibPrompt": "Have you chosen your DP subjects?",
+    "explain": "Why this route",
+    "checked": "Selected",
+    "resetNotice": "Answers cleared. You can start again.",
+    "skip": "Skip to content"
+  },
+  "landing": {
+    "eyebrow": "For students in grades 10–12",
+    "titleStart": "University starts",
+    "titleEnd": "with a clear plan.",
+    "lead": "Careers, universities, subjects and exams: find what matters right now. Answer 6 questions and discover your next step.",
+    "note": "6 questions. No account needed on this page.",
+    "exampleLabel": "Example route",
+    "previewHeading": "Three actions for your next step",
+    "tabs": [
+      "Choosing a career",
+      "Choosing a university",
+      "Choosing subjects"
+    ],
+    "scenarios": [
+      "Grade 10 · exploring interests",
+      "Grade 11 · field roughly chosen",
+      "Grade 10 · planning IB DP"
+    ],
+    "situationTitle": "Where shall we start?",
+    "situationIntro": "You don’t have to decide everything at once. Choose the question that matters now.",
+    "situations": [
+      {
+        "title": "Many interests. How do I choose a field?",
+        "text": "Explore what you enjoy doing. Your choice can evolve with experience."
+      },
+      {
+        "title": "Many universities. How do I compare them?",
+        "text": "Choose your own criteria: course content, location and total cost."
+      },
+      {
+        "title": "Different requirements. Which subjects should I check?",
+        "text": "Compare school subjects and exams with specific university programmes."
+      }
+    ],
+    "howTitle": "From a question to a next step",
+    "howSteps": [
+      {
+        "title": "Tell us where you are",
+        "text": "Six questions about your grade, curriculum, interests and current challenges."
+      },
+      {
+        "title": "See your next actions",
+        "text": "A preliminary route and three manageable steps based on your answers."
+      },
+      {
+        "title": "Continue in Ventorme",
+        "text": "Go to the platform, register and complete its onboarding."
+      }
+    ],
+    "howBoundary": "This page offers a preliminary route. Accounts and platform features are in Ventorme itself.",
+    "featuresTitle": "Support at different stages",
+    "featuresIntro": "Explore the Ventorme features related to your task.",
+    "featuresNote": "Check feature availability and terms on the platform.",
+    "faqTitle": "Questions you can ask",
+    "finalTitle": "You don’t have to decide everything.",
+    "finalAccent": "Start with your next step.",
+    "finalText": "Your route can change. What matters is knowing what to do now.",
+    "compassLabel": "Choose a direction",
+    "compassHint": "Every route has its own starting point"
+  },
+  "questions": {
+    "grade": {
+      "title": "Which grade are you in?",
+      "help": "This helps us suggest relevant next actions."
+    },
+    "program": {
+      "title": "Which curriculum do you study or plan to study?",
+      "help": "Admission requirements depend on the specific university programme."
+    },
+    "stage": {
+      "title": "Where are you in the process?",
+      "help": "Choose the option that best describes your situation."
+    },
+    "regions": {
+      "title": "Where are you considering studying?",
+      "help": "This guides your search; it does not establish admission requirements."
+    },
+    "interests": {
+      "title": "Which fields interest you?",
+      "help": "Interests can change. There is no right answer."
+    },
+    "challenges": {
+      "title": "What feels most difficult right now?",
+      "help": "Your first choice becomes the main focus. We’ll consider the second too."
+    }
+  },
+  "choices": {
+    "grade": {
+      "10": "Grade 10",
+      "11": "Grade 11",
+      "12": "Grade 12"
+    },
+    "program": {
+      "kz": "Kazakhstan school curriculum / UNT",
+      "ib": "IB / planning IB DP",
+      "alevel": "A-level",
+      "other": "Another curriculum",
+      "unknown": "Not sure yet"
+    },
+    "ibStatus": {
+      "choosing": "Still choosing",
+      "chosen": "Already chosen",
+      "unknown": "Not sure yet"
+    },
+    "stage": {
+      "direction": "Choosing a career or field",
+      "universities": "Field roughly chosen; looking for universities",
+      "requirements": "Have universities; checking requirements",
+      "documents": "Preparing exams and documents",
+      "unknown": "Hard to say yet"
+    },
+    "regions": {
+      "kz": "Kazakhstan",
+      "europe": "Continental Europe",
+      "uk": "United Kingdom",
+      "northAmerica": "USA and Canada",
+      "asia": "Asia",
+      "turkey": "Türkiye",
+      "unknown": "Undecided"
+    },
+    "interests": {
+      "engineering": "Engineering",
+      "science": "Natural sciences",
+      "health": "Medicine and health",
+      "it": "IT",
+      "business": "Business and economics",
+      "humanities": "Social sciences and humanities",
+      "art": "Art and design",
+      "unknown": "Still exploring"
+    },
+    "challenges": {
+      "direction": "Choosing a field",
+      "universities": "Comparing universities",
+      "subjects": "Understanding school subject requirements",
+      "funding": "Understanding costs and funding",
+      "exams": "Planning exams",
+      "documents": "Understanding documents and deadlines",
+      "start": "Knowing where to start"
+    }
+  },
+  "features": {
+    "orientation": {
+      "title": "Career exploration",
+      "text": "Explore your interests and learn more about possible fields."
+    },
+    "universities": {
+      "title": "University selection",
+      "text": "Find programmes worth comparing and researching."
+    },
+    "exams": {
+      "title": "IELTS and SAT",
+      "text": "Explore exam preparation if these tests are part of your route."
+    },
+    "grants": {
+      "title": "UNT grants",
+      "text": "Explore the UNT grant calculator if you are considering this path."
+    },
+    "essays": {
+      "title": "Essay support",
+      "text": "Work on explaining your experience and motivation."
+    },
+    "venti": {
+      "title": "Venti AI assistant",
+      "text": "Discuss questions about fields and next steps."
+    }
+  },
+  "faq": [
+    {
+      "q": "Do I need to know my future career already?",
+      "a": "No. Start with your interests and compare several fields. A career choice does not define your whole life; you can refine it with experience."
+    },
+    {
+      "q": "How is this quiz different from a career test?",
+      "a": "It clarifies your situation and immediate tasks. It is not psychological diagnosis or an assessment of ability. You can explore Ventorme’s career test separately."
+    },
+    {
+      "q": "What will I see after six questions?",
+      "a": "A main focus, a short explanation and three next actions. The result appears before registration. We do not ask for your name, email or phone number."
+    },
+    {
+      "q": "What happens when I go to Ventorme?",
+      "a": "The real Ventorme registration page opens. Create an account and complete onboarding there. Your quiz answers are not transferred automatically. Check feature terms on the platform."
+    },
+    {
+      "q": "How should I check subject and exam requirements?",
+      "a": "Use the official page for each specific programme and your admission year. For IB, check subjects, HL/SL levels and scores. There is no single rule for every university."
+    }
+  ],
+  "result": {
+    "title": "Your next step",
+    "subtitle": "A preliminary route based on your answers",
+    "stepsTitle": "Three practical next actions",
+    "more": "Another priority",
+    "featuresTitle": "What to explore in Ventorme",
+    "handoff": "After following the link, create an account and complete onboarding in Ventorme. These quiz answers stay in this tab.",
+    "disclaimer": "This is a preliminary plan, not confirmation that you meet a university’s requirements.",
+    "regionContext": "For your programme search, you’re considering: {regions}.",
+    "unknownRegion": "Compare several study destinations, then narrow your search.",
+    "interestContext": "Use your interests as a starting point: {interests}.",
+    "unknownInterests": "Start with activities you enjoy trying.",
+    "years": {
+      "10": "In grade 10, begin with exploring fields and choosing school subjects.",
+      "11": "In grade 11, collect programme options and clarify requirements.",
+      "12": "In grade 12, first check approaching deadlines on official programme pages."
+    },
+    "focus": {
+      "direction": {
+        "title": "From interests to fields",
+        "why": "You want to explore your direction. Begin with real activities and your own criteria.",
+        "steps": [
+          "List 2–3 activities or topics you would like to explore further.",
+          "Look at what several careers and study programmes actually involve.",
+          "Compare fields using your criteria and choose one to investigate next."
+        ],
+        "extra": "Write down the criteria you will use to compare fields."
+      },
+      "universities": {
+        "title": "A university shortlist",
+        "why": "It helps to narrow the list and compare programmes using the same criteria.",
+        "steps": [
+          "Find 3–5 specific study programmes in your field.",
+          "Compare content, teaching language, location and total cost.",
+          "Read each programme’s official requirements for your admission year."
+        ],
+        "extra": "Add comparison criteria to your programme shortlist."
+      },
+      "subjects": {
+        "title": "Subjects for specific programmes",
+        "why": "Requirements differ. Check specific programmes before deciding on school subjects.",
+        "steps": [
+          "Choose a few specific programmes to investigate.",
+          "Check subject and exam requirements on their official pages.",
+          "Compare them with your curriculum and discuss any gaps with an adviser."
+        ],
+        "extra": "Check school subjects on official programme pages."
+      },
+      "funding": {
+        "title": "A clear picture of costs",
+        "why": "You want to understand affordability. Compare the full cost and funding conditions.",
+        "steps": [
+          "List tuition, living costs and required expenses for several programmes.",
+          "Check official scholarship and grant pages and eligibility conditions.",
+          "Record deadlines, documents and missing information for each funding option."
+        ],
+        "extra": "Add total costs and funding conditions to your comparison."
+      },
+      "exams": {
+        "title": "Exams in a useful order",
+        "why": "You want an exam plan. First find out which exams you actually need.",
+        "steps": [
+          "Check required exams and scores on your chosen programmes’ pages.",
+          "Compare result release dates with application deadlines.",
+          "Assess your starting level and create a realistic preparation plan."
+        ],
+        "extra": "Check required exams before choosing preparation courses."
+      },
+      "documents": {
+        "title": "Documents and deadlines together",
+        "why": "You are preparing applications. Make upcoming deadlines and missing documents visible.",
+        "steps": [
+          "Collect document requirements and upcoming deadlines for each programme.",
+          "Make a calendar for applications, exams and recommendations.",
+          "Check which documents, translations and essays still need preparation."
+        ],
+        "extra": "List missing documents and their preparation deadlines."
+      },
+      "start": {
+        "title": "One clear starting point",
+        "why": "Choosing a first action feels difficult. Start with a short list of open questions.",
+        "steps": [
+          "Write down what you know and what remains unclear.",
+          "Choose one field or programme to research first.",
+          "Open its official page and identify one small next action."
+        ],
+        "extra": "Choose one manageable action for the near future."
+      }
+    },
+    "ibSteps": [
+      "Find a few specific programmes in your chosen field.",
+      "Check required subjects, HL/SL levels and scores on official pages.",
+      "Compare requirements with your current or planned DP subjects and discuss them with your school adviser."
+    ],
+    "universalProgram": "If your curriculum is different or undecided, check how each university evaluates your school qualification."
+  }
+}

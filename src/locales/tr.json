@@ -1,0 +1,339 @@
+{
+  "meta": {
+    "title": "Ventorme · Üniversite yolu net bir planla başlar",
+    "description": "10–12. sınıf öğrencileri için. Durumun hakkında altı soruyu yanıtla ve üniversite başvurusu için üç sonraki adımı öğren."
+  },
+  "nav": {
+    "how": "Nasıl çalışır",
+    "features": "Özellikler",
+    "faq": "Sorular"
+  },
+  "common": {
+    "quiz": "Rotamı oluştur",
+    "register": "Ventorme’ye kaydol",
+    "example": "Örneğe bak",
+    "share": "Paylaş",
+    "copied": "Bağlantı kopyalandı",
+    "shareError": "Paylaşılamadı. Sayfa adresini tarayıcıdan kopyala.",
+    "next": "İleri",
+    "back": "Geri",
+    "result": "Rotamı göster",
+    "edit": "Yanıtları değiştir",
+    "restart": "Yeniden başla",
+    "home": "Ana sayfa",
+    "exit": "Anketten çık",
+    "menu": "Menüyü aç",
+    "closeMenu": "Menüyü kapat",
+    "chooseLanguage": "Dil seç",
+    "lightTheme": "Açık temaya geç",
+    "darkTheme": "Koyu temaya geç",
+    "pauseAnimation": "Arka plan animasyonunu duraklat",
+    "resumeAnimation": "Arka plan animasyonunu sürdür",
+    "resultEmpty": "Durumunla başlayalım",
+    "resultEmptyBody": "Ön rotanı görmek için altı soruyu yanıtla.",
+    "loading": "Rotan açılıyor…",
+    "previewLabel": "Ön izleme sürümü",
+    "registerUnavailable": "Kayıt şu an kullanılamıyor. Takım bağlantısı henüz ayarlanmadı.",
+    "questionProgress": "{total} sorudan {current}. soru",
+    "selectedCount": "Seçilen: {count} / {max}",
+    "maxChoices": "En fazla {max} seçenek seçebilirsin. Yeni bir seçenek için birini kaldır.",
+    "singleChoice": "Bir seçenek seç",
+    "multiChoice": "En fazla {max} seçenek seç",
+    "resume": "Yanıtların bu sekmede kayıtlı. Devam et veya yeniden başla.",
+    "privacy": "Gizlilik",
+    "terms": "Kullanım koşulları",
+    "platform": "Ventorme’yi aç",
+    "footerNote": "Lise öğrencileri için ön üniversite rotası. Bir Hacknext takımının sayfası.",
+    "gradeLabel": "{grade}. sınıf",
+    "optional": "İsteğe bağlı",
+    "ibPrompt": "DP derslerini seçtin mi?",
+    "explain": "Neden bu rota",
+    "checked": "Seçildi",
+    "resetNotice": "Yanıtlar silindi. Yeniden başlayabilirsin.",
+    "skip": "İçeriğe geç"
+  },
+  "landing": {
+    "eyebrow": "10–12. sınıf öğrencileri için",
+    "titleStart": "Üniversite yolu",
+    "titleEnd": "net bir planla başlar.",
+    "lead": "Meslek, üniversite, dersler ve sınavlar: şu an neyin önemli olduğunu öğren. 6 soruyu yanıtla ve sonraki adımını bul.",
+    "note": "6 soru. Bu sayfada hesap gerekmez.",
+    "exampleLabel": "Örnek rota",
+    "previewHeading": "Sonraki adımın için üç eylem",
+    "tabs": [
+      "Meslek seçiyorum",
+      "Üniversite seçiyorum",
+      "Dersleri araştırıyorum"
+    ],
+    "scenarios": [
+      "10. sınıf · ilgi alanlarını keşfediyorum",
+      "11. sınıf · alanım yaklaşık belli",
+      "10. sınıf · IB DP planlıyorum"
+    ],
+    "situationTitle": "Nereden başlayalım?",
+    "situationIntro": "Her şeyi bir anda kararlaştırman gerekmez. Şu an seni düşündüren soruyu seç.",
+    "situations": [
+      {
+        "title": "Birçok ilgim var. Nasıl alan seçerim?",
+        "text": "Neler yapmaktan hoşlandığını keşfet. Deneyim kazandıkça seçimini netleştirebilirsin."
+      },
+      {
+        "title": "Birçok üniversite var. Nasıl karşılaştırırım?",
+        "text": "Kendi ölçütlerini belirle: program, konum ve toplam maliyet."
+      },
+      {
+        "title": "Koşullar farklı. Hangi dersleri kontrol etmeliyim?",
+        "text": "Okul derslerini ve sınavları belirli üniversite programlarıyla karşılaştır."
+      }
+    ],
+    "howTitle": "Bir sorudan sonraki adıma",
+    "howSteps": [
+      {
+        "title": "Durumunu anlat",
+        "text": "Sınıfın, müfredatın, ilgilerin ve mevcut zorlukların hakkında altı soru."
+      },
+      {
+        "title": "Sonraki eylemleri gör",
+        "text": "Yanıtlarına göre ön rota ve uygulanabilir üç adım."
+      },
+      {
+        "title": "Ventorme’de devam et",
+        "text": "Platforma git, kaydol ve başlangıç sürecini tamamla."
+      }
+    ],
+    "howBoundary": "Bu sayfa bir ön rota sunar. Hesap ve platform özellikleri Ventorme’nin içindedir.",
+    "featuresTitle": "Farklı aşamalarda destek",
+    "featuresIntro": "Ventorme’nin hangi özelliklerinin görevine uygun olduğunu keşfet.",
+    "featuresNote": "Özelliklerin erişimini ve koşullarını platformda kontrol et.",
+    "faqTitle": "Sorabileceğin sorular",
+    "finalTitle": "Her şeyi bir anda kararlaştırman gerekmez.",
+    "finalAccent": "Sonraki adımınla başla.",
+    "finalText": "Rotanı yeniden değerlendirebilirsin. Önemli olan şimdi ne yapacağını bilmek.",
+    "compassLabel": "İlerleme yönünü seç",
+    "compassHint": "Her rotanın kendi başlangıç noktası vardır"
+  },
+  "questions": {
+    "grade": {
+      "title": "Kaçıncı sınıftasın?",
+      "help": "Bu, uygun sonraki adımları seçmemize yardımcı olur."
+    },
+    "program": {
+      "title": "Hangi müfredatta okuyorsun veya okumayı planlıyorsun?",
+      "help": "Kabul koşulları belirli üniversite programına bağlıdır."
+    },
+    "stage": {
+      "title": "Şu an hangi aşamadasın?",
+      "help": "Durumunu en iyi anlatan seçeneği seç."
+    },
+    "regions": {
+      "title": "Nerede okumayı düşünüyorsun?",
+      "help": "Bu, aramana yön verir; kabul koşullarını belirlemez."
+    },
+    "interests": {
+      "title": "Hangi alanlar ilgini çekiyor?",
+      "help": "İlgiler değişebilir. Burada doğru cevap yok."
+    },
+    "challenges": {
+      "title": "Şu an en zor olan ne?",
+      "help": "İlk seçimin ana odağın olur. İkincisini de dikkate alırız."
+    }
+  },
+  "choices": {
+    "grade": {
+      "10": "10. sınıf",
+      "11": "11. sınıf",
+      "12": "12. sınıf"
+    },
+    "program": {
+      "kz": "Kazakistan okul müfredatı / UNT",
+      "ib": "IB / IB DP planlıyorum",
+      "alevel": "A-level",
+      "other": "Başka bir müfredat",
+      "unknown": "Henüz bilmiyorum"
+    },
+    "ibStatus": {
+      "choosing": "Seçiyorum",
+      "chosen": "Zaten seçtim",
+      "unknown": "Henüz bilmiyorum"
+    },
+    "stage": {
+      "direction": "Meslek veya alan seçiyorum",
+      "universities": "Alanım yaklaşık belli, üniversite arıyorum",
+      "requirements": "Üniversiteler belli, koşulları araştırıyorum",
+      "documents": "Sınav ve belgeleri hazırlıyorum",
+      "unknown": "Henüz söylemek zor"
+    },
+    "regions": {
+      "kz": "Kazakistan",
+      "europe": "Kıta Avrupası",
+      "uk": "Birleşik Krallık",
+      "northAmerica": "ABD ve Kanada",
+      "asia": "Asya",
+      "turkey": "Türkiye",
+      "unknown": "Henüz karar vermedim"
+    },
+    "interests": {
+      "engineering": "Mühendislik",
+      "science": "Doğa bilimleri",
+      "health": "Tıp ve sağlık",
+      "it": "Bilişim",
+      "business": "İşletme ve ekonomi",
+      "humanities": "Sosyal ve beşerî bilimler",
+      "art": "Sanat ve tasarım",
+      "unknown": "Hâlâ keşfediyorum"
+    },
+    "challenges": {
+      "direction": "Alan seçmek",
+      "universities": "Üniversiteleri karşılaştırmak",
+      "subjects": "Okul dersi koşullarını anlamak",
+      "funding": "Maliyet ve finansmanı anlamak",
+      "exams": "Sınavları planlamak",
+      "documents": "Belge ve son tarihleri anlamak",
+      "start": "Nereden başlayacağımı bilmek"
+    }
+  },
+  "features": {
+    "orientation": {
+      "title": "Meslek keşfi",
+      "text": "İlgilerini keşfet ve olası alanları daha iyi tanı."
+    },
+    "universities": {
+      "title": "Üniversite seçimi",
+      "text": "Karşılaştırmaya ve araştırmaya değer programları bul."
+    },
+    "exams": {
+      "title": "IELTS ve SAT",
+      "text": "Bu sınavlar rotan için gerekliyse hazırlık olanaklarını araştır."
+    },
+    "grants": {
+      "title": "UNT bursları",
+      "text": "Bu yolu düşünüyorsan UNT burs hesaplayıcısını incele."
+    },
+    "essays": {
+      "title": "Başvuru yazısı desteği",
+      "text": "Deneyimini ve motivasyonunu nasıl anlatacağını geliştir."
+    },
+    "venti": {
+      "title": "Venti yapay zekâ asistanı",
+      "text": "Alan seçimi ve sonraki adımlarla ilgili sorularını konuş."
+    }
+  },
+  "faq": [
+    {
+      "q": "Gelecekteki mesleğimi şimdiden bilmem gerekir mi?",
+      "a": "Hayır. İlgilerinden başlayıp birkaç alanı karşılaştırabilirsin. Meslek seçimi tüm hayatını belirlemez; deneyim kazandıkça seçimini netleştirebilirsin."
+    },
+    {
+      "q": "Bu anket meslek testinden nasıl farklı?",
+      "a": "Durumunu ve yakın görevlerini netleştirir. Psikolojik tanı veya yetenek değerlendirmesi değildir. Ventorme’nin meslek testini ayrıca inceleyebilirsin."
+    },
+    {
+      "q": "Altı sorudan sonra ne göreceğim?",
+      "a": "Ana odak, kısa açıklama ve üç sonraki eylem. Sonuç kayıt öncesinde görünür. Adını, e-posta adresini veya telefonunu istemiyoruz."
+    },
+    {
+      "q": "Ventorme’ye geçince ne olur?",
+      "a": "Gerçek Ventorme kayıt sayfası açılır. Orada hesap oluşturup başlangıç sürecini tamamla. Anket yanıtların otomatik aktarılmaz. Özellik koşullarını platformda kontrol et."
+    },
+    {
+      "q": "Ders ve sınav koşullarını nasıl kontrol etmeliyim?",
+      "a": "Belirli programın resmî sayfasında başvuru yılının koşullarını kontrol et. IB için dersleri, HL/SL düzeylerini ve puanları karşılaştır. Tüm üniversiteler için tek kural yoktur."
+    }
+  ],
+  "result": {
+    "title": "Senin sonraki adımın",
+    "subtitle": "Yanıtlarına göre bir ön rota",
+    "stepsTitle": "Üç yakın eylem",
+    "more": "Bir başka öncelik",
+    "featuresTitle": "Ventorme’de neleri keşfedebilirsin",
+    "handoff": "Bağlantıya geçtikten sonra Ventorme’de hesap oluştur ve başlangıç sürecini tamamla. Bu yanıtlar bu sekmede kalır.",
+    "disclaimer": "Bu bir ön plandır; üniversite koşullarına uygunluk onayı değildir.",
+    "regionContext": "Program aramak için düşündüğün yerler: {regions}.",
+    "unknownRegion": "Önce birkaç eğitim yerinin koşullarını karşılaştır, sonra aramanı daralt.",
+    "interestContext": "İlgilerini başlangıç noktası al: {interests}.",
+    "unknownInterests": "Denemekten hoşlandığın etkinliklerle başlayabilirsin.",
+    "years": {
+      "10": "10. sınıfta alanları keşfetmek ve okul derslerini seçmekle başla.",
+      "11": "11. sınıfta program seçeneklerini topla ve koşulları netleştir.",
+      "12": "12. sınıfta önce resmî program sayfalarındaki yaklaşan son tarihleri kontrol et."
+    },
+    "focus": {
+      "direction": {
+        "title": "İlgilerden alanlara",
+        "why": "Yönünü keşfetmek istiyorsun. Somut etkinlikler ve kendi ölçütlerinle başlayalım.",
+        "steps": [
+          "Daha derin incelemek istediğin 2–3 etkinlik veya konuyu yaz.",
+          "Birkaç mesleğin ve eğitim programının gerçek içeriğine bak.",
+          "Alanları kendi ölçütlerinle karşılaştır ve sonraki araştırma için birini seç."
+        ],
+        "extra": "Alanları karşılaştırmak için kullanacağın ölçütleri yaz."
+      },
+      "universities": {
+        "title": "Kısa bir üniversite listesi",
+        "why": "Listeyi daraltmak ve programları aynı ölçütlerle karşılaştırmak faydalı olur.",
+        "steps": [
+          "Alanında 3–5 belirli eğitim programı bul.",
+          "İçeriği, öğretim dilini, konumu ve toplam maliyeti karşılaştır.",
+          "Her programın başvuru yılın için resmî koşullarını oku."
+        ],
+        "extra": "Program listene karşılaştırma ölçütlerini ekle."
+      },
+      "subjects": {
+        "title": "Belirli programlar için dersler",
+        "why": "Koşullar farklıdır. Önce belirli programları, sonra okul derslerini kontrol edelim.",
+        "steps": [
+          "Araştırmak istediğin birkaç belirli programı seç.",
+          "Resmî sayfalarda ders ve sınav koşullarını kontrol et.",
+          "Koşulları müfredatınla karşılaştır ve farkları bir danışmanla konuş."
+        ],
+        "extra": "Resmî program sayfalarında okul derslerini kontrol et."
+      },
+      "funding": {
+        "title": "Maliyetlerin net bir resmi",
+        "why": "Maliyeti anlamak istiyorsun. Tam giderleri ve finansman koşullarını karşılaştıralım.",
+        "steps": [
+          "Birkaç program için öğrenim, yaşam ve zorunlu giderleri yaz.",
+          "Bursların resmî sayfalarını ve başvuru koşullarını kontrol et.",
+          "Her finansman yolu için son tarihleri, belgeleri ve eksik bilgileri kaydet."
+        ],
+        "extra": "Karşılaştırmana toplam maliyeti ve finansman koşullarını ekle."
+      },
+      "exams": {
+        "title": "Sınavlar için anlaşılır sıra",
+        "why": "Sınavları planlamak istiyorsun. Önce hangilerine gerçekten ihtiyacın olduğunu bulalım.",
+        "steps": [
+          "Seçtiğin programlarda gereken sınavları ve puanları kontrol et.",
+          "Sonuç açıklama tarihlerini başvuru son tarihleriyle karşılaştır.",
+          "Başlangıç düzeyini değerlendir ve gerçekçi bir hazırlık planı oluştur."
+        ],
+        "extra": "Hazırlık seçmeden önce gerekli sınavları kontrol et."
+      },
+      "documents": {
+        "title": "Belgeler ve tarihler tek planda",
+        "why": "Başvuruları hazırlıyorsun. Yaklaşan tarihleri ve eksik belgeleri görmek önemli.",
+        "steps": [
+          "Her programın belge koşullarını ve yaklaşan son tarihlerini topla.",
+          "Başvurular, sınavlar ve referanslar için takvim hazırla.",
+          "Hangi belgelerin, çevirilerin ve yazıların hâlâ hazırlanması gerektiğini kontrol et."
+        ],
+        "extra": "Eksik belgeleri ve hazırlama tarihlerini yaz."
+      },
+      "start": {
+        "title": "Tek bir net başlangıç noktası",
+        "why": "İlk eylemi seçmek zor. Rotan hakkındaki kısa bir soru listesiyle başla.",
+        "steps": [
+          "Bildiklerini ve hâlâ belirsiz kalanları yaz.",
+          "İlk araştırma için bir alan veya program seç.",
+          "Resmî sayfasını aç ve küçük bir sonraki eylem belirle."
+        ],
+        "extra": "Yakın gelecek için uygulanabilir küçük bir eylem seç."
+      }
+    },
+    "ibSteps": [
+      "İlgi alanında birkaç belirli program bul.",
+      "Resmî sayfalarda gerekli dersleri, HL/SL düzeylerini ve puanları kontrol et.",
+      "Koşulları mevcut veya planlanan DP derslerinle karşılaştır ve okul danışmanınla konuş."
+    ],
+    "universalProgram": "Müfredatın farklıysa veya belirsizse üniversitenin okul diplomanı nasıl değerlendirdiğini kontrol et."
+  }
+}

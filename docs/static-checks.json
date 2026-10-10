@@ -1,0 +1,15 @@
+{
+  "localized_pages": 18,
+  "referenced_assets": 19,
+  "checks": [
+    "document language",
+    "canonical URL",
+    "Open Graph image",
+    "unique rendered IDs",
+    "internal target files",
+    "anchor targets",
+    "root redirect",
+    "disabled registration without team number"
+  ],
+  "browser_execution": false
+}
