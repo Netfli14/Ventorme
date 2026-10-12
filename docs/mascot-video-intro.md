@@ -13,3 +13,5 @@ The home header is fixed above the video scene to preserve the full 100svh frame
 
 ## Automated checks
 `npm test` now checks clamping, forward/reverse media seeking, the end frame boundary, and invalid metadata. GitHub Actions runs `npm run check` on the mascot PR and main.
+
+Skip intro control is placed below the fixed desktop/mobile navigation; the fixed header must not occlude the only skip action.
