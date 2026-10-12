@@ -1,117 +1,115 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { Locale } from '@/lib/i18n';
-import { scrollProgress, scrollTime } from '@/lib/video-scroll';
 import styles from './MascotScrollIntro.module.css';
 
 const VIDEO_URL = '/media/ventorme-mascot-intro.mp4';
-const introCopy: Record<Locale, { name: string; description: string; skip: string; scroll: string }> = {
-  ru: { name: 'Мы VentorMe', description: 'AI-платформа для поступления', skip: 'Пропустить интро', scroll: 'Листай вниз' },
-  en: { name: 'We are VentorMe', description: 'Your AI-powered university admissions platform', skip: 'Skip intro', scroll: 'Scroll to explore' },
-  kk: { name: 'Біз VentorMe', description: 'Университетке түсуге арналған AI-платформа', skip: 'Кіріспені өткізу', scroll: 'Төмен айналдыр' },
-  uz: { name: 'Biz VentorMe', description: 'Universitetga kirish uchun AI-platforma', skip: 'Kirishni o‘tkazib yuborish', scroll: 'Pastga aylantiring' },
-  zh: { name: '我们是 VentorMe', description: '助力大学申请的 AI 平台', skip: '跳过开场', scroll: '向下滚动' },
-  tr: { name: 'Biz VentorMe', description: 'Üniversite başvuruları için yapay zekâ platformu', skip: 'Girişi atla', scroll: 'Aşağı kaydır' },
+
+const introCopy: Record<Locale, {
+  name: string; description: string; skip: string; continue: string; play: string; replay: string;
+}> = {
+  ru: { name: 'Мы VentorMe', description: 'AI-платформа для поступления', skip: 'Пропустить интро', continue: 'Листай дальше', play: 'Воспроизвести видео', replay: 'Посмотреть ещё раз' },
+  en: { name: 'We are VentorMe', description: 'AI-powered university admissions platform', skip: 'Skip intro', continue: 'Scroll to continue', play: 'Play video', replay: 'Watch again' },
+  kk: { name: 'Біз VentorMe', description: 'Университетке түсуге арналған AI-платформа', skip: 'Кіріспені өткізу', continue: 'Әрі қарай айналдыр', play: 'Видеоны ойнату', replay: 'Қайта көру' },
+  uz: { name: 'Biz VentorMe', description: 'Universitetga kirish uchun AI-platforma', skip: 'Kirishni o‘tkazib yuborish', continue: 'Davom etish uchun aylantiring', play: 'Videoni ijro etish', replay: 'Yana ko‘rish' },
+  zh: { name: '我们是 VentorMe', description: '助力大学申请的 AI 平台', skip: '跳过开场', continue: '向下滚动继续', play: '播放视频', replay: '再次观看' },
+  tr: { name: 'Biz VentorMe', description: 'Üniversite başvuruları için yapay zekâ platformu', skip: 'Girişi atla', continue: 'Devam etmek için kaydır', play: 'Videoyu oynat', replay: 'Tekrar izle' },
 };
-const clamp = (value: number) => Math.min(1, Math.max(0, value));
 
 /**
- * Scroll is the sole source of truth for playback; the browser keeps native
- * wheel/touch scrolling. Put the actual H.264 MP4 at public/media/.
+ * One natural, timed video on ALL screen sizes:
+ * - Autoplays muted and inline to satisfy mobile autoplay restrictions.
+ * - Never seeks, pauses, or changes rate in response to wheel/touch scroll.
+ * - The page scrolls normally and the next section begins immediately below.
  */
 export function MascotScrollIntro({ locale }: { locale: Locale }) {
   const sectionRef = useRef<HTMLElement>(null);
-  const sceneRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const requestRef = useRef(0);
-  const durationRef = useRef(0);
-  const [progress, setProgress] = useState(0);
   const [assetFailed, setAssetFailed] = useState(false);
-  const [frameReady, setFrameReady] = useState(false);
-  const [reducedMotion, setReducedMotion] = useState(false);
+  const [ready, setReady] = useState(false);
+  const [requiresTap, setRequiresTap] = useState(false);
+  const [finished, setFinished] = useState(false);
+  const [showTitle, setShowTitle] = useState(false);
   const text = introCopy[locale];
-
-  const sampleScroll = useCallback(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-    // Use the sticky scene's real height; mobile browser chrome can change innerHeight.
-    const sceneHeight = sceneRef.current?.offsetHeight ?? window.innerHeight;
-    const next = scrollProgress(section.getBoundingClientRect().top, section.offsetHeight, sceneHeight);
-    document.documentElement.dataset.mascotScene = next < 0.995 ? 'active' : 'done';
-    setProgress(previous => (Math.abs(previous - next) > 0.002 ? next : previous));
-    const video = videoRef.current;
-    if (assetFailed || !video || !(durationRef.current > 0) || video.readyState < 1) return;
-    const target = scrollTime(next, durationRef.current);
-    if (target !== null && Math.abs(video.currentTime - target) >= 1 / 60) {
-      try { video.currentTime = target; } catch { /* media metadata not ready */ }
-    }
-  }, [assetFailed]);
-
-  const scheduleSample = useCallback(() => {
-    if (requestRef.current) return;
-    requestRef.current = window.requestAnimationFrame(() => {
-      requestRef.current = 0;
-      sampleScroll();
-    });
-  }, [sampleScroll]);
-
-  useEffect(() => {
-    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const onMotionChange = () => setReducedMotion(media.matches);
-    onMotionChange();
-    media.addEventListener('change', onMotionChange);
-    window.addEventListener('scroll', scheduleSample, { passive: true });
-    window.addEventListener('resize', scheduleSample);
-    scheduleSample();
-    return () => {
-      media.removeEventListener('change', onMotionChange);
-      window.removeEventListener('scroll', scheduleSample);
-      window.removeEventListener('resize', scheduleSample);
-      window.cancelAnimationFrame(requestRef.current);
-    };
-  }, [scheduleSample]);
 
   useEffect(() => {
     if (assetFailed) {
       delete document.documentElement.dataset.mascotScene;
       return;
     }
-    document.documentElement.dataset.mascotScene = 'active';
-    scheduleSample();
-    return () => { delete document.documentElement.dataset.mascotScene; };
-  }, [assetFailed, scheduleSample]);
 
-  // The component is rendered only if the genuine MP4 is present at build time.
-  // If a browser cannot decode it, leave the normal landing page accessible.
+    const section = sectionRef.current;
+    document.documentElement.dataset.mascotScene = 'active';
+    const observer = section && typeof IntersectionObserver !== 'undefined'
+      ? new IntersectionObserver(([entry]) => {
+          document.documentElement.dataset.mascotScene = entry.isIntersecting ? 'active' : 'done';
+        }, { threshold: 0.04 })
+      : null;
+    if (observer && section) observer.observe(section);
+    return () => {
+      observer?.disconnect();
+      delete document.documentElement.dataset.mascotScene;
+    };
+  }, [assetFailed]);
+
+  const startVideo = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.muted = true;
+    void video.play().then(() => {
+      setRequiresTap(false);
+    }).catch(() => {
+      // Some phone power-saving and browser settings require a tap to play.
+      setRequiresTap(true);
+    });
+  };
+
+  const replayVideo = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    setFinished(false);
+    setShowTitle(false);
+    video.currentTime = 0;
+    startVideo();
+  };
+
+  // The real video is gated at build time. If decoding fails, do not leave
+  // a black full-screen intro or switch to an artificial mascot.
   if (assetFailed) return null;
 
   return <section ref={sectionRef}
-    data-mascot-intro="true"
-    className={[styles.scrollSection, reducedMotion ? styles.reduced : ''].join(' ')}
-    aria-label={[text.name, text.description].join(': ')}>
-    <div ref={sceneRef} className={styles.stickyScene}>
-      <video ref={videoRef} className={styles.video} src={VIDEO_URL}
-        style={{ opacity: frameReady && !assetFailed ? 1 : 0 }}
-        muted playsInline preload="auto" aria-hidden="true"
-        onLoadedMetadata={event => {
-          const video = event.currentTarget;
-          durationRef.current = Number.isFinite(video.duration) ? video.duration : 0;
-          video.pause();
-          scheduleSample();
-        }}
-        onLoadedData={() => { setFrameReady(true); scheduleSample(); }}
-        onSeeked={() => { setFrameReady(true); scheduleSample(); }}
-        onPlay={event => event.currentTarget.pause()}
-        onError={() => { setFrameReady(false); setAssetFailed(true); }}
-      />
-      <div className={styles.scrim} aria-hidden="true" />
-      <div className={styles.brandReveal}
-        style={{ opacity: reducedMotion ? 1 : clamp((progress - 0.78) / 0.16) }}>
-        <h2>{text.name}</h2><p>{text.description}</p>
-      </div>
-      <a className={styles.skip} href="#content-start">{text.skip} <span aria-hidden="true">↓</span></a>
-      <p className={styles.scrollHint} aria-hidden="true">{text.scroll} <span>↓</span></p>
+    className={styles.videoSection}
+    aria-label={`${text.name}: ${text.description}`}
+    data-mascot-intro="video">
+    <video ref={videoRef} className={styles.video} src={VIDEO_URL}
+      autoPlay muted playsInline preload="auto" aria-hidden="true"
+      onCanPlay={event => {
+        setReady(true);
+        // Browsers should autoplay normally; if disallowed, expose a tap target.
+        if (!event.currentTarget.ended && event.currentTarget.paused && !requiresTap) startVideo();
+      }}
+      onPlay={() => setRequiresTap(false)}
+      onTimeUpdate={event => {
+        const video = event.currentTarget;
+        if (Number.isFinite(video.duration) && video.duration > 0 &&
+            video.currentTime >= video.duration * 0.84) setShowTitle(true);
+      }}
+      onEnded={() => { setFinished(true); setShowTitle(true); }}
+      onError={() => setAssetFailed(true)}
+    />
+    <div className={styles.scrim} aria-hidden="true" />
+    <div className={[styles.brandReveal, showTitle ? styles.visible : ''].join(' ')}>
+      <h2>{text.name}</h2>
+      <p>{text.description}</p>
     </div>
+    <a href="#content-start" className={styles.skip}>{text.skip} <span aria-hidden="true">↓</span></a>
+    {ready && requiresTap && <button type="button" className={styles.playButton} onClick={startVideo}>
+      <span aria-hidden="true">▶</span> {text.play}
+    </button>}
+    {finished && <button type="button" className={styles.replayButton} onClick={replayVideo}>
+      <span aria-hidden="true">↻</span> {text.replay}
+    </button>}
+    <p className={styles.scrollHint} aria-hidden="true">{text.continue} ↓</p>
   </section>;
 }
