@@ -1,23 +1,19 @@
-# Original VentorMe mascot video
+# Real Kling video intro — VentorMe
 
-The intro is a **normal, timed video on both phone and laptop**. Mouse movements, scrolling, and touch gestures do not control its timeline. The homepage scrolls naturally after the video section.
+The homepage now includes the actual Kling snow-leopard mascot video that the user uploaded, encoded as H.264/yuv420p MP4 with faststart.
 
-- Asset: original user-provided `kling_20261012_VIDEO_Create_an__412_0.mp4` placed at `public/media/ventorme-mascot-intro.mp4`.
-- Video element: `autoPlay muted playsInline preload="auto"` so autoplay is allowed by most mobile and desktop browsers; it plays once and holds the last frame.
-- Final overlay near the end: «Мы VentorMe» / «AI-платформа для поступления» (localized across six languages).
-- If autoplay is blocked, the visitor can tap «Воспроизвести видео». A replay button is available after completion.
-- Content follows immediately after the `100svh` section; no sticky `280svh` scene, no `scrollProgress`, and no video seeking from page scroll.
-- If the actual MP4 is not in the repository at build time, `hasMascotVideo()` omits the entire intro. There is no fake 3D illustration or sample video.
+- Real video: `public/media/ventorme-mascot-intro.mp4` (4.5 s, ~1.1 MB)
+- First-frame poster: `public/media/ventorme-mascot-poster.jpg`
+- The final clip preserves the actual filmed mascot animation, omits the initial white multi-pose storyboard frames, and covers the generator's incorrect baked-in ending text with a clean frame sampled from the same original video. The correct accessible localized headline is rendered as HTML over the final segment.
+- Both mobile and desktop: normal muted, inline video autoplay, **no scroll-driven seeking and no mouse control**. Plays once and holds the ending frame.
+- Mobile: `object-fit: cover` fills portrait screens with the mascot centered instead of displaying a tiny horizontal strip. Desktop uses the same cover behavior with centered subject.
+- Localized final copy on RU: «Мы VentorMe» — «AI-платформа для поступления».
+- If autoplay is blocked, a play button is displayed when the video is ready; replay remains available after the finish; the intro can always be skipped.
+- Native page scrolling remains available, with no 280vh sticky lock.
+- Build-time `hasMascotVideo()` confirms a valid-looking MP4 exists; if missing during future deployments, the intro is omitted (no fake drawn mascot).
 
-## Encoding the actual uploaded video
+## Validation
 
-For wider mobile compatibility, encode the *same original clip* (not a replacement) into H.264 + AAC (or omit audio), yuv420p, with faststart:
+Verify `npm run check` in GitHub Actions, Vercel Preview, and the Production deployment commit. Confirm the MP4 is delivered with HTTP 200, the poster loads, and visual playback on an Android phone and a laptop. Automated checks cannot replace testing on the user's actual device.
 
-```bash
-mkdir -p public/media
-ffmpeg -i kling_20261012_VIDEO_Create_an__412_0.mp4 -an -c:v libx264 -pix_fmt yuv420p -crf 21 -preset medium -movflags +faststart public/media/ventorme-mascot-intro.mp4
-```
-
-Then run `npm run check` and test on actual Android Chrome and iOS Safari.
-
-The original uploaded media is visible in previous Project metadata, but its bytes could not be materialized in this session. Upload the original MP4 directly to the current conversation (or commit it in the repository) before claiming the video itself is live.
+The user-provided original file was named `kling_20261012_VIDEO_Create_an__412_0.mp4`; the optimized derived clip is produced from that file and retains the same mascot footage.
