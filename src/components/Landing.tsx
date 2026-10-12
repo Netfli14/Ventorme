@@ -12,6 +12,7 @@ import { QuizButton, RegistrationButton, ShareButton } from './Actions';
 import { CompassScene } from './CompassScene';
 import { MascotScrollIntro } from './MascotScrollIntro';
 import { Features } from './Features';
+import { useApp } from './Providers';
 gsap.registerPlugin(useGSAP);
 const DataRain = dynamic(() => import('./ui/data-rain'), { ssr: false });
 
@@ -37,7 +38,7 @@ export function ExamplePreview({ locale }: { locale: Locale }) {
 }
 export function Hero({ locale }: { locale: Locale }) {
   const d = dictionaries[locale], hero = useRef<HTMLElement>(null);
-  const [backgroundPaused, setBackgroundPaused] = useState(false);
+  const { backgroundPaused, toggleBackground, ready } = useApp();
   useGSAP(() => {
     const mm = gsap.matchMedia();
     mm.add('(prefers-reduced-motion: no-preference)', () => {
@@ -46,9 +47,9 @@ export function Hero({ locale }: { locale: Locale }) {
     }); return () => mm.revert();
   }, { scope: hero });
   return <div className="hero-stage">
-    <DataRain className="hero-rain" fullscreen={false} flowSpeed={0.65} paused={backgroundPaused} />
+    {ready && <DataRain className="hero-rain" fullscreen={false} flowSpeed={0.65} paused={backgroundPaused} />}
     <section className="hero container" ref={hero} aria-labelledby="hero-heading"><div className="hero-copy"><span className="hero-label"><GraduationCap size={17} aria-hidden="true" />{d.landing.eyebrow}</span><h1 id="hero-heading">{d.landing.titleStart}<br /><span>{d.landing.titleEnd}</span></h1><p className="hero-lead">{d.landing.lead}</p><div className="hero-actions" id="hero-actions"><QuizButton locale={locale} /><RegistrationButton locale={locale} /></div><p className="hero-note"><Check size={15} aria-hidden="true" />{d.landing.note}</p><a className="text-button example-link" href="#example">{d.common.example}<ArrowUpRight size={16} aria-hidden="true" /></a></div><ExamplePreview locale={locale} /></section>
-    <button className="icon-button hero-animation-toggle" type="button" aria-pressed={backgroundPaused} aria-label={backgroundPaused ? d.common.resumeAnimation : d.common.pauseAnimation} title={backgroundPaused ? d.common.resumeAnimation : d.common.pauseAnimation} onClick={() => setBackgroundPaused(value => !value)}>
+    <button className="icon-button hero-animation-toggle" type="button" aria-pressed={backgroundPaused} aria-label={backgroundPaused ? d.common.resumeAnimation : d.common.pauseAnimation} title={backgroundPaused ? d.common.resumeAnimation : d.common.pauseAnimation} onClick={toggleBackground}>
       {backgroundPaused ? <Play size={18} aria-hidden="true" /> : <Pause size={18} aria-hidden="true" />}
     </button>
   </div>;
