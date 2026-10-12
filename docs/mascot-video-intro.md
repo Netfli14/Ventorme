@@ -10,3 +10,6 @@ Before release: add the actual MP4, test scrolling forward and backward with a b
 
 ## Layout detail
 The home header is fixed above the video scene to preserve the full 100svh frame (it switches to a dark glass treatment during the intro), and returns to the page theme as the scene is left. Mobile progress uses the scene's measured element height, not the browser's changing innerHeight.
+
+## Automated checks
+`npm test` now checks clamping, forward/reverse media seeking, the end frame boundary, and invalid metadata. GitHub Actions runs `npm run check` on the mascot PR and main.

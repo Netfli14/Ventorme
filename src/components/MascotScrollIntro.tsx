@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Locale } from '@/lib/i18n';
+import { scrollProgress, scrollTime } from '@/lib/video-scroll';
 import styles from './MascotScrollIntro.module.css';
 
 const VIDEO_URL = '/media/ventorme-mascot-intro.mp4';
@@ -35,14 +36,13 @@ export function MascotScrollIntro({ locale }: { locale: Locale }) {
     if (!section) return;
     // Use the sticky scene's real height; mobile browser chrome can change innerHeight.
     const sceneHeight = sceneRef.current?.offsetHeight ?? window.innerHeight;
-    const totalDistance = Math.max(1, section.offsetHeight - sceneHeight);
-    const next = clamp(-section.getBoundingClientRect().top / totalDistance);
+    const next = scrollProgress(section.getBoundingClientRect().top, section.offsetHeight, sceneHeight);
     document.documentElement.dataset.mascotScene = next < 0.995 ? 'active' : 'done';
     setProgress(previous => (Math.abs(previous - next) > 0.002 ? next : previous));
     const video = videoRef.current;
     if (!video || !(durationRef.current > 0) || video.readyState < 1) return;
-    const target = Math.min(durationRef.current - 0.001, Math.max(0, next * durationRef.current));
-    if (Math.abs(video.currentTime - target) >= 1 / 60) {
+    const target = scrollTime(next, durationRef.current);
+    if (target !== null && Math.abs(video.currentTime - target) >= 1 / 60) {
       try { video.currentTime = target; } catch { /* media metadata not ready */ }
     }
   }, []);
