@@ -335,5 +335,16 @@
       "Koşulları mevcut veya planlanan DP derslerinle karşılaştır ve okul danışmanınla konuş."
     ],
     "universalProgram": "Müfredatın farklıysa veya belirsizse üniversitenin okul diplomanı nasıl değerlendirdiğini kontrol et."
+  },
+  "cookies": {
+    "title": "Çerezlerde seçim senin",
+    "description": "Site tercihlerini sonraki ziyaretler için kaydediyoruz. Çerezleri kabul edebilir veya yalnızca gerekli olanları kullanabilirsin.",
+    "policy": "Çerez politikası",
+    "necessary": "Gerekli depolama, çerez seçimini 180 gün ve test ilerlemeni bu oturum boyunca saklar. Test cevapları kayıt bağlantısına eklenmez.",
+    "preferences": "“Kabul et” seçilirse site, seçtiğin temayı bu cihazda hatırlar. “Yalnızca gerekli” seçeneğinde tema sonraki ziyaretler için kaydedilmez.",
+    "analytics": "Bu sayfada reklam çerezleri veya analiz araçları etkin değil. Seçimini sayfanın altındaki “Çerez ayarları” üzerinden değiştirebilirsin.",
+    "accept": "Kabul et",
+    "essential": "Yalnızca gerekli",
+    "settings": "Çerez ayarları"
   }
 }

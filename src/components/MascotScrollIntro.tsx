@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { Locale } from '@/lib/i18n';
 import styles from './MascotScrollIntro.module.css';
 
-const VIDEO_URL = '/media/ventorme-mascot-intro.mp4';
+const VIDEO_URL = '/media/ventorme-mascot-intro.mp4?v=2';
 
 const introCopy: Record<Locale, {
   name: string; description: string; skip: string; continue: string; play: string; replay: string;
@@ -83,7 +83,8 @@ export function MascotScrollIntro({ locale }: { locale: Locale }) {
     aria-label={`${text.name}: ${text.description}`}
     data-mascot-intro="video">
     <video ref={videoRef} className={styles.video} src={VIDEO_URL}
-      poster="/media/ventorme-mascot-poster.jpg"
+      poster="/media/ventorme-mascot-poster.jpg?v=2"
+      width={1484} height={620}
       autoPlay muted playsInline preload="auto" aria-hidden="true"
       onCanPlay={event => {
         setReady(true);

@@ -335,5 +335,16 @@
       "Compare requirements with your current or planned DP subjects and discuss them with your school adviser."
     ],
     "universalProgram": "If your curriculum is different or undecided, check how each university evaluates your school qualification."
+  },
+  "cookies": {
+    "title": "Cookies, your choice",
+    "description": "Save your site preferences for future visits. Accept cookies or keep only the essentials.",
+    "policy": "Cookie policy",
+    "necessary": "Essential storage remembers your cookie choice for 180 days and your quiz progress for this session. Quiz answers are never added to the registration link.",
+    "preferences": "Choosing “Accept” saves your theme on this device. With “Essential only”, the theme works without being saved between visits.",
+    "analytics": "This landing page has no advertising cookies or analytics tools. Change your choice through “Cookie settings” at the bottom of the page.",
+    "accept": "Accept",
+    "essential": "Essential only",
+    "settings": "Cookie settings"
   }
 }

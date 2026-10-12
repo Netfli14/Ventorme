@@ -335,5 +335,16 @@
       "Talablarni hozirgi yoki rejalashtirilgan DP fanlaring bilan solishtir va maktab maslahatchisi bilan muhokama qil."
     ],
     "universalProgram": "Dasturing boshqa yoki hali noma’lum bo‘lsa, universitet maktab attestating yoki diplomingni qanday baholashini aniqlashtir."
+  },
+  "cookies": {
+    "title": "Cookies: tanlov seniki",
+    "description": "Keyingi tashriflar uchun sayt sozlamalarini saqlaymiz. Cookies fayllarini qabul qil yoki faqat zarurlarini qoldir.",
+    "policy": "Cookies siyosati",
+    "necessary": "Zarur saqlash tizimi cookies tanlovingni 180 kun, kvizdagi jarayonni esa shu sessiya davomida saqlaydi. Kviz javoblari ro‘yxatdan o‘tish havolasiga qo‘shilmaydi.",
+    "preferences": "“Qabul qilish” tanlansa, sayt shu qurilmada tanlangan mavzuni eslab qoladi. “Faqat zarurlari” bilan mavzu keyingi tashriflar uchun saqlanmaydi.",
+    "analytics": "Bu sahifada reklama cookies fayllari va tahlil vositalari ulanmagan. Tanlovni sahifa pastidagi “Cookies sozlamalari” orqali o‘zgartirish mumkin.",
+    "accept": "Qabul qilish",
+    "essential": "Faqat zarurlari",
+    "settings": "Cookies sozlamalari"
   }
 }

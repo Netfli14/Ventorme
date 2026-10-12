@@ -48,10 +48,10 @@ test('changing one answer updates the result without mutating the previous answe
   assert.deepEqual(a, before);
 });
 test('one official registration URL preserves leading zeros and contains no answers', () => {
-  const url = new URL(registrationUrl('0042')!);
+  const url = new URL(registrationUrl('004')!);
   assert.equal(url.origin + url.pathname, 'https://ventorme.ai/register');
   assert.equal(url.searchParams.get('utm_source'), 'hacknext');
-  assert.equal(url.searchParams.get('utm_campaign'), 'team-0042');
+  assert.equal(url.searchParams.get('utm_campaign'), 'team-004');
   assert.deepEqual([...url.searchParams.keys()].sort(), ['utm_campaign', 'utm_source']);
   for (const v of [undefined, '', 'team-42', ' 42', '42&email=a', '42.0']) assert.equal(registrationUrl(v), null);
 });
