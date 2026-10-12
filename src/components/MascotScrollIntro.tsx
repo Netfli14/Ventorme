@@ -4,7 +4,6 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Locale } from '@/lib/i18n';
 import { scrollProgress, scrollTime } from '@/lib/video-scroll';
 import styles from './MascotScrollIntro.module.css';
-import { MascotFallback } from './MascotFallback';
 
 const VIDEO_URL = '/media/ventorme-mascot-intro.mp4';
 const introCopy: Record<Locale, { name: string; description: string; skip: string; scroll: string }> = {
@@ -83,14 +82,15 @@ export function MascotScrollIntro({ locale }: { locale: Locale }) {
     return () => { delete document.documentElement.dataset.mascotScene; };
   }, [assetFailed, scheduleSample]);
 
-  // If the MP4 is missing or iOS has not decoded a frame, the snow-leopard
-  // illustration remains visible and is controlled by the SAME scroll progress.
+  // The component is rendered only if the genuine MP4 is present at build time.
+  // If a browser cannot decode it, leave the normal landing page accessible.
+  if (assetFailed) return null;
+
   return <section ref={sectionRef}
     data-mascot-intro="true"
     className={[styles.scrollSection, reducedMotion ? styles.reduced : ''].join(' ')}
     aria-label={[text.name, text.description].join(': ')}>
     <div ref={sceneRef} className={styles.stickyScene}>
-      <MascotFallback progress={progress} reducedMotion={reducedMotion} />
       <video ref={videoRef} className={styles.video} src={VIDEO_URL}
         style={{ opacity: frameReady && !assetFailed ? 1 : 0 }}
         muted playsInline preload="auto" aria-hidden="true"
@@ -102,6 +102,7 @@ export function MascotScrollIntro({ locale }: { locale: Locale }) {
         }}
         onLoadedData={() => { setFrameReady(true); scheduleSample(); }}
         onSeeked={() => { setFrameReady(true); scheduleSample(); }}
+        onPlay={event => event.currentTarget.pause()}
         onError={() => { setFrameReady(false); setAssetFailed(true); }}
       />
       <div className={styles.scrim} aria-hidden="true" />
