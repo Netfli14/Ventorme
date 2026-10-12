@@ -10,6 +10,7 @@ import { dictionaries, type Locale } from '@/lib/i18n';
 import { motionTokens } from '@/lib/motion';
 import { QuizButton, RegistrationButton, ShareButton } from './Actions';
 import { CompassScene } from './CompassScene';
+import { MascotScrollIntro } from './MascotScrollIntro';
 import { Features } from './Features';
 gsap.registerPlugin(useGSAP);
 const DataRain = dynamic(() => import('./ui/data-rain'), { ssr: false });
@@ -80,5 +81,5 @@ export function MobileActionBar({ locale }: { locale: Locale }) {
 }
 export function Landing({ locale }: { locale: Locale }) {
   const d = dictionaries[locale];
-  return <><main id="main-content"><Hero locale={locale} /><Benefits locale={locale} /><HowItWorks locale={locale} /><section className="section container" id="features" aria-labelledby="features-heading"><Reveal><div className="section-heading"><h2 id="features-heading">{d.landing.featuresTitle}</h2><p>{d.landing.featuresIntro}</p></div><Features locale={locale} /><p className="section-note">{d.landing.featuresNote}</p></Reveal></section><FAQ locale={locale} /><FinalCTA locale={locale} /></main><MobileActionBar locale={locale} /></>;
+  return <><main id="main-content"><MascotScrollIntro locale={locale} /><div id="content-start"><Hero locale={locale} /></div><Benefits locale={locale} /><HowItWorks locale={locale} /><section className="section container" id="features" aria-labelledby="features-heading"><Reveal><div className="section-heading"><h2 id="features-heading">{d.landing.featuresTitle}</h2><p>{d.landing.featuresIntro}</p></div><Features locale={locale} /><p className="section-note">{d.landing.featuresNote}</p></Reveal></section><FAQ locale={locale} /><FinalCTA locale={locale} /></main><MobileActionBar locale={locale} /></>;
 }

@@ -401,3 +401,19 @@ ol { padding: 0; list-style: none; margin: 0; }
   *,*::before,*::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
   .situation-card:hover,.button:hover { transform: none; }
 }
+
+/* The intro occupies the full viewport behind the fixed homepage navigation. */
+.site-header--home { position: fixed; top: 0; left: 0; right: 0; width: 100%; }
+html[data-mascot-scene="active"] .site-header--home {
+  background: rgba(7, 11, 19, .66);
+  border-bottom-color: rgba(255,255,255,.12);
+  --text: #f8fafc;
+  --muted: #dce4ee;
+  --accent: #34d399;
+  --card: #1e293b;
+  color: #f8fafc;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+.site-header--home ~ main .hero-stage .hero { padding-top: 120px; }
+@media(max-width:600px) { .site-header--home ~ main .hero-stage .hero { padding-top: 110px; } }
