@@ -64,6 +64,31 @@
   font-size: .9rem;
 }
 .skip:hover, .skip:focus-visible { color: #fff; background: #26344f; }
+.registration {
+  position: absolute;
+  z-index: 5;
+  top: calc(110px + env(safe-area-inset-top, 0px));
+  left: max(1.2rem, 3.5vw);
+  width: min(30rem, calc(100% - 16rem));
+  text-align: center;
+}
+.registration :global(.button) {
+  width: 100%;
+  min-height: 52px;
+  background: #f2c99c;
+  color: #2e2119;
+  border-color: #f2c99c;
+  box-shadow: 0 6px 28px rgba(0, 0, 0, .22);
+}
+.registration :global(.button):hover {
+  background: #ffe0ba;
+  border-color: #ffe0ba;
+}
+.registration :global(.button):focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 4px;
+}
+.registration :global(.button) svg { flex-shrink: 0; }
 .playButton, .replayButton {
   position: absolute;
   z-index: 5;
@@ -95,18 +120,26 @@
 @media (max-width: 640px) {
   .videoSection { min-height: 0; }
   .skip { top: calc(92px + env(safe-area-inset-top, 0px)); right: 1rem; }
+  .registration {
+    top: calc(152px + env(safe-area-inset-top, 0px));
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 2rem);
+  }
   .brandReveal { bottom: 5.4rem; }
   /* Limit enlargement of the landscape source in portrait viewports. */
   .video {
     inset: auto 0;
-    top: 50%;
-    height: min(56svh, 460px);
-    transform: translateY(-60%);
+    top: calc(238px + env(safe-area-inset-top, 0px));
+    height: min(56svh, calc(100svh - 290px - env(safe-area-inset-top, 0px)), 460px);
     object-fit: cover;
     object-position: 50% 50%;
     mask-image: linear-gradient(to bottom, transparent, #000 5%, #000 94%, transparent);
   }
   .replayButton { bottom: 3rem; }
+}
+@media (max-width: 640px) and (max-height: 500px) {
+  .video { object-fit: contain; }
 }
 @media (prefers-reduced-motion: reduce) {
   .brandReveal { transition: none; }

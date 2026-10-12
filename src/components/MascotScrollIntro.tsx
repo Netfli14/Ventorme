@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import type { Locale } from '@/lib/i18n';
+import { RegistrationButton } from './Actions';
 import styles from './MascotScrollIntro.module.css';
 
 const VIDEO_URL = '/media/ventorme-mascot-intro.mp4?v=2';
@@ -106,6 +107,9 @@ export function MascotScrollIntro({ locale }: { locale: Locale }) {
       <p>{text.description}</p>
     </div>
     <a href="#content-start" className={styles.skip}>{text.skip} <span aria-hidden="true">↓</span></a>
+    <div className={styles.registration}>
+      <RegistrationButton locale={locale} primary />
+    </div>
     {ready && requiresTap && <button type="button" className={styles.playButton} onClick={startVideo}>
       <span aria-hidden="true">▶</span> {text.play}
     </button>}

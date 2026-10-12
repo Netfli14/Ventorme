@@ -445,4 +445,8 @@ html[data-mascot-scene] .site-header--home ~ main .hero-stage .hero { padding-to
   }
   .cookie-banner__heading h2 { font-size: 18px; }
   .cookie-banner__actions .button { min-height: 48px; }
+  html[data-mascot-scene="active"] .cookie-banner {
+    bottom: max(12px, env(safe-area-inset-bottom, 0px));
+    max-height: calc(100svh - 260px - env(safe-area-inset-top, 0px));
+  }
 }
