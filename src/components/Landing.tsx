@@ -79,7 +79,7 @@ export function MobileActionBar({ locale }: { locale: Locale }) {
   }, []);
   return <AnimatePresence>{visible && <motion.div key="quiz-action-bar" className="mobile-action-bar" initial={{ opacity: 0, y: reduce ? 0 : 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: reduce ? 0 : motionTokens.micro }}><QuizButton locale={locale} /></motion.div>}</AnimatePresence>;
 }
-export function Landing({ locale }: { locale: Locale }) {
+export function Landing({ locale, mascotVideoAvailable = false }: { locale: Locale; mascotVideoAvailable?: boolean }) {
   const d = dictionaries[locale];
-  return <><main id="main-content"><MascotScrollIntro locale={locale} /><div id="content-start"><Hero locale={locale} /></div><Benefits locale={locale} /><HowItWorks locale={locale} /><section className="section container" id="features" aria-labelledby="features-heading"><Reveal><div className="section-heading"><h2 id="features-heading">{d.landing.featuresTitle}</h2><p>{d.landing.featuresIntro}</p></div><Features locale={locale} /><p className="section-note">{d.landing.featuresNote}</p></Reveal></section><FAQ locale={locale} /><FinalCTA locale={locale} /></main><MobileActionBar locale={locale} /></>;
+  return <><main id="main-content">{mascotVideoAvailable && <MascotScrollIntro locale={locale} />}<div id="content-start"><Hero locale={locale} /></div><Benefits locale={locale} /><HowItWorks locale={locale} /><section className="section container" id="features" aria-labelledby="features-heading"><Reveal><div className="section-heading"><h2 id="features-heading">{d.landing.featuresTitle}</h2><p>{d.landing.featuresIntro}</p></div><Features locale={locale} /><p className="section-note">{d.landing.featuresNote}</p></Reveal></section><FAQ locale={locale} /><FinalCTA locale={locale} /></main><MobileActionBar locale={locale} /></>;
 }
