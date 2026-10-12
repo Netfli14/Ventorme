@@ -16,6 +16,7 @@ export function Header({ locale }: { locale: Locale }) {
   const d = dictionaries[locale], { theme, toggleTheme } = useApp();
   const [open, setOpen] = useState(false), panel = useRef<HTMLDivElement>(null), toggle = useRef<HTMLButtonElement>(null), reduce = useReducedMotion();
   const pathname = usePathname();
+  const home = /^\/(?:ru|en|kk|uz|zh|tr)\/?$/.test(pathname);
   useEffect(() => { document.documentElement.lang = locale; setOpen(false); }, [locale, pathname]);
   useEffect(() => {
     if (!open) return;
@@ -36,7 +37,7 @@ export function Header({ locale }: { locale: Locale }) {
     return () => { document.body.style.overflow = old; document.removeEventListener('keydown', keyboard); document.removeEventListener('pointerdown', outside); };
   }, [open]);
   const links = [['how', d.nav.how], ['features', d.nav.features], ['faq', d.nav.faq]];
-  return <header className="site-header"><div className="container header-inner">
+  return <header className={`site-header${home ? ' site-header--home' : ''}`}><div className="container header-inner">
     <Link className="wordmark" href={`/${locale}/`} aria-label={`Ventorme · ${d.common.home}`}><span className="brand-symbol"><Compass size={22} strokeWidth={1.8} aria-hidden="true" /></span>Ventorme<span className="brand-period" aria-hidden="true">.</span></Link>
     <nav className="desktop-nav" aria-label={d.common.menu}>{links.map(([id, name]) => <Link key={id} href={`/${locale}/#${id}`}>{name}</Link>)}</nav>
     <div className="header-actions"><LanguageSelector locale={locale} /><button type="button" className="icon-button" onClick={toggleTheme} aria-label={theme === 'light' ? d.common.darkTheme : d.common.lightTheme}>{theme === 'light' ? <Moon size={19} aria-hidden="true" /> : <Sun size={19} aria-hidden="true" />}</button><span className="desktop-registration"><RegistrationButton locale={locale} /></span><button ref={toggle} type="button" className="icon-button menu-toggle" aria-label={open ? d.common.closeMenu : d.common.menu} aria-expanded={open} aria-controls="mobile-menu" onClick={() => setOpen(v => !v)}>{open ? <X size={21} aria-hidden="true" /> : <Menu size={21} aria-hidden="true" />}</button></div>

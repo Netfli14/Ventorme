@@ -21,6 +21,7 @@ const clamp = (value: number) => Math.min(1, Math.max(0, value));
  */
 export function MascotScrollIntro({ locale }: { locale: Locale }) {
   const sectionRef = useRef<HTMLElement>(null);
+  const sceneRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const requestRef = useRef(0);
   const durationRef = useRef(0);
@@ -32,8 +33,11 @@ export function MascotScrollIntro({ locale }: { locale: Locale }) {
   const sampleScroll = useCallback(() => {
     const section = sectionRef.current;
     if (!section) return;
-    const totalDistance = Math.max(1, section.offsetHeight - window.innerHeight);
+    // Use the sticky scene's real height; mobile browser chrome can change innerHeight.
+    const sceneHeight = sceneRef.current?.offsetHeight ?? window.innerHeight;
+    const totalDistance = Math.max(1, section.offsetHeight - sceneHeight);
     const next = clamp(-section.getBoundingClientRect().top / totalDistance);
+    document.documentElement.dataset.mascotScene = next < 0.995 ? 'active' : 'done';
     setProgress(previous => (Math.abs(previous - next) > 0.002 ? next : previous));
     const video = videoRef.current;
     if (!video || !(durationRef.current > 0) || video.readyState < 1) return;
@@ -67,13 +71,24 @@ export function MascotScrollIntro({ locale }: { locale: Locale }) {
     };
   }, [scheduleSample]);
 
+  useEffect(() => {
+    if (assetFailed) {
+      delete document.documentElement.dataset.mascotScene;
+      return;
+    }
+    document.documentElement.dataset.mascotScene = 'active';
+    scheduleSample();
+    return () => { delete document.documentElement.dataset.mascotScene; };
+  }, [assetFailed, scheduleSample]);
+
   // No media: keep the normal landing page instead of a blank 280vh scene.
   if (assetFailed) return null;
 
   return <section ref={sectionRef}
+    data-mascot-intro="true"
     className={[styles.scrollSection, reducedMotion ? styles.reduced : ''].join(' ')}
     aria-label={[text.name, text.description].join(': ')}>
-    <div className={styles.stickyScene}>
+    <div ref={sceneRef} className={styles.stickyScene}>
       <video ref={videoRef} className={styles.video} src={VIDEO_URL}
         muted playsInline preload="auto" aria-hidden="true"
         onLoadedMetadata={event => {
