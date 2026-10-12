@@ -14,7 +14,7 @@
   width: 100%;
   height: 100%;
   display: block;
-  object-fit: contain;
+  object-fit: cover;
   object-position: center;
 }
 .scrim {
@@ -96,6 +96,7 @@
   .videoSection { min-height: 0; }
   .skip { top: calc(92px + env(safe-area-inset-top, 0px)); right: 1rem; }
   .brandReveal { bottom: 5.4rem; }
+  .video { object-fit: cover; object-position: 50% 50%; }
   .replayButton { bottom: 3rem; }
 }
 @media (prefers-reduced-motion: reduce) {

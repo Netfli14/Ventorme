@@ -83,6 +83,7 @@ export function MascotScrollIntro({ locale }: { locale: Locale }) {
     aria-label={`${text.name}: ${text.description}`}
     data-mascot-intro="video">
     <video ref={videoRef} className={styles.video} src={VIDEO_URL}
+      poster="/media/ventorme-mascot-poster.jpg"
       autoPlay muted playsInline preload="auto" aria-hidden="true"
       onCanPlay={event => {
         setReady(true);
@@ -93,7 +94,7 @@ export function MascotScrollIntro({ locale }: { locale: Locale }) {
       onTimeUpdate={event => {
         const video = event.currentTarget;
         if (Number.isFinite(video.duration) && video.duration > 0 &&
-            video.currentTime >= video.duration * 0.84) setShowTitle(true);
+            video.currentTime >= video.duration * 0.69) setShowTitle(true);
       }}
       onEnded={() => { setFinished(true); setShowTitle(true); }}
       onError={() => setAssetFailed(true)}
