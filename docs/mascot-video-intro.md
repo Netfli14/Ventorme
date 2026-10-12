@@ -15,3 +15,6 @@ The home header is fixed above the video scene to preserve the full 100svh frame
 `npm test` now checks clamping, forward/reverse media seeking, the end frame boundary, and invalid metadata. GitHub Actions runs `npm run check` on the mascot PR and main.
 
 Skip intro control is placed below the fixed desktop/mobile navigation; the fixed header must not occlude the only skip action.
+
+## Mobile fallback (2026-10-12)
+The production repository does not yet contain the original mascot MP4, so the scroll intro must NOT disappear or present an empty scene. A locally rendered SVG snow-leopard mascot (blue glasses/shirt, rear/front views and high-five) follows native scrolling even when the media request fails or mobile Safari never decodes a video frame. The first decoded frame replaces the SVG seamlessly if the original MP4 becomes available. The intended Russian closing message is exactly «Мы VentorMe» + «AI-платформа для поступления»; do not show explanatory placeholder copy on top of the scene. When reduced motion is enabled, show the front-facing mascot without the long scroll animation. Verify a real phone after deployment.

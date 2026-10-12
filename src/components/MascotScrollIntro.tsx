@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Locale } from '@/lib/i18n';
 import { scrollProgress, scrollTime } from '@/lib/video-scroll';
 import styles from './MascotScrollIntro.module.css';
+import { MascotFallback } from './MascotFallback';
 
 const VIDEO_URL = '/media/ventorme-mascot-intro.mp4';
 const introCopy: Record<Locale, { name: string; description: string; skip: string; scroll: string }> = {
@@ -28,6 +29,7 @@ export function MascotScrollIntro({ locale }: { locale: Locale }) {
   const durationRef = useRef(0);
   const [progress, setProgress] = useState(0);
   const [assetFailed, setAssetFailed] = useState(false);
+  const [frameReady, setFrameReady] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
   const text = introCopy[locale];
 
@@ -40,12 +42,12 @@ export function MascotScrollIntro({ locale }: { locale: Locale }) {
     document.documentElement.dataset.mascotScene = next < 0.995 ? 'active' : 'done';
     setProgress(previous => (Math.abs(previous - next) > 0.002 ? next : previous));
     const video = videoRef.current;
-    if (!video || !(durationRef.current > 0) || video.readyState < 1) return;
+    if (assetFailed || !video || !(durationRef.current > 0) || video.readyState < 1) return;
     const target = scrollTime(next, durationRef.current);
     if (target !== null && Math.abs(video.currentTime - target) >= 1 / 60) {
       try { video.currentTime = target; } catch { /* media metadata not ready */ }
     }
-  }, []);
+  }, [assetFailed]);
 
   const scheduleSample = useCallback(() => {
     if (requestRef.current) return;
@@ -81,15 +83,16 @@ export function MascotScrollIntro({ locale }: { locale: Locale }) {
     return () => { delete document.documentElement.dataset.mascotScene; };
   }, [assetFailed, scheduleSample]);
 
-  // No media: keep the normal landing page instead of a blank 280vh scene.
-  if (assetFailed) return null;
-
+  // If the MP4 is missing or iOS has not decoded a frame, the snow-leopard
+  // illustration remains visible and is controlled by the SAME scroll progress.
   return <section ref={sectionRef}
     data-mascot-intro="true"
     className={[styles.scrollSection, reducedMotion ? styles.reduced : ''].join(' ')}
     aria-label={[text.name, text.description].join(': ')}>
     <div ref={sceneRef} className={styles.stickyScene}>
+      <MascotFallback progress={progress} reducedMotion={reducedMotion} />
       <video ref={videoRef} className={styles.video} src={VIDEO_URL}
+        style={{ opacity: frameReady && !assetFailed ? 1 : 0 }}
         muted playsInline preload="auto" aria-hidden="true"
         onLoadedMetadata={event => {
           const video = event.currentTarget;
@@ -97,7 +100,9 @@ export function MascotScrollIntro({ locale }: { locale: Locale }) {
           video.pause();
           scheduleSample();
         }}
-        onError={() => setAssetFailed(true)}
+        onLoadedData={() => { setFrameReady(true); scheduleSample(); }}
+        onSeeked={() => { setFrameReady(true); scheduleSample(); }}
+        onError={() => { setFrameReady(false); setAssetFailed(true); }}
       />
       <div className={styles.scrim} aria-hidden="true" />
       <div className={styles.brandReveal}

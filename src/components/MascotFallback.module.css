@@ -1,0 +1,9 @@
+.stage { position:absolute; inset:0; overflow:hidden; display:flex; justify-content:center; align-items:center; pointer-events:none; background: radial-gradient(ellipse at 50% 55%, #1f3558 0%, #0e192a 43%, #070b13 81%); perspective: 1200px; }
+.glow { position:absolute; width:min(90vw,780px); height:70%; border-radius:50%; background:radial-gradient(ellipse,rgba(78,125,206,.34),rgba(8,14,25,0) 68%); filter: blur(30px); }
+.figure { position:relative; width:min(70vw,410px); height:min(72svh,520px); transform-style:preserve-3d; transform-origin:center; will-change:transform; filter:drop-shadow(0 28px 30px rgba(0,0,0,.26)); }
+.figure .front,.figure .back { position:absolute; inset:0; width:100%; height:100%; -webkit-backface-visibility:hidden; backface-visibility:hidden; }
+.figure .front { transform:rotateY(180deg); }
+.figure svg { display:block; width:100%; height:100%; }
+.floor { position:absolute; bottom:8%; left:20%; right:20%; height:10%; border-radius:50%; background:radial-gradient(ellipse,rgba(74,124,219,.25),transparent 70%); filter:blur(14px); }
+@media(max-width:640px) { .figure { width:min(96vw,400px); height:min(67svh,510px); margin-top:-6svh; } .floor { bottom:12%; } }
+@media(prefers-reduced-motion:reduce) { .figure { will-change:auto; } }
