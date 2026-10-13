@@ -342,7 +342,7 @@
     "policy": "Cookie policy",
     "necessary": "Essential storage remembers your cookie choice for 180 days and your quiz progress for this session. Quiz answers are never added to the registration link.",
     "preferences": "Choosing “Accept” saves your theme on this device. With “Essential only”, the theme works without being saved between visits.",
-    "analytics": "This landing page has no advertising cookies or analytics tools. Change your choice through “Cookie settings” at the bottom of the page.",
+    "analytics": "The site counts registration button clicks without cookies or visitor identifiers. Contact details and quiz answers are not sent to the counter. Advertising cookies are not used. Change your choice through “Cookie settings” at the bottom of the page.",
     "accept": "Accept",
     "essential": "Essential only",
     "settings": "Cookie settings"

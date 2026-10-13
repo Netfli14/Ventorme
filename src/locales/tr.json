@@ -342,7 +342,7 @@
     "policy": "Çerez politikası",
     "necessary": "Gerekli depolama, çerez seçimini 180 gün ve test ilerlemeni bu oturum boyunca saklar. Test cevapları kayıt bağlantısına eklenmez.",
     "preferences": "“Kabul et” seçilirse site, seçtiğin temayı bu cihazda hatırlar. “Yalnızca gerekli” seçeneğinde tema sonraki ziyaretler için kaydedilmez.",
-    "analytics": "Bu sayfada reklam çerezleri veya analiz araçları etkin değil. Seçimini sayfanın altındaki “Çerez ayarları” üzerinden değiştirebilirsin.",
+    "analytics": "Site, kayıt düğmelerine yapılan tıklamaları çerez veya ziyaretçi kimliği kullanmadan sayar. İletişim bilgileri ve test yanıtları sayaca gönderilmez. Reklam çerezleri kullanılmaz. Seçimini sayfanın altındaki “Çerez ayarları” üzerinden değiştirebilirsin.",
     "accept": "Kabul et",
     "essential": "Yalnızca gerekli",
     "settings": "Çerez ayarları"

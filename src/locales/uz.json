@@ -342,7 +342,7 @@
     "policy": "Cookies siyosati",
     "necessary": "Zarur saqlash tizimi cookies tanlovingni 180 kun, kvizdagi jarayonni esa shu sessiya davomida saqlaydi. Kviz javoblari ro‘yxatdan o‘tish havolasiga qo‘shilmaydi.",
     "preferences": "“Qabul qilish” tanlansa, sayt shu qurilmada tanlangan mavzuni eslab qoladi. “Faqat zarurlari” bilan mavzu keyingi tashriflar uchun saqlanmaydi.",
-    "analytics": "Bu sahifada reklama cookies fayllari va tahlil vositalari ulanmagan. Tanlovni sahifa pastidagi “Cookies sozlamalari” orqali o‘zgartirish mumkin.",
+    "analytics": "Sayt ro‘yxatdan o‘tish tugmalari bosilishini cookies fayllarisiz va tashrif buyuruvchi identifikatorlarisiz hisoblaydi. Aloqa ma’lumotlari va viktorina javoblari hisoblagichga yuborilmaydi. Reklama cookies fayllari ishlatilmaydi. Tanlovni sahifa pastidagi “Cookies sozlamalari” orqali o‘zgartirish mumkin.",
     "accept": "Qabul qilish",
     "essential": "Faqat zarurlari",
     "settings": "Cookies sozlamalari"

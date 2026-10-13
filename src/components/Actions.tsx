@@ -4,10 +4,11 @@ import { Share2, ArrowUpRight, ArrowRight, Check, LockKeyhole } from 'lucide-rea
 import Link from 'next/link';
 import { REGISTER_URL, SITE_URL } from '@/lib/config';
 import { dictionaries, type Locale } from '@/lib/i18n';
+import { sendRegistrationClick } from '@/lib/registration-tracking';
 export function RegistrationButton({ locale, primary = false }: { locale: Locale; primary?: boolean }) {
   const d = dictionaries[locale], descriptionId = useId();
   if (!REGISTER_URL) return <span className="registration-unavailable"><button type="button" className={`button ${primary ? 'button-primary' : 'button-outline'}`} disabled aria-describedby={descriptionId}><LockKeyhole size={17} aria-hidden="true" />{d.common.register}</button><span className="sr-only" id={descriptionId}>{d.common.registerUnavailable}</span></span>;
-  return <a className={`button ${primary ? 'button-primary' : 'button-outline'}`} href={REGISTER_URL}>{d.common.register}<ArrowUpRight size={18} aria-hidden="true" /></a>;
+  return <a className={`button ${primary ? 'button-primary' : 'button-outline'}`} href={REGISTER_URL} onClick={sendRegistrationClick} onAuxClick={event => { if (event.button === 1) sendRegistrationClick(); }}>{d.common.register}<ArrowUpRight size={18} aria-hidden="true" /></a>;
 }
 export function QuizButton({ locale, stage, className = '' }: { locale: Locale; stage?: string; className?: string }) {
   return <Link className={`button button-primary ${className}`} href={`/${locale}/quiz/${stage ? `?stage=${stage}` : ''}`}>{dictionaries[locale].common.quiz}<ArrowRight size={18} aria-hidden="true" /></Link>;
