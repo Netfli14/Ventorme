@@ -43,11 +43,9 @@ const featureMap: Record<Focus, string[]> = {
 // Ordered challenges express the student's first and second priorities, not a psychological score.
 export function buildPreview(a: Answers): Preview | null {
   if (!isComplete(a)) return null;
-  const requested = a.challenges.filter(x => x !== 'start');
   const inferred: Focus = a.stage === 'requirements' ? 'subjects' : a.stage === 'documents' ? 'documents' : a.stage === 'universities' ? 'universities' : a.stage === 'direction' ? 'direction' : 'start';
-  const focus: Focus = requested.find(() => true) ?? inferred;
-  const includeStart = a.challenges.includes('start') && focus !== 'start';
-  const secondary = requested.find(x => x !== focus) ?? (includeStart ? 'start' : null);
+  const focus: Focus = !a.challenges[0] || a.challenges[0] === 'start' ? inferred : a.challenges[0];
+  const secondary = a.challenges[1] && a.challenges[1] !== focus ? a.challenges[1] : null;
   const features = [...new Set([...featureMap[focus], ...(secondary ? featureMap[secondary] : [])])].filter(id => id !== 'grants' || a.program === 'kz' || a.regions.includes('kz'));
   return { focus, secondary, ib: a.program === 'ib', year: a.grade!, program: a.program!, regions: [...a.regions], interests: [...a.interests], features };
 }

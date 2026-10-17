@@ -10,7 +10,7 @@ import {
 } from "@/lib/registration-clicks";
 import { buildFunnel } from "@/lib/funnel";
 import type { LeadInput } from "@/lib/lead-validation";
-import type { makeRoute } from "@/lib/route-model";
+import { restoreRoute, type makeRoute } from "@/lib/route-model";
 export type LeadRecord = LeadInput & {
   route: ReturnType<typeof makeRoute>;
   source: string;
@@ -62,7 +62,10 @@ export async function GET(request: Request) {
         const r = batch[j];
         if (r) {
           journeys.push(r.journeyId);
-          if (i + j >= offset && i + j < offset + 25) page.push(r);
+          if (i + j >= offset && i + j < offset + 25) {
+            const answers = restoreRoute(r.answers);
+            if (answers) page.push({...r, answers});
+          }
         }
       }
     }

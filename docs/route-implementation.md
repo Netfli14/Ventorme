@@ -4,9 +4,11 @@ Implemented 16 October 2026 in the existing Netfli14/Ventorme project. The exist
 
 ## User flow
 
-Three questions share one session state with the IB builder, comparisons and route card. Contact details are never required for the result or PNG export. The builder presents learning scenarios, not verified university requirements or admission probabilities. A general non-IB route is available. Recommendations are deterministic rules, explicitly labelled as such.
+Six questions (grade, curriculum, admission stage, regions, interests and two ordered priorities) share one session state with the IB builder, comparisons and route card. Contact details are never required for the result or PNG export. The builder presents learning scenarios, not verified university requirements or admission probabilities. A general non-IB route is available. Recommendations are deterministic rules, explicitly labelled as such.
 
 Languages: RU, EN, KZ (`kk`), UZ, ZH, TR. Theme preferences continue to follow the existing cookie choice. Per the owner's 17 October request, the original mascot MP4 and poster are restored as the full first-screen homepage intro, using the existing `MascotScrollIntro` scene. It plays as a normal muted video on desktop and phones, with native controls, pause/play, replay and a skip link. Reduced motion requires manual playback; scrolling away pauses the video. The hero also retains a small replay dialog. Quiz/result entry routes go directly to the route experience. There is no scroll interception or mandatory viewing time.
+
+The six original questions are integrated into the redesigned “Let’s start with you” section. IB subject status is optional inside the curriculum step. The same state drives the plan, three actions, relevant platform tools, PNG and private lead record. A secondary priority replaces the third action with a concrete action for that task. Former three-question sessions keep known answers and subject sets, and ask for missing context; original six-question sessions can be resumed. Historical leads retain their stored plan and are normalized only for display.
 
 ## Motion
 
@@ -70,7 +72,7 @@ npm run test:e2e
 
 The E2E script starts its own Next server, creates isolated temporary data and synthetic administrator credentials, and cleans up the data afterward. It never creates production test leads. `VENTORME_BROWSER_PATH` can select an existing Chromium executable. `VENTORME_TEST_DIST_DIR` keeps E2E development output separate from the production build.
 
-Verified in Chromium: three-question flow, multiple interests and exclusive undecided choice, back navigation, immediate result, IB selection and A/B changes, PNG download, required consent, real local server persistence, administrator login/view/logout, anonymous event schemas, six languages, both themes, widths 320/390/768/1024/1440, original video playback, reduced motion and non-IB route. No page or console errors occurred in the passing run. Russian and Chinese PNG exports were opened and visually checked. The Chinese character subset includes every character used by the current locale copy; a separate CJK font family is loaded for the interface and canvas export.
+Verified in Chromium: six-question flow, multiple interests and exclusive undecided choice, back navigation, immediate result, IB selection and A/B changes, PNG download, required consent, real local server persistence, administrator login/view/logout, anonymous event schemas, six languages, both themes, widths 320/390/768/1024/1440, original video playback, reduced motion and non-IB route. No page or console errors occurred in the passing run. Russian and Chinese PNG exports were opened and visually checked. The Chinese character subset includes every character used by the current locale copy; a separate CJK font family is loaded for the interface and canvas export.
 
 Production persistence and authenticated access were additionally verified on 17 October 2026. Chromium emulation does not constitute a physical iPhone/Safari check.
 

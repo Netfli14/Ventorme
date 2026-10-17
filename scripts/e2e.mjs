@@ -181,41 +181,39 @@ try {
     .getByRole("button", { name: "Получить мой маршрут", exact: true })
     .first()
     .click();
-  await page.locator("#quiz label").nth(1).click();
-  await page
-    .locator("#quiz")
-    .getByRole("button", { name: "Далее", exact: true })
-    .click();
-  await page.locator("#quiz label").nth(0).click();
-  await page.locator("#quiz label").nth(1).click();
+  const choose = async (question, value) => page.locator(`#quiz label:has(input[name="route-${question}"][value="${value}"])`).click();
+  const next = async () => page.locator("#quiz").getByRole("button", {name:"Далее",exact:true}).click();
+  await choose("grade", "11"); await next();
+  await choose("program", "ib");
+  await choose("ibStatus", "chosen"); await next();
+  await choose("stage", "requirements"); await next();
+  await choose("regions", "uk"); await choose("regions", "europe"); await choose("regions", "asia");
+  await choose("regions", "turkey");
+  assert.equal(await page.locator('#quiz input[name="route-regions"]:checked').count(), 3);
+  await page.locator('#quiz [role="status"]').waitFor();
+  await choose("regions", "unknown");
+  assert.equal(await page.locator('#quiz input:checked').count(), 1);
+  await choose("regions", "uk"); await choose("regions", "europe"); await next();
+  await choose("interests", "engineering"); await choose("interests", "science");
   assert.equal(await page.locator("#quiz input:checked").count(), 2);
-  await page.locator("#quiz label").nth(7).click();
+  await choose("interests", "unknown");
   assert.equal(await page.locator("#quiz input:checked").count(), 1);
-  await page.locator("#quiz label").nth(0).click();
-  assert.equal(await page.locator("#quiz input:checked").count(), 1);
-  await page
-    .locator("#quiz")
-    .getByRole("button", { name: "Далее", exact: true })
-    .click();
-  await page
-    .locator("#quiz")
-    .getByRole("button", { name: "Назад", exact: true })
-    .click();
-  assert.equal(await page.locator("#quiz input:checked").count(), 1);
-  await page
-    .locator("#quiz")
-    .getByRole("button", { name: "Далее", exact: true })
-    .click();
-  await page.locator("#quiz label").nth(1).click();
-  await page
-    .locator("#quiz")
-    .getByRole("button", { name: "Показать мой маршрут", exact: true })
-    .click();
-  await page.locator("#my-route article").waitFor({ state: "visible" });
-  assert.ok(
-    (await page.locator("#my-route article").innerText()).includes("11 класс"),
-  );
-  ok("three questions, multi-select, undecided, back, immediate result");
+  await choose("interests", "engineering");
+  await page.locator("#quiz").getByRole("button", {name:"Назад",exact:true}).click();
+  assert.equal(await page.locator("#quiz input:checked").count(), 2);
+  await next();
+  assert.equal(await page.locator("#quiz input:checked").count(), 1); await next();
+  await choose("challenges", "subjects"); await choose("challenges", "exams"); await choose("challenges", "funding");
+  assert.equal(await page.locator('#quiz input:checked').count(), 2);
+  await page.locator("#quiz").getByRole("button", {name:"Показать мой маршрут",exact:true}).click();
+  await page.locator("#my-route article").waitFor({state:"visible"});
+  const routeText = await page.locator("#my-route article").innerText();
+  assert.match(routeText, /11 класс/); assert.match(routeText, /IB DP/);
+  assert.match(routeText, /Великобритания/); assert.match(routeText, /Континентальная Европа/);
+  assert.match(routeText, /Есть университеты/); assert.match(routeText, /Спланировать экзамены/);
+  assert.equal(await page.locator('#my-route article ol li').count(), 3);
+  await page.screenshot({path:'.test-tools/six-question-result.png'});
+  ok("six original questions, optional IB status, choice limits, undecided, back and contextual plan");
   const ib = page.locator("#ib-builder");
   await ib.getByRole("button", { name: "Mathematics AA", exact: true }).click();
   await ib.getByRole("button", { name: "Физика", exact: true }).click();
@@ -324,6 +322,11 @@ try {
   );
   const stats = await (await admin.request.get(base + "/api/stats/")).json();
   assert.equal(stats.totalLeads, 1);
+  assert.equal(stats.leads[0].answers.program, "ib");
+  assert.equal(stats.leads[0].answers.ibStatus, "chosen");
+  assert.equal(stats.leads[0].answers.stage, "requirements");
+  assert.deepEqual(stats.leads[0].answers.regions, ["uk", "europe"]);
+  assert.deepEqual(stats.leads[0].answers.challenges, ["subjects", "exams"]);
   assert.equal(stats.funnel.counts.quiz_start, 1);
   assert.equal(stats.funnel.counts.quiz_complete, 1);
   assert.equal(stats.funnel.conversions.resultToLead.rate, 100);
@@ -337,24 +340,16 @@ try {
     .locator("#my-route")
     .getByRole("button", { name: "Изменить ответы", exact: true })
     .click();
-  await page.locator("#quiz label").nth(2).click();
-  await page
-    .locator("#quiz")
-    .getByRole("button", { name: "Далее", exact: true })
-    .click();
-  await page
-    .locator("#quiz")
-    .getByRole("button", { name: "Далее", exact: true })
-    .click();
-  await page.locator("#quiz label").nth(3).click();
-  await page
-    .locator("#quiz")
-    .getByRole("button", { name: "Показать мой маршрут", exact: true })
-    .click();
+  await choose("grade", "12");
+  for (let i=0;i<5;i++) await next();
+  await choose("challenges", "subjects"); await choose("challenges", "exams");
+  await choose("challenges", "funding");
+  await page.locator("#quiz").getByRole("button", {name:"Показать мой маршрут",exact:true}).click();
+  assert.match(await page.locator("#my-route article").innerText(), /картина расходов/);
   assert.match(await page.locator("#my-route article").innerText(), /12 класс/);
   ok("editing a completed quiz updates the route and retains subject sets");
   const stateBefore = await page.evaluate(() =>
-    sessionStorage.getItem("ventorme.route.v2"),
+    sessionStorage.getItem("ventorme.route.v3"),
   );
   for (const locale of ["ru", "en", "kk", "uz", "zh", "tr"]) {
     await page.goto(base + "/" + locale + "/", { waitUntil: "networkidle" });
@@ -364,7 +359,7 @@ try {
       locale,
     );
     assert.equal(
-      await page.evaluate(() => sessionStorage.getItem("ventorme.route.v2")),
+      await page.evaluate(() => sessionStorage.getItem("ventorme.route.v3")),
       stateBefore,
     );
     for (const width of [320, 390, 768, 1024, 1440]) {

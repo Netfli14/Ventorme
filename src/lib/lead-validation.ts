@@ -58,8 +58,12 @@ export function parseLead(value: unknown): LeadInput | null {
   const a = x.answers;
   const answers: RouteState = {
     grade: a.grade,
+    program: a.program,
+    ibStatus: a.ibStatus,
+    stage: a.stage,
+    regions: [...a.regions],
     interests: [...a.interests],
-    challenge: a.challenge,
+    challenges: [...a.challenges],
     step: a.step,
     completed: true,
     ib: a.ib,

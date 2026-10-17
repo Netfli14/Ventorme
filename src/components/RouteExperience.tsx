@@ -29,15 +29,18 @@ import {
   CheckCircle2,
   X,
 } from "lucide-react";
-import { dictionaries, type Locale } from "@/lib/i18n";
+import { dictionaries, format, type Locale } from "@/lib/i18n";
 import { routeCopy } from "@/lib/route-copy";
 import {
   interests,
-  challenges,
+  questionIds,
+  routeStepValid,
+  type RouteState,
   subjects,
   makeRoute,
   type Subject,
 } from "@/lib/route-model";
+import { options, limits, toggleChoice } from "@/lib/quiz";
 import { downloadRoute } from "@/lib/export-route";
 import { useRoute } from "./RouteProvider";
 import { useRouteMotion } from "./useRouteMotion";
@@ -330,61 +333,55 @@ function RouteScene({
 }
 
 function Quiz({ locale }: { locale: Locale }) {
-  const c = routeCopy[locale],
-    d = dictionaries[locale],
+  const c = routeCopy[locale], d = dictionaries[locale],
     { route: s, patch, track } = useRoute(),
-    scope = useRef<HTMLDivElement>(null),
-    heading = useRef<HTMLHeadingElement>(null),
-    reduce = useReducedMotion(),
-    moved = useRef(false),
-    direction = useRef(1);
-  const valid =
-    s.step === 0
-      ? Boolean(s.grade)
-      : s.step === 1
-        ? s.interests.length > 0
-        : Boolean(s.challenge);
+    scope = useRef<HTMLDivElement>(null), heading = useRef<HTMLHeadingElement>(null),
+    reduce = useReducedMotion(), moved = useRef(false), direction = useRef(1);
+  const [limited, setLimited] = useState(false);
+  const id = questionIds[s.step], total = questionIds.length;
+  const valid = routeStepValid(s, s.step);
+  const multi = id === "regions" || id === "interests" || id === "challenges";
+  const selection = s[id];
+  const selected = (value: string) => Array.isArray(selection) ? (selection as readonly string[]).includes(value) : selection === value;
   useLayoutEffect(() => {
-    if (moved.current) heading.current?.focus({ preventScroll: true });
+    if (moved.current && heading.current) {
+      heading.current.focus({ preventScroll: true });
+      const rect = heading.current.getBoundingClientRect();
+      if (rect.top < 100 || rect.bottom > innerHeight - 100)
+        heading.current.scrollIntoView({block: "center", behavior: reduce ? "instant" : "smooth"});
+    }
     if (reduce || !scope.current) return;
-    const ctx = gsap.context(
-      () => {
-        const answers = scope.current!.querySelectorAll("[data-answer]");
-        const timeline = gsap.timeline({defaults: {ease: "power3.out", clearProps: "all"}})
-          .from("[data-question-message], [data-question] > svg", {x: 22 * direction.current, scale: 0.97, opacity: 0.25, duration: 0.35});
-        if (answers.length) timeline.from(answers, {y: 18, scale: 0.97, opacity: 0.3, duration: 0.35, stagger: 0.025}, 0.08);
-        gsap.fromTo("[data-quiz-arrow]", {x: -12, scaleX: 0.6}, {x: 0, scaleX: 1, duration: 0.4, ease: "power3.out", clearProps: "all"});
-      },
-      scope,
-    );
+    const ctx = gsap.context(() => {
+      const answers = scope.current!.querySelectorAll("[data-answer]");
+      const timeline = gsap.timeline({defaults: {ease: "power3.out", clearProps: "all"}})
+        .from("[data-question-message], [data-question] > svg", {x: 22 * direction.current, scale: 0.97, opacity: 0.25, duration: 0.35});
+      if (answers.length) timeline.from(answers, {y: 18, scale: 0.97, opacity: 0.3, duration: 0.35, stagger: 0.025}, 0.08);
+      gsap.fromTo("[data-quiz-arrow]", {x: -12, scaleX: 0.6}, {x: 0, scaleX: 1, duration: 0.4, ease: "power3.out", clearProps: "all"});
+    }, scope);
     return () => ctx.revert();
   }, [s.step, s.completed, reduce]);
-  const selectInterest = (id: (typeof interests)[number]) => {
-    track("quiz_start");
-    const next =
-      id === "unknown"
-        ? (["unknown"] as typeof s.interests)
-        : s.interests.includes(id)
-          ? s.interests.filter((v) => v !== id)
-          : [...s.interests.filter((v) => v !== "unknown"), id];
-    patch({
-      interests: next,
-      field: next.find((v) => v !== "unknown") || s.field,
-      completed: false,
-    });
+  const select = (value: string) => {
+    track("quiz_start"); setLimited(false);
+    if (id === "grade") patch({grade: value as RouteState["grade"], completed: false});
+    else if (id === "program") patch({program: value as RouteState["program"], ibStatus: value === "ib" ? s.ibStatus : "", ib: value === "ib", completed: false});
+    else if (id === "stage") patch({stage: value as RouteState["stage"], completed: false});
+    else {
+      const next = toggleChoice<string>(s[id], value, limits[id], id === "challenges" ? undefined : "unknown");
+      setLimited(next.limited);
+      if (!next.limited) patch({[id]: next.values, completed: false,
+        ...(id === "interests" ? {field: next.values.find(v => v !== "unknown") as RouteState["field"] || s.field} : {})});
+    }
+  };
+  const jump = (step: number) => {
+    moved.current = true; direction.current = step < s.step ? -1 : 1;
+    setLimited(false); patch({step, completed: false});
   };
   const move = (back = false) => {
-    moved.current = true;
-    direction.current = back ? -1 : 1;
-    if (back) {
-      patch({ step: Math.max(0, s.step - 1), completed: false });
-      return;
-    }
+    if (back) return jump(Math.max(0, s.step - 1));
     if (!valid) return;
-    if (s.step < 2) patch({ step: s.step + 1 });
+    if (s.step < total - 1) jump(s.step + 1);
     else {
-      patch({ completed: true });
-      track("quiz_complete");
+      patch({completed: true}); track("quiz_complete");
       requestAnimationFrame(() => go("my-route"));
     }
   };
@@ -394,167 +391,73 @@ function Quiz({ locale }: { locale: Locale }) {
         <div className={styles.quizLayout}>
           <div className={styles.quizIntro}>
             <SectionLabel n="01">{c.eyebrow}</SectionLabel>
-            <h2>{c.quizTitle}</h2>
-            <p>{c.quizLead}</p>
+            <h2>{c.quizTitle}</h2><p>{c.quizLead}</p>
+            <nav className={styles.quizTopics} aria-label={c.quizTitle}>
+              {questionIds.map((key, index) => <button key={key} type="button"
+                aria-label={d.questions[key].title} aria-current={!s.completed && index === s.step ? "step" : undefined}
+                disabled={!s.completed && index > s.step} onClick={() => jump(index)}>
+                <span>{(s.completed || index < s.step) && routeStepValid(s, index) ? <Check size={14} /> : `0${index + 1}`}</span>
+                {c.quizTopics[index]}
+              </button>)}
+            </nav>
             <div className={styles.quizDecor} aria-hidden="true" data-motion-section="quiz">
-              <span data-quiz-symbol>?</span>
-              <div data-quiz-arrow>→</div>
+              <span data-quiz-symbol>?</span><div data-quiz-arrow>→</div>
               <span data-quiz-symbol>{s.completed ? <Check size={52} /> : "!"}</span>
             </div>
             <p className={styles.smallNote}>{c.free}</p>
           </div>
-          <div className={styles.quizCard}>
+          <div className={styles.quizCard} data-quiz-step={id}>
             <div className={styles.progressCaption}>
-              <span>
-                {s.completed ? c.done : `${c.step} ${s.step + 1} / 3`}
-              </span>
-              <span>
-                {s.completed ? "03" : `0${s.step + 1}`}
-                <span className={styles.muted}> / 03</span>
-              </span>
+              <span>{s.completed ? c.done : `${c.step} ${s.step + 1} / ${total}`}</span>
+              <span>{s.completed ? "06" : `0${s.step + 1}`}<span className={styles.muted}> / 06</span></span>
             </div>
-            <div
-              className={styles.progress}
-              role="progressbar"
-              aria-label={c.step}
-              aria-valuemin={0}
-              aria-valuemax={3}
-              aria-valuenow={s.completed ? 3 : s.step + 1}
-            >
-              <span
-                style={{
-                  transform: `scaleX(${s.completed ? 1 : (s.step + 1) / 3})`,
-                }}
-              />
+            <div className={styles.progress} role="progressbar" aria-label={c.step}
+              aria-valuemin={0} aria-valuemax={total} aria-valuenow={s.completed ? total : s.step + 1}>
+              <span style={{transform: `scaleX(${s.completed ? 1 : (s.step + 1) / total})`}} />
             </div>
-            {s.completed ? (
-              <div data-question className={styles.quizComplete}>
-                <CheckCircle2 size={42} />
-                <h3>{c.quizDone}</h3>
-                <p>{c.quizDoneText}</p>
-                <div className={styles.buttonRow}>
-                  <button
-                    className="button button-primary"
-                    onClick={() => go("ib-builder")}
-                  >
-                    {c.secondary}
-                    <ArrowRight size={17} />
-                  </button>
-                  <button
-                    className="text-button"
-                    onClick={() => {
-                      moved.current = true;
-                      patch({ completed: false, step: 0 });
-                    }}
-                  >
-                    {c.edit}
-                  </button>
-                </div>
+            {s.completed ? <div data-question className={styles.quizComplete}>
+              <CheckCircle2 size={42} /><h3>{c.quizDone}</h3><p>{c.quizDoneText}</p>
+              <div className={styles.buttonRow}>
+                <button className="button button-primary" onClick={() => go("my-route")}>{c.show}<ArrowRight size={17} /></button>
+                <button className="text-button" onClick={() => jump(0)}>{c.edit}</button>
               </div>
-            ) : (
-              <div data-question>
-                <div className={styles.questionMessage} data-question-message>
-                  <span className={styles.messageSender} aria-hidden="true">
-                    <img src="/media/ventorme-mascot-poster.jpg" alt="" /> VentorMe
-                  </span>
-                  <h3 ref={heading} tabIndex={-1} id="route-question">
-                    <MessageText text={c.questions[s.step]} />
-                  </h3>
-                  <p className={styles.questionHelp}>{c.help[s.step]}</p>
-                </div>
-                <div
-                  className={`${styles.options} ${s.step === 0 ? styles.grades : ""}`}
-                  role="group"
-                  aria-labelledby="route-question"
-                >
-                  {s.step === 0 &&
-                    (["10", "11", "12"] as const).map((g) => (
-                      <label
-                        data-answer
-                        key={g}
-                        className={`${styles.option} ${s.grade === g ? styles.chosen : ""}`}
-                      >
-                        <input
-                          type="radio"
-                          name="route-grade"
-                          checked={s.grade === g}
-                          onChange={() => {
-                            track("quiz_start");
-                            patch({ grade: g });
-                          }}
-                        />
-                        <strong>{g}</strong>
-                        <span>{c.grade}</span>
-                        {s.grade === g && <Check size={17} />}
-                      </label>
-                    ))}
-                  {s.step === 1 &&
-                    interests.map((id, i) => (
-                      <label
-                        data-answer
-                        key={id}
-                        className={`${styles.option} ${s.interests.includes(id) ? styles.chosen : ""}`}
-                      >
-                        <input
-                          type="checkbox"
-                          checked={s.interests.includes(id)}
-                          onChange={() => selectInterest(id)}
-                        />
-                        <span className={styles.optionNumber}>0{i + 1}</span>
-                        <span>{d.choices.interests[id]}</span>
-                        <span className={styles.optionCheck}>
-                          {s.interests.includes(id) ? (
-                            <Check size={15} />
-                          ) : (
-                            <Plus size={15} />
-                          )}
-                        </span>
-                      </label>
-                    ))}
-                  {s.step === 2 &&
-                    challenges.map((id, i) => (
-                      <label
-                        data-answer
-                        key={id}
-                        className={`${styles.option} ${s.challenge === id ? styles.chosen : ""}`}
-                      >
-                        <input
-                          type="radio"
-                          name="route-challenge"
-                          checked={s.challenge === id}
-                          onChange={() => {
-                            track("quiz_start");
-                            patch({ challenge: id });
-                          }}
-                        />
-                        <span className={styles.optionNumber}>0{i + 1}</span>
-                        <span>{c.challenges[i]}</span>
-                        {s.challenge === id && <Check size={17} />}
-                      </label>
-                    ))}
-                </div>
-                <div className={styles.quizNav}>
-                  <button
-                    type="button"
-                    className="text-button"
-                    onClick={() => move(true)}
-                    disabled={s.step === 0}
-                  >
-                    <ArrowLeft size={17} />
-                    {c.back}
-                  </button>
-                  <button
-                    type="button"
-                    className="button button-primary"
-                    disabled={!valid}
-                    onClick={() => move()}
-                  >
-                    {s.step === 2 ? c.show : c.next}
-                    <ArrowRight size={17} />
-                  </button>
-                </div>
+            </div> : <div data-question>
+              <div className={styles.questionMessage} data-question-message>
+                <span className={styles.messageSender} aria-hidden="true"><img src="/media/ventorme-mascot-poster.jpg" alt="" /> VentorMe</span>
+                <h3 ref={heading} tabIndex={-1} id="route-question"><MessageText text={c.questions[s.step]} /></h3>
+                <p className={styles.questionHelp}>{c.help[s.step]}</p>
               </div>
-            )}
+              {multi && <div className={styles.choiceCaption} aria-live="polite">
+                <span>{format(d.common.multiChoice, {max: limits[id]})}</span>
+                <span>{format(d.common.selectedCount, {count: (selection as string[]).length, max: limits[id]})}</span>
+              </div>}
+              <div className={`${styles.options} ${id === "grade" ? styles.grades : ""} ${id === "program" || id === "stage" ? styles.wideOptions : ""}`}
+                role="group" aria-labelledby="route-question">
+                {options[id].map((value, index) => <label data-answer key={value}
+                  className={`${styles.option} ${selected(value) ? styles.chosen : ""}`}>
+                  <input type={multi ? "checkbox" : "radio"} name={`route-${id}`} value={value}
+                    checked={selected(value)} onChange={() => select(value)} />
+                  {id === "grade" ? <><strong>{value}</strong><span>{c.grade}</span></> : <>
+                    <span className={styles.optionNumber}>{id === "challenges" && selected(value)
+                      ? `0${s.challenges.indexOf(value as typeof s.challenges[number]) + 1}` : `0${index + 1}`}</span>
+                    <span>{(d.choices[id] as Record<string, string>)[value]}</span>
+                  </>}
+                  <span className={styles.optionCheck}>{selected(value) ? <Check size={15} /> : multi ? <Plus size={15} /> : null}</span>
+                </label>)}
+              </div>
+              {limited && multi && <p role="status" className={styles.choiceLimit}>{format(d.common.maxChoices, {max: limits[id]})}</p>}
+              {id === "program" && s.program === "ib" && <fieldset className={styles.ibStatus}>
+                <legend>{d.common.ibPrompt} <small>{c.optional}</small></legend>
+                <div>{options.ibStatus.map(value => <label key={value} className={s.ibStatus === value ? styles.chosen : ""}>
+                  <input type="radio" name="route-ibStatus" value={value} checked={s.ibStatus === value}
+                    onChange={() => patch({ibStatus: value})} />{d.choices.ibStatus[value]}
+                </label>)}</div>
+              </fieldset>}
+              <div className={styles.quizNav}>
+                <button type="button" className="text-button" onClick={() => move(true)} disabled={s.step === 0}><ArrowLeft size={17} />{c.back}</button>
+                <button type="button" className="button button-primary" disabled={!valid} onClick={() => move()}>{s.step === total - 1 ? c.show : c.next}<ArrowRight size={17} /></button>
+              </div>
+            </div>}
           </div>
         </div>
       </div>
@@ -1057,7 +960,7 @@ function MyRoute({ locale }: { locale: Locale }) {
     const card = host.querySelector("[data-route-card]");
     if (card) observer.observe(card);
     return () => {observer.disconnect(); ctx.revert();};
-  }, [s.completed, s.challenge, s.grade, s.interests, reduce]);
+  }, [s.completed, s.challenges, s.grade, s.program, s.stage, s.regions, s.interests, reduce]);
   async function save() {
     setDownload("loading");
     try {
@@ -1102,7 +1005,7 @@ function MyRoute({ locale }: { locale: Locale }) {
                   <span>
                     {s.grade} {c.grade}
                   </span>
-                  <span>{s.ib ? "IB" : c.generalMode}</span>
+                  <span>{s.program ? d.choices.program[s.program] : c.generalMode}</span>
                 </div>
                 <dl data-route-piece className={styles.routeDetails}>
                   <div>
@@ -1113,18 +1016,10 @@ function MyRoute({ locale }: { locale: Locale }) {
                         .join(", ")}
                     </dd>
                   </div>
-                  <div>
-                    <dt>{c.difficulty}</dt>
-                    <dd>
-                      {
-                        c.challenges[
-                          challenges.indexOf(
-                            s.challenge as (typeof challenges)[number],
-                          )
-                        ]
-                      }
-                    </dd>
-                  </div>
+                  <div><dt>{d.questions.stage.title}</dt><dd>{s.stage ? d.choices.stage[s.stage] : "—"}</dd></div>
+                  <div><dt>{d.questions.regions.title}</dt><dd>{s.regions.map(id => d.choices.regions[id]).join(", ")}</dd></div>
+                  <div><dt>{d.questions.challenges.title}</dt><dd>{s.challenges.map((id, i) => `${i + 1}. ${d.choices.challenges[id]}`).join(" · ")}</dd></div>
+                  {s.program === "ib" && s.ibStatus && <div><dt>{d.common.ibPrompt}</dt><dd>{d.choices.ibStatus[s.ibStatus]}</dd></div>}
                   {s.ib && s[s.active].length > 0 && (
                     <div>
                       <dt>
@@ -1177,6 +1072,8 @@ function MyRoute({ locale }: { locale: Locale }) {
               {download === "error" && <p role="alert">{c.downloadError}</p>}
               <div className={styles.recommendations}>
                 <h3>{c.startWith}</h3>
+                {route.focus === "subjects" && <button type="button" className="button button-secondary"
+                  onClick={() => go("ib-builder")}>{c.secondary}<ArrowRight size={17} /></button>}
                 {route.features.map((key) => {
                   const f = d.features[key as keyof typeof d.features];
                   return (

@@ -3,7 +3,6 @@ import { routeCopy } from "./route-copy";
 import {
   makeRoute,
   subjects,
-  challenges,
   type RouteState,
 } from "./route-model";
 
@@ -49,12 +48,11 @@ export async function downloadRoute(state: RouteState, locale: Locale) {
       color: "#3B3B3B",
       gap: 20,
     },
-    {
-      text: `${c.difficulty}: ${c.challenges[challenges.indexOf(state.challenge as (typeof challenges)[number])]}`,
-      size: 28,
-      color: "#3B3B3B",
-      gap: 20,
-    },
+    {text: `${d.questions.program.title} ${state.program ? d.choices.program[state.program] : "—"}`, size: 28, color: "#3B3B3B", gap: 20},
+    {text: `${d.questions.stage.title} ${state.stage ? d.choices.stage[state.stage] : "—"}`, size: 28, color: "#3B3B3B", gap: 20},
+    {text: `${d.questions.regions.title} ${state.regions.map(id => d.choices.regions[id]).join(", ")}`, size: 28, color: "#3B3B3B", gap: 20},
+    {text: `${d.questions.challenges.title} ${state.challenges.map((id, i) => `${i+1}. ${d.choices.challenges[id]}`).join(" · ")}`, size: 28, color: "#3B3B3B", gap: 20},
+    ...(state.program === "ib" && state.ibStatus ? [{text: `${d.common.ibPrompt} ${d.choices.ibStatus[state.ibStatus]}`, size: 28, color: "#3B3B3B", gap: 20}] : []),
     {
       text: state.ib
         ? `${c.selected} (${state.active.toUpperCase()}): ${state[state.active].map((s) => c.subjects[subjects.indexOf(s)]).join(", ") || "—"}`

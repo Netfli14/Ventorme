@@ -10,11 +10,13 @@ import {
 } from "react";
 import {
   emptyRoute,
-  validRoute,
+  restoreRoute,
+  routeFromAnswers,
   type RouteState,
   type RouteEvent,
 } from "@/lib/route-model";
-const KEY = "ventorme.route.v2";
+import { readState } from "@/lib/storage";
+const KEY = "ventorme.route.v3";
 type Context = {
   route: RouteState;
   ready: boolean;
@@ -45,10 +47,13 @@ export function RouteProvider({ children }: { children: ReactNode }) {
   }, []);
   useEffect(() => {
     try {
-      const s = JSON.parse(sessionStorage.getItem(KEY) || "null");
-      if (validRoute(s)) {
+      const saved = sessionStorage.getItem(KEY) || sessionStorage.getItem("ventorme.route.v2");
+      const oldQuiz = readState(sessionStorage);
+      const s = restoreRoute(JSON.parse(saved || "null")) || (oldQuiz ? routeFromAnswers(oldQuiz.answers, oldQuiz.step) : null);
+      if (s) {
         current.current = s;
         setRoute(s);
+        sessionStorage.setItem(KEY, JSON.stringify(s));
       }
     } catch {}
     setReady(true);

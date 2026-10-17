@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { dictionaries } from "@/lib/i18n";
 import { routeCopy } from "@/lib/route-copy";
-import { subjects, challenges } from "@/lib/route-model";
+import { subjects } from "@/lib/route-model";
 import type { ClickStats } from "@/lib/registration-clicks";
 import type { LeadRecord } from "@/app/api/stats/route";
 import type { buildFunnel } from "@/lib/funnel";
@@ -301,19 +301,15 @@ export function RegistrationStats() {
                                 )
                                 .join(", ")}
                             </dd>
-                            <dt>Задача</dt>
-                            <dd>
-                              {
-                                routeCopy.ru.challenges[
-                                  challenges.indexOf(
-                                    lead.answers
-                                      .challenge as (typeof challenges)[number],
-                                  )
-                                ]
-                              }
-                            </dd>
-                            <dt>Программа</dt>
-                            <dd>{lead.answers.ib ? "IB" : "Общий маршрут"}</dd>
+                            <dt>Задачи по приоритету</dt>
+                            <dd>{lead.answers.challenges.map(id => dictionaries.ru.choices.challenges[id]).join(" · ") || "—"}</dd>
+                            <dt>Программа обучения</dt>
+                            <dd>{lead.answers.program ? dictionaries.ru.choices.program[lead.answers.program] : "Не указана в прежнем квизе"}</dd>
+                            <dt>Текущий этап</dt>
+                            <dd>{lead.answers.stage ? dictionaries.ru.choices.stage[lead.answers.stage] : "—"}</dd>
+                            <dt>Регионы</dt>
+                            <dd>{lead.answers.regions.map(id => dictionaries.ru.choices.regions[id]).join(", ") || "—"}</dd>
+                            {lead.answers.ibStatus && <><dt>Выбор предметов IB</dt><dd>{dictionaries.ru.choices.ibStatus[lead.answers.ibStatus]}</dd></>}
                             {lead.answers.ib &&
                               (["a", "b"] as const).map((k) => (
                                 <div className={styles.definition} key={k}>

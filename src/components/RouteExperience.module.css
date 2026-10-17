@@ -440,6 +440,29 @@
 .quizIntro {
   padding-top: 18px;
 }
+.quizTopics { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 26px; }
+.quizTopics button {
+  display: flex; align-items: center; gap: 9px; padding: 9px 8px;
+  text-align: left; min-height: 44px; font-size: 12px; color: var(--muted);
+  border: 1px solid transparent; border-radius: 12px;
+}
+.quizTopics button > span {
+  width: 27px; height: 27px; flex-shrink: 0; display: grid; place-items: center;
+  border: 1px solid var(--border); border-radius: 9px; font-size: 10px; background: var(--card);
+}
+.quizTopics button[aria-current="step"] { color: var(--accent); background: var(--selected); border-color: var(--border); }
+.quizTopics button[aria-current="step"] > span { background: var(--accent); color: white; border-color: var(--accent); }
+.quizTopics button:disabled { opacity: 0.6; cursor: default; }
+.quizTopics button > span:has(svg) { color: #315c39; background: #dff4de; border-color: #dff4de; }
+.choiceCaption { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; margin: -4px 0 12px; color: var(--muted); font-size: 11px; }
+.choiceLimit { color: var(--accent); font-size: 12px; margin-top: 12px; }
+.wideOptions { grid-template-columns: minmax(0, 1fr) !important; }
+.ibStatus { border: 1px solid var(--border); border-radius: 14px; padding: 14px; margin-top: 20px; min-width: 0; }
+.ibStatus legend { font-size: 12px; padding-inline: 5px; }
+.ibStatus legend small { display: block; color: var(--muted); font-size: 10px; }
+.ibStatus > div { display: flex; flex-wrap: wrap; gap: 8px; }
+.ibStatus label { display: flex; align-items: center; gap: 6px; padding: 8px; min-height: 40px; border: 1px solid var(--border); border-radius: 9px; font-size: 11px; cursor: pointer; }
+.ibStatus input { accent-color: var(--accent); }
 .quizIntro > p:not(.sectionLabel) {
   color: var(--muted);
   font-size: 15px;
@@ -612,6 +635,7 @@
   top: 12px;
   right: 12px;
 }
+.grades .option > .optionCheck { position: absolute; top: 12px; right: 12px; }
 .grades .option > span {
   font-size: 12px;
 }
