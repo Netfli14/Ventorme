@@ -71,6 +71,8 @@
   left: max(1.2rem, 3.5vw);
   width: min(30rem, calc(100% - 16rem));
   text-align: center;
+  display: grid;
+  gap: 10px;
 }
 .registration :global(.button) {
   width: 100%;
@@ -151,3 +153,5 @@
 @media (prefers-reduced-motion: reduce) {
   .brandReveal { transition: none; }
 }
+
+@media(max-width:640px){.registration{top:calc(124px + env(safe-area-inset-top,0px))}.video{top:calc(270px + env(safe-area-inset-top,0px));height:min(52svh,calc(100svh - 320px - env(safe-area-inset-top,0px)),460px)}}

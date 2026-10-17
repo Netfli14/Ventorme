@@ -6,7 +6,6 @@ import {
   useState,
 } from "react";
 import { gsap } from "gsap";
-import { Flip } from "gsap/Flip";
 import { useReducedMotion } from "./useMotionPreference";
 import {
   ArrowUpRight,
@@ -28,27 +27,16 @@ import {
   CheckCircle2,
   X,
 } from "lucide-react";
-import { dictionaries, format, type Locale } from "@/lib/i18n";
+import { dictionaries, type Locale } from "@/lib/i18n";
 import { routeCopy } from "@/lib/route-copy";
-import {
-  interests,
-  questionIds,
-  routeStepValid,
-  type RouteState,
-  subjects,
-  makeRoute,
-  type Subject,
-} from "@/lib/route-model";
-import { options, limits, toggleChoice } from "@/lib/quiz";
-import { downloadRoute } from "@/lib/export-route";
 import { useRoute } from "./RouteProvider";
 import { useRouteMotion } from "./useRouteMotion";
+import { MascotScrollIntro } from "./MascotScrollIntro";
 import { StoryExperience } from "./StoryExperience";
+import { platformFaq } from "@/lib/platform-faq";
 import { storyCopy } from "@/lib/story-copy";
-import { MessageText } from "./MessageText";
-import { RegistrationButton, ShareButton } from "./Actions";
+import { RegistrationButton } from "./Actions";
 import styles from "./RouteExperience.module.css";
-gsap.registerPlugin(Flip);
 
 function go(id: string) {
   const section = document.getElementById(id);
@@ -93,13 +81,7 @@ function RouteScene({
     { route } = useRoute();
   const [run, setRun] = useState(0),
     [failed, setFailed] = useState(false);
-  const hint = route.completed
-    ? c.quizDone
-    : route[route.active].length === 3
-      ? c.change
-      : route.grade
-        ? c.help[route.step]
-        : c.mascotHint;
+  const hint = c.mascotHint;
   useLayoutEffect(() => {
     if (reduce || !scope.current) return;
     const host = scope.current;
@@ -332,627 +314,6 @@ function RouteScene({
   );
 }
 
-function Quiz({ locale }: { locale: Locale }) {
-  const c = routeCopy[locale], d = dictionaries[locale],
-    { route: s, patch, track } = useRoute(),
-    scope = useRef<HTMLDivElement>(null), heading = useRef<HTMLHeadingElement>(null),
-    reduce = useReducedMotion(), moved = useRef(false), direction = useRef(1);
-  const [limited, setLimited] = useState(false);
-  const id = questionIds[s.step], total = questionIds.length;
-  const valid = routeStepValid(s, s.step);
-  const multi = id === "regions" || id === "interests" || id === "challenges";
-  const selection = s[id];
-  const selected = (value: string) => Array.isArray(selection) ? (selection as readonly string[]).includes(value) : selection === value;
-  useLayoutEffect(() => {
-    if (moved.current && heading.current) {
-      heading.current.focus({ preventScroll: true });
-      const rect = heading.current.getBoundingClientRect();
-      if (rect.top < 100 || rect.bottom > innerHeight - 100)
-        heading.current.scrollIntoView({block: "center", behavior: reduce ? "instant" : "smooth"});
-    }
-    if (reduce || !scope.current) return;
-    const ctx = gsap.context(() => {
-      const answers = scope.current!.querySelectorAll("[data-answer]");
-      const timeline = gsap.timeline({defaults: {ease: "power3.out", clearProps: "all"}})
-        .from("[data-question-message], [data-question] > svg", {x: 22 * direction.current, scale: 0.97, opacity: 0.25, duration: 0.35});
-      if (answers.length) timeline.from(answers, {y: 18, scale: 0.97, opacity: 0.3, duration: 0.35, stagger: 0.025}, 0.08);
-      gsap.fromTo("[data-quiz-arrow]", {x: -12, scaleX: 0.6}, {x: 0, scaleX: 1, duration: 0.4, ease: "power3.out", clearProps: "all"});
-    }, scope);
-    return () => ctx.revert();
-  }, [s.step, s.completed, reduce]);
-  const select = (value: string) => {
-    track("quiz_start"); setLimited(false);
-    if (id === "grade") patch({grade: value as RouteState["grade"], completed: false});
-    else if (id === "program") patch({program: value as RouteState["program"], ibStatus: value === "ib" ? s.ibStatus : "", ib: value === "ib", completed: false});
-    else if (id === "stage") patch({stage: value as RouteState["stage"], completed: false});
-    else {
-      const next = toggleChoice<string>(s[id], value, limits[id], id === "challenges" ? undefined : "unknown");
-      setLimited(next.limited);
-      if (!next.limited) patch({[id]: next.values, completed: false,
-        ...(id === "interests" ? {field: next.values.find(v => v !== "unknown") as RouteState["field"] || s.field} : {})});
-    }
-  };
-  const jump = (step: number) => {
-    moved.current = true; direction.current = step < s.step ? -1 : 1;
-    setLimited(false); patch({step, completed: false});
-  };
-  const move = (back = false) => {
-    if (back) return jump(Math.max(0, s.step - 1));
-    if (!valid) return;
-    if (s.step < total - 1) jump(s.step + 1);
-    else {
-      patch({completed: true}); track("quiz_complete");
-      requestAnimationFrame(() => go("my-route"));
-    }
-  };
-  return (
-    <section id="quiz" className={styles.quizSection} ref={scope}>
-      <div className="container">
-        <div className={styles.quizLayout}>
-          <div className={styles.quizIntro}>
-            <SectionLabel n="01">{c.eyebrow}</SectionLabel>
-            <h2>{c.quizTitle}</h2><p>{c.quizLead}</p>
-            <nav className={styles.quizTopics} aria-label={c.quizTitle}>
-              {questionIds.map((key, index) => <button key={key} type="button"
-                aria-label={d.questions[key].title} aria-current={!s.completed && index === s.step ? "step" : undefined}
-                disabled={!s.completed && index > s.step} onClick={() => jump(index)}>
-                <span>{(s.completed || index < s.step) && routeStepValid(s, index) ? <Check size={14} /> : `0${index + 1}`}</span>
-                {c.quizTopics[index]}
-              </button>)}
-            </nav>
-            <div className={styles.quizDecor} aria-hidden="true" data-motion-section="quiz">
-              <span data-quiz-symbol>?</span><div data-quiz-arrow>→</div>
-              <span data-quiz-symbol>{s.completed ? <Check size={52} /> : "!"}</span>
-            </div>
-            <p className={styles.smallNote}>{c.free}</p>
-          </div>
-          <div className={styles.quizCard} data-quiz-step={id}>
-            <div className={styles.progressCaption}>
-              <span>{s.completed ? c.done : `${c.step} ${s.step + 1} / ${total}`}</span>
-              <span>{s.completed ? "06" : `0${s.step + 1}`}<span className={styles.muted}> / 06</span></span>
-            </div>
-            <div className={styles.progress} role="progressbar" aria-label={c.step}
-              aria-valuemin={0} aria-valuemax={total} aria-valuenow={s.completed ? total : s.step + 1}>
-              <span style={{transform: `scaleX(${s.completed ? 1 : (s.step + 1) / total})`}} />
-            </div>
-            {s.completed ? <div data-question className={styles.quizComplete}>
-              <CheckCircle2 size={42} /><h3>{c.quizDone}</h3><p>{c.quizDoneText}</p>
-              <div className={styles.buttonRow}>
-                <button className="button button-primary" onClick={() => go("my-route")}>{c.show}<ArrowRight size={17} /></button>
-                <button className="text-button" onClick={() => jump(0)}>{c.edit}</button>
-              </div>
-            </div> : <div data-question>
-              <div className={styles.questionMessage} data-question-message>
-                <span className={styles.messageSender} aria-hidden="true"><img src="/media/ventorme-mascot-poster.jpg" alt="" /> VentorMe</span>
-                <h3 ref={heading} tabIndex={-1} id="route-question"><MessageText text={c.questions[s.step]} /></h3>
-                <p className={styles.questionHelp}>{c.help[s.step]}</p>
-              </div>
-              {multi && <div className={styles.choiceCaption} aria-live="polite">
-                <span>{format(d.common.multiChoice, {max: limits[id]})}</span>
-                <span>{format(d.common.selectedCount, {count: (selection as string[]).length, max: limits[id]})}</span>
-              </div>}
-              <div className={`${styles.options} ${id === "grade" ? styles.grades : ""} ${id === "program" || id === "stage" ? styles.wideOptions : ""}`}
-                role="group" aria-labelledby="route-question">
-                {options[id].map((value, index) => <label data-answer key={value}
-                  className={`${styles.option} ${selected(value) ? styles.chosen : ""}`}>
-                  <input type={multi ? "checkbox" : "radio"} name={`route-${id}`} value={value}
-                    checked={selected(value)} onChange={() => select(value)} />
-                  {id === "grade" ? <><strong>{value}</strong><span>{c.grade}</span></> : <>
-                    <span className={styles.optionNumber}>{id === "challenges" && selected(value)
-                      ? `0${s.challenges.indexOf(value as typeof s.challenges[number]) + 1}` : `0${index + 1}`}</span>
-                    <span>{(d.choices[id] as Record<string, string>)[value]}</span>
-                  </>}
-                  <span className={styles.optionCheck}>{selected(value) ? <Check size={15} /> : multi ? <Plus size={15} /> : null}</span>
-                </label>)}
-              </div>
-              {limited && multi && <p role="status" className={styles.choiceLimit}>{format(d.common.maxChoices, {max: limits[id]})}</p>}
-              {id === "program" && s.program === "ib" && <fieldset className={styles.ibStatus}>
-                <legend>{d.common.ibPrompt} <small>{c.optional}</small></legend>
-                <div>{options.ibStatus.map(value => <label key={value} className={s.ibStatus === value ? styles.chosen : ""}>
-                  <input type="radio" name="route-ibStatus" value={value} checked={s.ibStatus === value}
-                    onChange={() => patch({ibStatus: value})} />{d.choices.ibStatus[value]}
-                </label>)}</div>
-              </fieldset>}
-              <div className={styles.quizNav}>
-                <button type="button" className="text-button" onClick={() => move(true)} disabled={s.step === 0}><ArrowLeft size={17} />{c.back}</button>
-                <button type="button" className="button button-primary" disabled={!valid} onClick={() => move()}>{s.step === total - 1 ? c.show : c.next}<ArrowRight size={17} /></button>
-              </div>
-            </div>}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function IBBuilder({ locale }: { locale: Locale }) {
-  const c = routeCopy[locale],
-    d = dictionaries[locale],
-    { route: s, patch } = useRoute(),
-    [compare, setCompare] = useState(false),
-    scope = useRef<HTMLDivElement>(null),
-    flip = useRef<ReturnType<typeof Flip.getState> | null>(null),
-    reduce = useReducedMotion();
-  const active = s[s.active],
-    label = (id: Subject) => c.subjects[subjects.indexOf(id)];
-  useLayoutEffect(() => {
-    if (flip.current && !reduce && scope.current) {
-      const state = flip.current;
-      flip.current = null;
-      const targets = scope.current.querySelectorAll("[data-flip-id]");
-      const animation = Flip.from(state, {
-        targets,
-        duration: 0.48,
-        ease: "power3.out",
-        absolute: false,
-        scale: true,
-        prune: true,
-        stagger: 0.018,
-        onComplete: () => {
-          gsap.set(targets, { clearProps: "all" });
-        },
-      });
-      return () => {
-        animation.progress(1);
-        animation.kill();
-        gsap.set(targets, { clearProps: "all" });
-      };
-    }
-  }, [s.a, s.b, s.active, reduce]);
-  useLayoutEffect(() => {
-    if (reduce || !scope.current) return;
-    const ctx = gsap.context(() => {
-      const notes = scope.current!.querySelectorAll("[data-builder-note]"),
-        count = scope.current!.querySelectorAll("[data-set-count]"),
-        differences = scope.current!.querySelectorAll("[data-diff-chip]");
-      if (notes.length) gsap.from(notes, {x: 14, opacity: 0.35, duration: 0.35, stagger: 0.05, ease: "power3.out", clearProps: "all"});
-      if (count.length) gsap.from(count, {y: -5, scale: 1.15, duration: 0.3, ease: "power3.out", clearProps: "all"});
-      if (differences.length) gsap.from(differences, {y: 10, scale: 0.88, rotation: -3, opacity: 0.2, duration: 0.38, stagger: 0.04, ease: "power3.out", clearProps: "all"});
-    }, scope);
-    return () => ctx.revert();
-  }, [s.a, s.b, s.active, s.field, s.ib, compare, reduce]);
-  function captureSet() {
-    if (!scope.current) return;
-    const targets = scope.current.querySelectorAll("[data-flip-id]");
-    gsap.killTweensOf(targets);
-    gsap.set(targets, { clearProps: "all" });
-    if (!reduce) flip.current = Flip.getState(targets);
-  }
-  function change(id: Subject) {
-    captureSet();
-    const next = active.includes(id)
-      ? active.filter((v) => v !== id)
-      : active.length < 3
-        ? [...active, id]
-        : active;
-    patch({ [s.active]: next });
-  }
-  const added = s.b.filter((x) => !s.a.includes(x)),
-    removed = s.a.filter((x) => !s.b.includes(x));
-  const fieldCheck = ["engineering", "it", "business"].includes(s.field)
-    ? c.checks[0]
-    : ["science", "health"].includes(s.field)
-      ? c.checks[1]
-      : ["humanities", "art"].includes(s.field)
-        ? c.checks[2]
-        : c.checks[3];
-  return (
-    <section
-      id="ib-builder"
-      className={`${styles.section} container`}
-      ref={scope}
-    >
-      <SectionLabel n="02">IB / A ↔ B</SectionLabel>
-      <div className={styles.sectionHeading}>
-        <h2>{c.ibTitle}</h2>
-        <p>{c.ibLead}</p>
-      </div>
-      <div className={styles.modeSwitch}>
-        <button
-          type="button"
-          aria-pressed={s.ib}
-          onClick={() => patch({ ib: true })}
-        >
-          {c.ibMode}
-        </button>
-        <button
-          type="button"
-          aria-pressed={!s.ib}
-          onClick={() => patch({ ib: false })}
-        >
-          {c.generalMode}
-        </button>
-      </div>
-      {!s.ib ? (
-        <div className={styles.generalCard}>
-          <GraduationCap size={38} />
-          <div>
-            <h3>{c.generalMode}</h3>
-            <p>{c.generalNote}</p>
-          </div>
-          <button
-            className="button button-primary"
-            onClick={() => go(s.completed ? "my-route" : "quiz")}
-          >
-            {c.primary}
-            <ArrowRight size={17} />
-          </button>
-        </div>
-      ) : (
-        <div className={styles.builderLayout}>
-          <div className={styles.builderCard}>
-            <div className={styles.builderTop}>
-              <label htmlFor="route-field">{c.field}</label>
-              <select
-                id="route-field"
-                value={s.field}
-                onChange={(e) =>
-                  patch({ field: e.target.value as typeof s.field })
-                }
-              >
-                {interests.map((i) => (
-                  <option key={i} value={i}>
-                    {d.choices.interests[i]}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className={styles.builderBar}>
-              <h3>{c.selected}</h3>
-              <span className={styles.setCount}>
-                <span className={styles.setPips} aria-hidden="true">
-                  {[0, 1, 2].map(i => <i key={i} data-filled={i < active.length} />)}
-                </span>
-                <span data-set-count>{active.length} / 3 HL</span>
-              </span>
-            </div>
-            <div className={styles.setTabs} role="group" aria-label={c.set}>
-              {(["a", "b"] as const).map((k) => (
-                <button
-                  type="button"
-                  key={k}
-                  aria-pressed={s.active === k}
-                  onClick={() => {captureSet(); patch({ active: k });}}
-                >
-                  {c.set} {k.toUpperCase()}
-                  <span>{s[k].length}/3</span>
-                </button>
-              ))}
-            </div>
-            <div
-              className={styles.selectedSubjects}
-              aria-label={`${c.set} ${s.active.toUpperCase()}`}
-            >
-              {active.map((id) => (
-                <button
-                  type="button"
-                  className={styles.subjectSelected}
-                  data-flip-id={id}
-                  key={id}
-                  onClick={() => change(id)}
-                  aria-label={`${c.removed}: ${label(id)}`}
-                >
-                  {label(id)}
-                  <span>HL</span>
-                  <Minus size={15} />
-                </button>
-              ))}
-              {Array.from({ length: 3 - active.length }, (_, i) => (
-                <div key={`empty-${i}`} className={styles.emptySlot}>
-                  <Plus size={18} />
-                  <span>HL 0{active.length + i + 1}</span>
-                </div>
-              ))}
-            </div>
-            <p className={styles.smallNote}>{c.empty}</p>
-            <div className={styles.subjectPool} aria-label={c.choose}>
-              {subjects
-                .filter((id) => !active.includes(id))
-                .map((id) => (
-                  <button
-                    type="button"
-                    data-flip-id={id}
-                    key={id}
-                    disabled={active.length === 3}
-                    onClick={() => change(id)}
-                  >
-                    {label(id)}
-                    <Plus size={14} />
-                  </button>
-                ))}
-            </div>
-            <div className={styles.builderActions}>
-              <button
-                type="button"
-                className="button button-outline"
-                onClick={() => setCompare((v) => !v)}
-                aria-expanded={compare}
-                aria-controls="subject-comparison"
-              >
-                <GitCompareArrows size={17} />
-                {c.compare}
-              </button>
-              <button
-                type="button"
-                className="text-button"
-                onClick={() => {
-                  captureSet();
-                  patch({ b: [...s.a], active: "b" });
-                  setCompare(true);
-                }}
-              >
-                {c.copy}
-                <ArrowRight size={15} />
-              </button>
-            </div>
-          </div>
-          <aside className={styles.builderNotes}>
-            <span className={styles.pastelPurple}>{c.demo}</span>
-            <h3>{c.checkTitle}</h3>
-            <span className={styles.messageSender} aria-hidden="true">
-              <img src="/media/ventorme-mascot-poster.jpg" alt="" /> VentorMe
-            </span>
-            <ul>
-              <li data-builder-note>
-                <span>01</span>
-                <p><MessageText text={fieldCheck} /></p>
-              </li>
-              {active.slice(0, 2).map((id, i) => (
-                <li data-builder-note key={id}>
-                  <span>0{i + 2}</span>
-                  <p><MessageText text={c.subjectCheck.replace("{subject}", label(id))} /></p>
-                </li>
-              ))}
-            </ul>
-            <p className={styles.smallNote}>{c.ibNote}</p>
-            <div className={styles.inlineHint}>
-              <Sparkles size={18} />
-              <span>{active.length === 3 ? c.change : c.mascotHint}</span>
-            </div>
-          </aside>
-        </div>
-      )}
-      {s.ib && compare && (
-        <div id="subject-comparison" className={styles.comparison}>
-          <div className={styles.comparisonTitle}>
-            <GitCompareArrows size={22} />
-            <h3>{c.compare}</h3>
-          </div>
-          <div className={styles.compareSets}>
-            {(["a", "b"] as const).map((k) => (
-              <div
-                key={k}
-                className={s.active === k ? styles.activeCompare : ""}
-              >
-                <button
-                  type="button"
-                  className="text-button"
-                  onClick={() => {captureSet(); patch({ active: k });}}
-                >
-                  {c.set} {k.toUpperCase()} <ArrowUpRight size={16} />
-                </button>
-                <p>
-                  {s[k].map((id) => (
-                    <span
-                      key={id}
-                      data-diff-chip={(k === "b" ? added : removed).includes(id) || undefined}
-                      className={
-                        (k === "b" ? added : removed).includes(id)
-                          ? styles.differentSubject
-                          : ""
-                      }
-                    >
-                      {label(id)} <small>HL</small>
-                    </span>
-                  ))}
-                </p>
-              </div>
-            ))}
-          </div>
-          <div className={styles.diff} aria-live="polite">
-            {!added.length && !removed.length ? (
-              <p>{c.same}</p>
-            ) : (
-              <>
-                <p>
-                  <strong>+ {c.added}: </strong>
-                  {added.map(label).join(", ") || "—"}
-                </p>
-                <p>
-                  <strong>− {c.removed}: </strong>
-                  {removed.map(label).join(", ") || "—"}
-                </p>
-                {added.map((id) => (
-                  <p key={id}>
-                    {c.subjectCheck.replace("{subject}", label(id))}
-                  </p>
-                ))}
-              </>
-            )}
-          </div>
-        </div>
-      )}
-    </section>
-  );
-}
-
-function MyRoute({ locale }: { locale: Locale }) {
-  const c = routeCopy[locale],
-    d = dictionaries[locale],
-    { route: s, patch, track } = useRoute(),
-    route = makeRoute(s, locale),
-    scope = useRef<HTMLElement>(null),
-    reduce = useReducedMotion();
-  const [download, setDownload] = useState<"idle" | "loading" | "error">(
-    "idle",
-  );
-  useEffect(() => {
-    if (!s.completed || !scope.current) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) track("result_view");
-      },
-      { threshold: 0.2 },
-    );
-    observer.observe(scope.current);
-    return () => observer.disconnect();
-  }, [s.completed, track]);
-  useLayoutEffect(() => {
-    if (!s.completed || reduce || !scope.current) return;
-    const host = scope.current;
-    const ctx = gsap.context(() => {}, host);
-    const observer = new IntersectionObserver(([entry]) => {
-      if (!entry.isIntersecting) return;
-      observer.disconnect();
-      ctx.add(() => {
-        gsap.timeline({defaults: {ease: "power3.out", clearProps: "transform,opacity"}})
-          .from("[data-route-card]", {rotation: -1.5, scale: 0.96, x: -16, duration: 0.55})
-          .from("[data-route-piece]", {x: 18, opacity: 0.25, duration: 0.4, stagger: 0.035}, 0.1)
-          .from("[data-route-badge]", {scale: 0.3, rotation: -45, duration: 0.35, stagger: 0.1, ease: "back.out(1.5)"}, 0.45)
-          .fromTo("[data-route-gleam]", {xPercent: -150}, {xPercent: 450, duration: 1, clearProps: "", ease: "power2.inOut"}, 0.3);
-      });
-    }, {threshold: 0.12});
-    const card = host.querySelector("[data-route-card]");
-    if (card) observer.observe(card);
-    return () => {observer.disconnect(); ctx.revert();};
-  }, [s.completed, s.challenges, s.grade, s.program, s.stage, s.regions, s.interests, reduce]);
-  async function save() {
-    setDownload("loading");
-    try {
-      await downloadRoute(s, locale);
-      setDownload("idle");
-      track("route_download");
-    } catch {
-      setDownload("error");
-    }
-  }
-  return (
-    <section id="my-route" className={styles.resultSection} ref={scope}>
-      <div className="container">
-        <SectionLabel n="03">{c.done}</SectionLabel>
-        <div className={styles.sectionHeading}>
-          <h2>{c.resultTitle}</h2>
-          <p>{c.resultLead}</p>
-        </div>
-        {!s.completed ? (
-          <div className={styles.emptyResult}>
-            <Compass size={32} />
-            <p>{c.noResult}</p>
-            <button
-              className="button button-primary"
-              onClick={() => go("quiz")}
-            >
-              {c.primary}
-              <ArrowRight size={17} />
-            </button>
-          </div>
-        ) : (
-          <div className={styles.resultLayout}>
-            <div>
-              <article data-route-card className={styles.routeCard} aria-label={c.resultTitle}>
-                <span data-route-gleam className={styles.routeGleam} aria-hidden="true" />
-                <div data-route-piece className={styles.routeCardTop}>
-                  <span>VENTORME / YOUR NEXT MOVE</span>
-                  <CheckCircle2 size={24} />
-                </div>
-                <h3 data-route-piece>{route.title}</h3>
-                <div data-route-piece className={styles.contextTags}>
-                  <span>
-                    {s.grade} {c.grade}
-                  </span>
-                  <span>{s.program ? d.choices.program[s.program] : c.generalMode}</span>
-                </div>
-                <dl data-route-piece className={styles.routeDetails}>
-                  <div>
-                    <dt>{c.interests}</dt>
-                    <dd>
-                      {s.interests
-                        .map((i) => d.choices.interests[i])
-                        .join(", ")}
-                    </dd>
-                  </div>
-                  <div><dt>{d.questions.stage.title}</dt><dd>{s.stage ? d.choices.stage[s.stage] : "—"}</dd></div>
-                  <div><dt>{d.questions.regions.title}</dt><dd>{s.regions.map(id => d.choices.regions[id]).join(", ")}</dd></div>
-                  <div><dt>{d.questions.challenges.title}</dt><dd>{s.challenges.map((id, i) => `${i + 1}. ${d.choices.challenges[id]}`).join(" · ")}</dd></div>
-                  {s.program === "ib" && s.ibStatus && <div><dt>{d.common.ibPrompt}</dt><dd>{d.choices.ibStatus[s.ibStatus]}</dd></div>}
-                  {s.ib && s[s.active].length > 0 && (
-                    <div>
-                      <dt>
-                        {c.selected} · {s.active.toUpperCase()}
-                      </dt>
-                      <dd>
-                        {s[s.active]
-                          .map((id) => c.subjects[subjects.indexOf(id)])
-                          .join(" · ")}
-                      </dd>
-                    </div>
-                  )}
-                </dl>
-                <p data-route-piece className={styles.routeSummary}>
-                  {route.summary}
-                </p>
-                <h4 data-route-piece>{c.actions}</h4>
-                <ol className={styles.routeSteps}>
-                  {route.steps.map((t, i) => (
-                    <li data-route-piece key={t}>
-                      <span data-route-badge>0{i + 1}</span>
-                      <p>{t}</p>
-                    </li>
-                  ))}
-                </ol>
-                <p className={styles.smallNote}>{c.rules}</p>
-              </article>
-              <div className={styles.routeControls}>
-                <button
-                  className="button button-primary"
-                  onClick={save}
-                  disabled={download === "loading"}
-                >
-                  <Download size={18} />
-                  {download === "loading" ? c.downloading : c.download}
-                </button>
-                <button
-                  type="button"
-                  className="text-button"
-                  onClick={() => {
-                    patch({ completed: false, step: 0 });
-                    go("quiz");
-                  }}
-                >
-                  {c.edit}
-                  <ArrowUpRight size={16} />
-                </button>
-                <ShareButton locale={locale} />
-              </div>
-              {download === "error" && <p role="alert">{c.downloadError}</p>}
-              <div className={styles.recommendations}>
-                <h3>{c.startWith}</h3>
-                {route.focus === "subjects" && <button type="button" className="button button-secondary"
-                  onClick={() => go("ib-builder")}>{c.secondary}<ArrowRight size={17} /></button>}
-                {route.features.map((key) => {
-                  const f = d.features[key as keyof typeof d.features];
-                  return (
-                    <div key={key}>
-                      <BookOpen size={19} />
-                      <p>
-                        <strong>{f.title}</strong>
-                        <span>{f.text}</span>
-                      </p>
-                    </div>
-                  );
-                })}
-                <p className={styles.smallNote}>{c.featureNote}</p>
-                <RegistrationButton locale={locale} primary />
-              </div>
-            </div>
-
-          </div>
-        )}
-      </div>
-    </section>
-  );
-}
-
 export function RouteExperience({
   locale,
   mascotVideoAvailable = true,
@@ -963,32 +324,20 @@ export function RouteExperience({
   entry?: "home" | "quiz" | "result";
 }) {
   const c = routeCopy[locale],
-    { ready, track, route } = useRoute(),
-    [mode, setMode] = useState<"story" | "quiz">(entry === "home" ? "story" : "quiz"),
+    { track } = useRoute(),
     scope = useRef<HTMLElement>(null);
   useRouteMotion(scope, locale);
   const story = storyCopy[locale];
+  function startPlan() { track("story_start"); go("story"); }
   useEffect(() => {
-    if (entry !== "home") return;
-    try { if (sessionStorage.getItem("ventorme.experience.mode") === "quiz") setMode("quiz"); } catch {}
-  }, [entry]);
-  function openMode(next: "story" | "quiz") {
-    setMode(next);
-    try { sessionStorage.setItem("ventorme.experience.mode", next); } catch {}
-    if (next === "quiz") track("quiz_start"); else track("story_start");
-    requestAnimationFrame(() => go(next));
-  }
-  useEffect(() => {
-    if (ready && entry !== "home") {
-      const timer = setTimeout(
-        () => go(entry === "quiz" ? "quiz" : "my-route"),
-        100,
-      );
+    if (entry !== "home") {
+      const timer = setTimeout(() => go("story"), 100);
       return () => clearTimeout(timer);
     }
-  }, [ready, entry]);
+  }, [entry]);
   return (
     <main id="main-content" className={styles.root} ref={scope}>
+      {entry === "home" && mascotVideoAvailable && <MascotScrollIntro locale={locale} planLabel={story.try} />}
       <section id="content-start" className={`${styles.hero} container`}>
         <div className={styles.heroCopy} data-motion-section="hero">
           <p data-hero-support className={styles.heroEyebrow}>
@@ -1002,36 +351,20 @@ export function RouteExperience({
           <span data-hero-underline className={styles.heroUnderline} aria-hidden="true" />
           <p data-hero-support className={styles.heroLead}>{story.lead}</p>
           <div data-hero-support className={styles.heroButtons}>
-            <button type="button" className="button button-primary" onClick={() => openMode("story")}>
+            <button type="button" className="button button-primary" onClick={startPlan}>
               {story.try}<ArrowUpRight size={19}/>
             </button>
             <RegistrationButton locale={locale}/>
           </div>
-          <button data-hero-support type="button" className="text-button" onClick={() => openMode("quiz")}>{story.quiz}<ArrowRight size={17}/></button>
           <p data-hero-support className={styles.heroNote}><ShieldCheck size={16}/>{story.demo}</p>
         </div>
         <RouteScene locale={locale} videoAvailable={mascotVideoAvailable} />
       </section>
-      <section id="how" className={`${styles.scenarioChoice} container`} aria-labelledby="scenario-heading">
-        <h2 id="scenario-heading">{story.choosePath}</h2>
-        <p>{story.distinction}</p>
-        <div className={styles.scenarioButtons}>
-          <button type="button" aria-pressed={mode === "story"} aria-controls="story-panel" onClick={() => openMode("story")}>{story.storyTab}<ArrowRight size={18}/></button>
-          <button type="button" aria-pressed={mode === "quiz"} aria-controls="personal-panel" onClick={() => openMode("quiz")}>{story.quizTab}<ArrowRight size={18}/></button>
-        </div>
-      </section>
-      <div id="features">
-        <div id="story-panel" hidden={mode !== "story"}><StoryExperience locale={locale}/></div>
-        <div id="personal-panel" hidden={mode !== "quiz"}>
-          <Quiz locale={locale}/>
-          <MyRoute locale={locale}/>
-          {route.program === "ib" && route.completed && <IBBuilder locale={locale}/>}
-        </div>
-      </div>
+      <div id="how"><div id="features"><StoryExperience locale={locale}/></div></div>
       <section id="faq" className={`${styles.faq} container`}>
         <h2>{c.faqTitle}</h2>
         <div>
-          {c.faqs.map(([q, a]) => (
+          {platformFaq[locale].map(([q, a]) => (
             <details key={q}>
               <summary>
                 {q}
@@ -1052,8 +385,8 @@ export function RouteExperience({
           <p>{c.finalText}</p>
         </div>
         <div>
-          <button className="button button-lime" onClick={() => openMode("quiz")}>
-            {story.quiz}
+          <button className="button button-lime" onClick={startPlan}>
+            {story.try}
             <ArrowUpRight size={18} />
           </button>
           <RegistrationButton locale={locale} />

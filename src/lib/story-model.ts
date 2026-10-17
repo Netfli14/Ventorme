@@ -1,3 +1,5 @@
+export const STORY_OPEN_STEPS = 3;
+export const STORY_RESULT_STEP = STORY_OPEN_STEPS;
 export const storyInterests = ['science', 'technology', 'people', 'creativity', 'business', 'nature'] as const;
 export type StoryInterest = typeof storyInterests[number];
 export type Criterion = 'programme' | 'budget' | 'country';
@@ -16,7 +18,7 @@ export function storyTaskOrder(first: StoryState['firstTask']): FirstTask[] {
   return first ? [first, ...tasks.filter(x => x !== first)] : tasks;
 }
 export function moveStory(s: StoryState, step: number): StoryState {
-  if (step < 0 || step > 7 || step > s.furthest + 1) return s;
+  if (step < 0 || step > STORY_RESULT_STEP || step > s.furthest + 1) return s;
   if (step > s.step && !canAdvanceStory(s)) return s;
   return {...s, step, furthest: Math.max(step, s.furthest)};
 }
@@ -28,5 +30,5 @@ export function restoreStory(raw: unknown): StoryState | null {
     || !['', 'direction', 'requirements', 'finance'].includes(s.firstTask) || !Number.isInteger(s.step)
     || !Number.isInteger(s.furthest) || s.step < 0 || s.step > s.furthest || s.furthest > 7
     || (s.furthest > 0 && s.interests.length !== 2) || (s.furthest > 1 && !s.criterion) || (s.furthest > 2 && !s.firstTask)) return null;
-  return {...s, interests: [...s.interests]};
+  return {...s, interests: [...s.interests], step: Math.min(s.step, STORY_RESULT_STEP), furthest: Math.min(s.furthest, STORY_RESULT_STEP)};
 }

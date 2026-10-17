@@ -25,7 +25,7 @@ const introCopy: Record<Locale, {
  * - Never seeks, pauses, or changes rate in response to wheel/touch scroll.
  * - The page scrolls normally and the next section begins immediately below.
  */
-export function MascotScrollIntro({ locale }: { locale: Locale }) {
+export function MascotScrollIntro({ locale, planLabel }: { locale: Locale; planLabel?: string }) {
   const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [assetFailed, setAssetFailed] = useState(false);
@@ -131,6 +131,7 @@ export function MascotScrollIntro({ locale }: { locale: Locale }) {
     </div>
     <a href="#content-start" className={styles.skip}>{text.skip} <span aria-hidden="true">↓</span></a>
     <div className={styles.registration}>
+      {planLabel && <a href="#story" className="button button-primary">{planLabel} <span aria-hidden="true">↗</span></a>}
       <RegistrationButton locale={locale} primary />
     </div>
     {paused && !finished && (ready || requiresTap || reduce) && <button type="button" className={styles.playButton} onClick={startVideo}>
