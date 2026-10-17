@@ -33,11 +33,13 @@ Paths:
 
 Authentication uses a salted scrypt password hash, signed 8-hour HttpOnly/SameSite=Strict cookie, Secure over HTTPS, same-origin write checks and server-side rate limits. All data APIs check authorization and return private/no-store responses. A client-side login screen is not relied on as authorization.
 
-## Production setup still required
+## Production setup and password rotation
 
-The existing production counter returned HTTP 200 with the expected aggregate fields, confirming its store connection is active. The connected Vercel account did not allow environment inspection. The CLI has no authenticated credentials. Automatic permission review rejected creating the new sensitive environment values, so **production administrator setup is not claimed to be complete**.
+Production is connected at `https://ventorme.vercel.app/`. On 17 October 2026, the Vercel connection allowed the two administrator values to be added as **sensitive, Production-only** environment variables in the existing project. No existing storage values were replaced and no production credentials were committed. The project was redeployed with the new environment. The administrator password is provided privately to the owner.
 
-In a private local terminal, run:
+A clearly labelled synthetic lead, `Тест подключения · 17.10.2026` with `test@example.invalid`, was submitted through the published quiz and form. The production endpoint saved it in the private store; authenticated statistics returned its answers, subject sets, consent and generated route. It remains visible as a test record. Anonymous statistics requests return 401. Quiz start/completion, result view and PNG download appeared in the same funnel. These test conversions are verification data, not product performance claims.
+
+For a new environment or password rotation, in a private local terminal run:
 
 ```sh
 npm run admin:setup
@@ -48,7 +50,7 @@ This creates an ignored, mode-0600 `.env.admin-setup.json` without transmitting 
 - `VENTORME_ADMIN_PASSWORD_HASH`
 - `VENTORME_SESSION_SECRET`
 
-Redeploy, open `/stats/`, and log in with the generated `password`. Keep the setup file private. The source contains no production password, signing key or storage credential.
+Redeploy, open `/stats/`, and log in with the generated `password`. Keep the setup file private. Rotating the session secret invalidates existing administrator sessions. The source contains no production password, signing key or storage credential.
 
 Until both authentication and storage are configured, lead submission returns 503 and the visitor sees a real failure message. There is no fake success or mail promise. Automatic email delivery is not implemented; the form is a voluntary request to team 004.
 
@@ -64,7 +66,7 @@ The E2E script starts its own Next server, creates isolated temporary data and s
 
 Verified in Chromium: three-question flow, multiple interests and exclusive undecided choice, back navigation, immediate result, IB selection and A/B changes, PNG download, required consent, real local server persistence, administrator login/view/logout, anonymous event schemas, six languages, both themes, widths 320/390/768/1024/1440, original video playback, reduced motion and non-IB route. No page or console errors occurred in the passing run. Russian and Chinese PNG exports were opened and visually checked. The Chinese character subset includes every character used by the current locale copy; a separate CJK font family is loaded for the interface and canvas export.
 
-Production persistence cannot be verified until the administrator environment is enabled. Chromium emulation does not constitute a physical iPhone/Safari check.
+Production persistence and authenticated access were additionally verified on 17 October 2026. Chromium emulation does not constitute a physical iPhone/Safari check.
 
 ## Primary content sources
 
