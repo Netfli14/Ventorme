@@ -471,3 +471,6 @@ html[data-mascot-scene] .site-header--home ~ main .hero-stage .hero { padding-to
 @media(max-width:600px){.desktop-registration{display:none}.site-header,.site-header--home{backdrop-filter:blur(14px)}.header-inner{min-height:68px}}
 
 @media(min-width:901px) and (max-width:1050px){.menu-toggle{display:inline-flex}}
+
+html[data-mascot-scene="active"] .site-header--home{--accent:#f5b567}
+html[data-mascot-scene="active"] .site-header--home .desktop-registration .button{background:#f5b567;color:#3f2b15;border-color:#f5b567}

@@ -68,8 +68,8 @@ function AdmissionResult({locale,onGate}:{locale:Locale;onGate:()=>void}){
  </section>;
 }
 export function RouteExperience({locale,mascotVideoAvailable=true,entry='home'}:{locale:Locale;mascotVideoAvailable?:boolean;entry?:'home'|'quiz'|'result'}){
- const c=experienceCopy[locale],old=routeCopy[locale],{ready,track}=useRoute(),scope=useRef<HTMLElement>(null),[gate,setGate]=useState(false);useEntrance(scope,locale);
- useEffect(()=>{if(ready&&entry!=='home'){requestAnimationFrame(()=>go(entry==='quiz'?'quiz':'my-route'));}},[ready,entry]);
+ const c=experienceCopy[locale],old=routeCopy[locale],{ready,track,route}=useRoute(),scope=useRef<HTMLElement>(null),[gate,setGate]=useState(false);useEntrance(scope,locale);
+ useEffect(()=>{if(ready&&entry!=='home'){requestAnimationFrame(()=>go(entry==='quiz'||!route.completed?'quiz':'my-route'));}},[ready,entry,route.completed]);
  const start=()=>{track('quiz_start');go('quiz');};
  return <main id="main-content" className={styles.root} ref={scope}>
   {entry==='home'&&mascotVideoAvailable&&<MascotScrollIntro locale={locale} planLabel={c.start}/>}
