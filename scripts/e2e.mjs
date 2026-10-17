@@ -101,6 +101,16 @@ try {
     ).every((h) => h === reg),
   );
   ok("exact team-004 links");
+  await page.getByRole("button", {name: "Повторить сцену", exact: true}).click();
+  await page.waitForTimeout(1200);
+  const signal = await page.locator("[data-signal]").first().evaluate(el => ({x: Number(el.getAttribute("cx")), opacity: Number(getComputedStyle(el).opacity)}));
+  assert.ok(signal.x > 112 && signal.opacity > 0, "a visible signal travels along the actual route");
+  await page.screenshot({path: ".test-tools/motion-hero.png", fullPage: false});
+  await page.waitForTimeout(3100);
+  const settled = await page.locator("[data-node]").evaluateAll(els => els.map(el => getComputedStyle(el).transform));
+  await page.waitForTimeout(250);
+  assert.deepEqual(await page.locator("[data-node]").evaluateAll(els => els.map(el => getComputedStyle(el).transform)), settled);
+  ok("hero replay sends route signals, animates cards, then settles without an endless loop");
   await page
     .getByRole("button", { name: "Включить тёмную тему", exact: true })
     .click();
@@ -182,6 +192,14 @@ try {
   assert.match(compare, /Добавлено: Биология/);
   assert.match(compare, /Убрано: Химия/);
   ok("GSAP subject selection and A/B single-subject difference");
+  await ib.getByRole("button", {name: /Набор A/}).first().click();
+  await ib.getByRole("button", {name: /Набор B/}).first().click();
+  await page.waitForTimeout(650);
+  const contained = await page.locator("[data-flip-id]").evaluateAll(els => els.every(el => {
+    const a=el.getBoundingClientRect(), b=el.parentElement.getBoundingClientRect();
+    return a.left >= b.left-1 && a.right <= b.right+1;
+  }));
+  assert.ok(contained, "FLIP cards settle inside their set or pool");
   await page.locator("#my-route").scrollIntoViewIfNeeded();
   const downloadPromise = page.waitForEvent("download");
   await page
@@ -362,6 +380,11 @@ try {
   await page.screenshot({path:"/tmp/ventorme-dark.png",fullPage:false});
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto(base + "/ru/", { waitUntil: "networkidle" });
+  assert.ok(await page.locator("[data-node], [data-hero-line]").evaluateAll(els => els.every(el => !el.style.transform)), "reduced motion removes GSAP spatial animations");
+  await page.locator("#faq summary").first().focus();
+  await page.keyboard.press("Enter");
+  assert.equal(await page.locator("#faq details").first().getAttribute("open"), "");
+  assert.equal(await page.locator("#faq details p").first().evaluate(el=>getComputedStyle(el).animationName), "none");
   await page
     .getByRole("button", { name: "Я не в IB · общий маршрут", exact: true })
     .click();

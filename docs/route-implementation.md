@@ -12,7 +12,9 @@ Languages: RU, EN, KZ (`kk`), UZ, ZH, TR. Theme preferences continue to follow t
 
 The project-scoped skill is installed at `.agents/skills/motion-design/SKILL.md`, with its upstream MIT license and supporting references. Source: `LottieFiles/motion-design-skill`, commit `f9a8a041b85185ee4881b3471d3415e939aac772`.
 
-GSAP handles the route construction scene, quiz changes, IB shared-element moves and result assembly. Signature easing: `power3.out`; feedback 240–320 ms, cards 400 ms, hero sequence under 2 seconds. Effects settle instead of looping. Reduced motion removes spatial choreography. Native controls, readable labels and selected states remain usable without motion.
+GSAP handles the route construction scene, quiz changes, IB shared-element moves and result assembly. The 17 October motion update adds travelling signals on the actual SVG route, orbit strokes, a masked headline entrance, finite counter-motion of the cards, selected-answer feedback, staggered questions, animated HL capacity indicators, FLIP movement when switching A/B, changing recommendation notes, highlighted subject differences, result-card assembly on intersection, FAQ feedback and final-call-to-action artwork.
+
+Signature easing: `power3.out`; feedback 240–350 ms, subject movement 480 ms, main hero assembly under 2 seconds with a short settling phase ending before 4 seconds. The scene pauses offscreen or when the tab is hidden and can be replayed. Section effects run once when seen; none uses a scroll hijack or infinite loop. Mobile has shorter section timing and smaller card displacement. Reduced motion removes spatial choreography and CSS transitions. Native controls, readable labels and selected states remain usable without motion. All observers, listeners and GSAP contexts are cleaned up on unmount or preference changes.
 
 Existing Three.js, GSAP, design-dna reference profiles and the linked Genjutsu repository were reviewed. No duplicate animation framework or WebGL scene was added for the same effect. This implementation applies the LottieFiles skill; it does not claim to install every linked repository as a skill.
 

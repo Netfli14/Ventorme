@@ -40,6 +40,7 @@ import {
 } from "@/lib/route-model";
 import { downloadRoute } from "@/lib/export-route";
 import { useRoute } from "./RouteProvider";
+import { useRouteMotion } from "./useRouteMotion";
 import { RegistrationButton, ShareButton } from "./Actions";
 import styles from "./RouteExperience.module.css";
 gsap.registerPlugin(Flip);
@@ -96,8 +97,12 @@ function RouteScene({
         : c.mascotHint;
   useLayoutEffect(() => {
     if (reduce || !scope.current) return;
+    const host = scope.current;
+    const mobile = matchMedia("(max-width: 850px)").matches;
+    let timeline: gsap.core.Timeline;
     const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+      const tl = gsap.timeline({ paused: true, defaults: { ease: "power3.out" } });
+      timeline = tl;
       tl.from('[data-node="interest"]', {
         x: -32,
         y: -14,
@@ -136,9 +141,27 @@ function RouteScene({
           },
           1.4,
         )
-        .from("[data-halo]", { scale: 0.9, opacity: 0, duration: 0.6 }, 1.05);
+        .from("[data-halo]", { scale: 0.7, opacity: 0, duration: 0.8 }, 0.8)
+        .from("[data-orbit]", { scale: 0.75, rotation: -60, opacity: 0, duration: 0.9, stagger: 0.1 }, 0.5)
+        .to('[data-node="interest"]', {y: mobile ? -4 : -8, rotation: -4, duration: 0.9, repeat: 1, yoyo: true, ease: "sine.inOut"}, 1.9)
+        .to('[data-node="route"]', {y: mobile ? 3 : 6, rotation: 2, duration: 0.9, repeat: 1, yoyo: true, ease: "sine.inOut"}, 2.1);
+      const paths = host.querySelectorAll<SVGPathElement>("[data-path]");
+      host.querySelectorAll<SVGCircleElement>("[data-signal]").forEach((signal, i) => {
+        const path = paths[i], progress = {value: 0}, length = path.getTotalLength();
+        tl.to(signal, {opacity: 1, duration: 0.15}, 0.8 + i * 0.25)
+          .to(progress, {value: 1, duration: 1.5, ease: "power1.inOut", onUpdate: () => {
+            const p = path.getPointAtLength(length * progress.value);
+            signal.setAttribute("cx", String(p.x)); signal.setAttribute("cy", String(p.y));
+          }}, 0.8 + i * 0.25)
+          .to(signal, {opacity: 0, duration: 0.2}, 2.3 + i * 0.25);
+      });
     }, scope);
-    return () => ctx.revert();
+    let visible = false;
+    const sync = () => visible && !document.hidden ? timeline?.play() : timeline?.pause();
+    const observer = new IntersectionObserver(([entry]) => {visible = entry.isIntersecting; sync();}, {threshold: 0.12});
+    observer.observe(host);
+    document.addEventListener("visibilitychange", sync);
+    return () => {observer.disconnect(); document.removeEventListener("visibilitychange", sync); ctx.revert();};
   }, [reduce, run]);
   function openVideo() {
     dialog.current?.showModal();
@@ -168,6 +191,9 @@ function RouteScene({
     <div className={styles.scene} ref={scope}>
       <div className={styles.sceneGrid} aria-hidden="true" />
       <div className={styles.sceneHalo} data-halo aria-hidden="true" />
+      <div className={styles.sceneOrbits} aria-hidden="true">
+        <span data-orbit /><span data-orbit />
+      </div>
       <div className={styles.sceneTop}>
         <span>
           <span className={styles.liveDot} /> VENTORME / PATH BUILDER
@@ -202,6 +228,8 @@ function RouteScene({
           strokeDasharray="900"
         />
         <circle cx="295" cy="237" r="6" fill="var(--accent)" />
+        <circle data-signal cx="112" cy="123" r="5" fill="#DFFF00" stroke="var(--accent)" strokeWidth="2" opacity="0" />
+        <circle data-signal cx="120" cy="300" r="4" fill="var(--accent)" opacity="0" />
       </svg>
       <div
         className={`${styles.sceneNode} ${styles.interestNode}`}
@@ -306,7 +334,8 @@ function Quiz({ locale }: { locale: Locale }) {
     scope = useRef<HTMLDivElement>(null),
     heading = useRef<HTMLHeadingElement>(null),
     reduce = useReducedMotion(),
-    moved = useRef(false);
+    moved = useRef(false),
+    direction = useRef(1);
   const valid =
     s.step === 0
       ? Boolean(s.grade)
@@ -317,14 +346,12 @@ function Quiz({ locale }: { locale: Locale }) {
     if (moved.current) heading.current?.focus({ preventScroll: true });
     if (reduce || !scope.current) return;
     const ctx = gsap.context(
-      () =>
-        gsap.from("[data-question]", {
-          x: 12,
-          opacity: 0.4,
-          duration: 0.28,
-          ease: "power3.out",
-          clearProps: "all",
-        }),
+      () => {
+        gsap.timeline({defaults: {ease: "power3.out", clearProps: "all"}})
+          .from("[data-question] > h3, [data-question] > svg", {x: 22 * direction.current, opacity: 0.25, duration: 0.35})
+          .from("[data-answer]", {y: 18, scale: 0.97, opacity: 0.3, duration: 0.35, stagger: 0.025}, 0.08);
+        gsap.fromTo("[data-quiz-arrow]", {x: -12, scaleX: 0.6}, {x: 0, scaleX: 1, duration: 0.4, ease: "power3.out", clearProps: "all"});
+      },
       scope,
     );
     return () => ctx.revert();
@@ -345,6 +372,7 @@ function Quiz({ locale }: { locale: Locale }) {
   };
   const move = (back = false) => {
     moved.current = true;
+    direction.current = back ? -1 : 1;
     if (back) {
       patch({ step: Math.max(0, s.step - 1), completed: false });
       return;
@@ -365,10 +393,10 @@ function Quiz({ locale }: { locale: Locale }) {
             <SectionLabel n="01">{c.eyebrow}</SectionLabel>
             <h2>{c.quizTitle}</h2>
             <p>{c.quizLead}</p>
-            <div className={styles.quizDecor} aria-hidden="true">
-              <span>?</span>
-              <div>→</div>
-              <span>!</span>
+            <div className={styles.quizDecor} aria-hidden="true" data-motion-section="quiz">
+              <span data-quiz-symbol>?</span>
+              <div data-quiz-arrow>→</div>
+              <span data-quiz-symbol>{s.completed ? <Check size={52} /> : "!"}</span>
             </div>
             <p className={styles.smallNote}>{c.free}</p>
           </div>
@@ -434,6 +462,7 @@ function Quiz({ locale }: { locale: Locale }) {
                   {s.step === 0 &&
                     (["10", "11", "12"] as const).map((g) => (
                       <label
+                        data-answer
                         key={g}
                         className={`${styles.option} ${s.grade === g ? styles.chosen : ""}`}
                       >
@@ -454,6 +483,7 @@ function Quiz({ locale }: { locale: Locale }) {
                   {s.step === 1 &&
                     interests.map((id, i) => (
                       <label
+                        data-answer
                         key={id}
                         className={`${styles.option} ${s.interests.includes(id) ? styles.chosen : ""}`}
                       >
@@ -476,6 +506,7 @@ function Quiz({ locale }: { locale: Locale }) {
                   {s.step === 2 &&
                     challenges.map((id, i) => (
                       <label
+                        data-answer
                         key={id}
                         className={`${styles.option} ${s.challenge === id ? styles.chosen : ""}`}
                       >
@@ -540,11 +571,12 @@ function IBBuilder({ locale }: { locale: Locale }) {
       const targets = scope.current.querySelectorAll("[data-flip-id]");
       const animation = Flip.from(state, {
         targets,
-        duration: 0.32,
+        duration: 0.48,
         ease: "power3.out",
         absolute: false,
-        scale: false,
+        scale: true,
         prune: true,
+        stagger: 0.018,
         onComplete: () => {
           gsap.set(targets, { clearProps: "all" });
         },
@@ -556,12 +588,24 @@ function IBBuilder({ locale }: { locale: Locale }) {
       };
     }
   }, [s.a, s.b, s.active, reduce]);
-  function change(id: Subject) {
+  useLayoutEffect(() => {
+    if (reduce || !scope.current) return;
+    const ctx = gsap.context(() => {
+      gsap.from("[data-builder-note]", {x: 14, opacity: 0.35, duration: 0.35, stagger: 0.05, ease: "power3.out", clearProps: "all"});
+      gsap.from("[data-set-count]", {y: -5, scale: 1.15, duration: 0.3, ease: "power3.out", clearProps: "all"});
+      gsap.from("[data-diff-chip]", {y: 10, scale: 0.88, rotation: -3, opacity: 0.2, duration: 0.38, stagger: 0.04, ease: "power3.out", clearProps: "all"});
+    }, scope);
+    return () => ctx.revert();
+  }, [s.a, s.b, s.active, s.field, compare, reduce]);
+  function captureSet() {
     if (!scope.current) return;
     const targets = scope.current.querySelectorAll("[data-flip-id]");
     gsap.killTweensOf(targets);
     gsap.set(targets, { clearProps: "all" });
     if (!reduce) flip.current = Flip.getState(targets);
+  }
+  function change(id: Subject) {
+    captureSet();
     const next = active.includes(id)
       ? active.filter((v) => v !== id)
       : active.length < 3
@@ -641,7 +685,12 @@ function IBBuilder({ locale }: { locale: Locale }) {
             </div>
             <div className={styles.builderBar}>
               <h3>{c.selected}</h3>
-              <span>{active.length} / 3 HL</span>
+              <span className={styles.setCount}>
+                <span className={styles.setPips} aria-hidden="true">
+                  {[0, 1, 2].map(i => <i key={i} data-filled={i < active.length} />)}
+                </span>
+                <span data-set-count>{active.length} / 3 HL</span>
+              </span>
             </div>
             <div className={styles.setTabs} role="group" aria-label={c.set}>
               {(["a", "b"] as const).map((k) => (
@@ -649,7 +698,7 @@ function IBBuilder({ locale }: { locale: Locale }) {
                   type="button"
                   key={k}
                   aria-pressed={s.active === k}
-                  onClick={() => patch({ active: k })}
+                  onClick={() => {captureSet(); patch({ active: k });}}
                 >
                   {c.set} {k.toUpperCase()}
                   <span>{s[k].length}/3</span>
@@ -713,6 +762,7 @@ function IBBuilder({ locale }: { locale: Locale }) {
                 type="button"
                 className="text-button"
                 onClick={() => {
+                  captureSet();
                   patch({ b: [...s.a], active: "b" });
                   setCompare(true);
                 }}
@@ -726,12 +776,12 @@ function IBBuilder({ locale }: { locale: Locale }) {
             <span className={styles.pastelPurple}>{c.demo}</span>
             <h3>{c.checkTitle}</h3>
             <ul>
-              <li>
+              <li data-builder-note>
                 <span>01</span>
                 {fieldCheck}
               </li>
               {active.slice(0, 2).map((id, i) => (
-                <li key={id}>
+                <li data-builder-note key={id}>
                   <span>0{i + 2}</span>
                   {c.subjectCheck.replace("{subject}", label(id))}
                 </li>
@@ -760,7 +810,7 @@ function IBBuilder({ locale }: { locale: Locale }) {
                 <button
                   type="button"
                   className="text-button"
-                  onClick={() => patch({ active: k })}
+                  onClick={() => {captureSet(); patch({ active: k });}}
                 >
                   {c.set} {k.toUpperCase()} <ArrowUpRight size={16} />
                 </button>
@@ -768,6 +818,7 @@ function IBBuilder({ locale }: { locale: Locale }) {
                   {s[k].map((id) => (
                     <span
                       key={id}
+                      data-diff-chip={(k === "b" ? added : removed).includes(id) || undefined}
                       className={
                         (k === "b" ? added : removed).includes(id)
                           ? styles.differentSubject
@@ -976,18 +1027,22 @@ function MyRoute({ locale }: { locale: Locale }) {
   }, [s.completed, track]);
   useLayoutEffect(() => {
     if (!s.completed || reduce || !scope.current) return;
-    const ctx = gsap.context(() => {
-      gsap.from("[data-route-piece]", {
-        y: 14,
-        scale: 0.98,
-        opacity: 0.3,
-        duration: 0.4,
-        stagger: 0.07,
-        ease: "power3.out",
-        clearProps: "all",
+    const host = scope.current;
+    const ctx = gsap.context(() => {}, host);
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) return;
+      observer.disconnect();
+      ctx.add(() => {
+        gsap.timeline({defaults: {ease: "power3.out", clearProps: "transform,opacity"}})
+          .from("[data-route-card]", {rotation: -1.5, scale: 0.96, x: -16, duration: 0.55})
+          .from("[data-route-piece]", {x: 18, opacity: 0.25, duration: 0.4, stagger: 0.035}, 0.1)
+          .from("[data-route-badge]", {scale: 0.3, rotation: -45, duration: 0.35, stagger: 0.1, ease: "back.out(1.5)"}, 0.45)
+          .fromTo("[data-route-gleam]", {xPercent: -150}, {xPercent: 450, duration: 1, clearProps: "", ease: "power2.inOut"}, 0.3);
       });
-    }, scope);
-    return () => ctx.revert();
+    }, {threshold: 0.12});
+    const card = host.querySelector("[data-route-card]");
+    if (card) observer.observe(card);
+    return () => {observer.disconnect(); ctx.revert();};
   }, [s.completed, s.challenge, s.grade, s.interests, reduce]);
   async function save() {
     setDownload("loading");
@@ -1022,7 +1077,8 @@ function MyRoute({ locale }: { locale: Locale }) {
         ) : (
           <div className={styles.resultLayout}>
             <div>
-              <article className={styles.routeCard} aria-label={c.resultTitle}>
+              <article data-route-card className={styles.routeCard} aria-label={c.resultTitle}>
+                <span data-route-gleam className={styles.routeGleam} aria-hidden="true" />
                 <div data-route-piece className={styles.routeCardTop}>
                   <span>VENTORME / YOUR NEXT MOVE</span>
                   <CheckCircle2 size={24} />
@@ -1075,7 +1131,7 @@ function MyRoute({ locale }: { locale: Locale }) {
                 <ol className={styles.routeSteps}>
                   {route.steps.map((t, i) => (
                     <li data-route-piece key={t}>
-                      <span>0{i + 1}</span>
+                      <span data-route-badge>0{i + 1}</span>
                       <p>{t}</p>
                     </li>
                   ))}
@@ -1141,7 +1197,9 @@ export function RouteExperience({
   entry?: "home" | "quiz" | "result";
 }) {
   const c = routeCopy[locale],
-    { ready, track } = useRoute();
+    { ready, track } = useRoute(),
+    scope = useRef<HTMLElement>(null);
+  useRouteMotion(scope, locale);
   useEffect(() => {
     if (ready && entry !== "home") {
       const timer = setTimeout(
@@ -1152,20 +1210,20 @@ export function RouteExperience({
     }
   }, [ready, entry]);
   return (
-    <main id="main-content" className={styles.root}>
+    <main id="main-content" className={styles.root} ref={scope}>
       <section className={`${styles.hero} container`}>
-        <div className={styles.heroCopy}>
-          <p className={styles.heroEyebrow}>
+        <div className={styles.heroCopy} data-motion-section="hero">
+          <p data-hero-support className={styles.heroEyebrow}>
             <span className={styles.pastelGreen}>10—12</span>
             {c.eyebrow}
           </p>
           <h1>
-            {c.title}
-            <br />
-            <span>{c.accent}</span>
+            <span className={styles.heroLine}><span data-hero-line>{c.title}</span></span>
+            <span className={`${styles.heroLine} ${styles.heroAccent}`}><span data-hero-line>{c.accent}</span></span>
           </h1>
-          <p className={styles.heroLead}>{c.lead}</p>
-          <div className={styles.heroButtons}>
+          <span data-hero-underline className={styles.heroUnderline} aria-hidden="true" />
+          <p data-hero-support className={styles.heroLead}>{c.lead}</p>
+          <div data-hero-support className={styles.heroButtons}>
             <button
               className="button button-primary"
               onClick={() => {
@@ -1181,17 +1239,17 @@ export function RouteExperience({
               <ArrowRight size={17} />
             </button>
           </div>
-          <p className={styles.heroNote}>
+          <p data-hero-support className={styles.heroNote}>
             <ShieldCheck size={16} />
             {c.free}
           </p>
         </div>
         <RouteScene locale={locale} videoAvailable={mascotVideoAvailable} />
       </section>
-      <div id="how" className={styles.journeyStrip}>
+      <div id="how" className={styles.journeyStrip} data-motion-section="journey">
         <div className="container">
           {c.scene.map((t, i) => (
-            <div key={t}>
+            <div key={t} data-journey-step>
               <span>0{i + 1}</span>
               <strong>{t}</strong>
               {i < 3 && <ArrowRight size={18} />}
@@ -1210,8 +1268,9 @@ export function RouteExperience({
         </div>
         <div className={styles.platformGrid}>
           {c.featureTitles.map((title, i) => (
-            <div key={title}>
+            <div key={title} data-motion-section="feature">
               <span
+                data-feature-number
                 className={
                   [
                     styles.pastelGreen,
@@ -1225,11 +1284,11 @@ export function RouteExperience({
               <h3>{title}</h3>
               <p>{c.featureTexts[i]}</p>
               {i === 0 ? (
-                <Compass size={50} strokeWidth={1} />
+                <Compass data-feature-icon size={50} strokeWidth={1} />
               ) : i === 1 ? (
-                <GraduationCap size={50} strokeWidth={1} />
+                <GraduationCap data-feature-icon size={50} strokeWidth={1} />
               ) : (
-                <BookOpen size={50} strokeWidth={1} />
+                <BookOpen data-feature-icon size={50} strokeWidth={1} />
               )}
             </div>
           ))}
@@ -1249,7 +1308,10 @@ export function RouteExperience({
           ))}
         </div>
       </section>
-      <section className={`${styles.final} container`}>
+      <section className={`${styles.final} container`} data-motion-section="final">
+        <div className={styles.finalArt} aria-hidden="true">
+          <span data-final-orbit /><span data-final-orbit /><span data-final-arrow>↗</span>
+        </div>
         <div>
           <span className={styles.sectionLabel}>YOUR NEXT MOVE ↗</span>
           <h2>{c.finalTitle}</h2>

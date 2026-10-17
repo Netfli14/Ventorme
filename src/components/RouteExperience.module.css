@@ -44,8 +44,26 @@
   font-weight: 750;
   max-width: 720px;
 }
-.hero h1 > span {
+.hero h1 > .heroAccent {
   color: var(--accent);
+}
+.heroLine {
+  display: block;
+  overflow: clip;
+  padding-block: 0.08em;
+  margin-block: -0.08em;
+}
+.heroLine > span {
+  display: block;
+}
+.heroUnderline {
+  display: block;
+  width: 92px;
+  height: 7px;
+  margin-top: 21px;
+  border-radius: 9px;
+  background: #dfff00;
+  transform: rotate(-3deg);
 }
 .heroLead {
   max-width: 490px;
@@ -123,6 +141,33 @@
   border: 30px solid color-mix(in srgb, var(--accent), transparent 94%);
   border-radius: 100%;
   z-index: -1;
+}
+.sceneOrbits {
+  position: absolute;
+  inset: 0;
+  overflow: clip;
+  border-radius: inherit;
+  z-index: -1;
+  pointer-events: none;
+}
+.sceneOrbits > span {
+  position: absolute;
+  width: 310px;
+  height: 310px;
+  left: 29%;
+  top: 12%;
+  border: 1px solid color-mix(in srgb, var(--accent), transparent 88%);
+  border-top-color: color-mix(in srgb, var(--accent), transparent 48%);
+  border-radius: 50%;
+  transform: rotate(25deg);
+}
+.sceneOrbits > span:last-child {
+  width: 225px;
+  height: 225px;
+  left: 37%;
+  top: 20%;
+  transform: rotate(-40deg);
+  border-top-color: #bdd200;
 }
 .sceneTop {
   display: flex;
@@ -488,7 +533,6 @@
   cursor: pointer;
   transition:
     background 0.18s,
-    transform 0.18s,
     border-color 0.18s;
   overflow-wrap: anywhere;
 }
@@ -645,6 +689,30 @@
 .builderBar > span {
   font-size: 11px;
   color: var(--accent);
+}
+.setCount {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.setPips {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.setPips > i {
+  width: 5px;
+  height: 18px;
+  border-radius: 3px;
+  background: var(--control);
+  transform: scaleY(0.45);
+  transition: transform 0.32s cubic-bezier(0.2, 0, 0, 1), background 0.2s;
+}
+.setPips > i[data-filled="true"] {
+  background: var(--accent);
+  transform: scaleY(1);
 }
 .setTabs {
   display: flex;
@@ -915,6 +983,14 @@
   height: 5px;
   background: var(--accent);
 }
+.routeGleam {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 30%;
+  background: linear-gradient(100deg, transparent, color-mix(in srgb, var(--accent), transparent 94%), transparent);
+  transform: translateX(-150%);
+  pointer-events: none;
+}
 .routeCardTop {
   display: flex;
   align-items: center;
@@ -1171,6 +1247,10 @@
   font-size: 15px;
   font-weight: 650;
 }
+.faq summary > svg {
+  flex-shrink: 0;
+  transition: transform 0.28s cubic-bezier(0.2, 0, 0, 1);
+}
 .faq details[open] summary > svg {
   transform: rotate(45deg);
 }
@@ -1180,7 +1260,34 @@
   color: var(--muted);
   padding-top: 18px;
 }
+.faq details[open] p {
+  animation: faqAnswer 0.32s cubic-bezier(0.2, 0, 0, 1) both;
+}
+@keyframes faqAnswer {
+  from {opacity: 0.3; transform: translateY(-8px);}
+  to {opacity: 1; transform: translateY(0);}
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .root :global(.button) > svg,
+  .root :global(.text-button) > svg {
+    transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1);
+  }
+  .root :global(.button):hover:not(:disabled) > svg,
+  .root :global(.text-button):hover:not(:disabled) > svg {
+    transform: translateX(3px) rotate(-5deg);
+  }
+  .platformGrid > div:hover > svg {
+    transform: translateY(-7px) rotate(-8deg);
+    opacity: 0.8;
+  }
+  .platformGrid > div > svg {
+    transition: transform 0.35s cubic-bezier(0.2, 0, 0, 1), opacity 0.25s;
+  }
+}
 .final {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1191,8 +1298,45 @@
   color: #fff;
   margin-bottom: 72px;
 }
-.final > div:first-child {
+.final > div:nth-child(2) {
   max-width: 650px;
+}
+.final > div:not(.finalArt) {
+  position: relative;
+  z-index: 1;
+}
+.finalArt {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.28;
+}
+.finalArt > span:not(:last-child) {
+  position: absolute;
+  width: 460px;
+  height: 460px;
+  right: 8%;
+  top: -85px;
+  border: 1px solid #ffffff50;
+  border-top: 2px solid #dfff00;
+  border-radius: 50%;
+  transform: rotate(25deg);
+}
+.finalArt > span:nth-child(2) {
+  width: 330px;
+  height: 330px;
+  right: 13%;
+  top: -25px;
+  transform: rotate(130deg);
+}
+.finalArt > span:last-child {
+  position: absolute;
+  right: 33%;
+  top: -100px;
+  font-size: 410px;
+  line-height: 1;
+  color: #dfff00;
+  opacity: 0.35;
 }
 .final .sectionLabel {
   color: #dfff00;
