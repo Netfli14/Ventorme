@@ -10,6 +10,8 @@ Languages: RU, EN, KZ (`kk`), UZ, ZH, TR. Theme preferences continue to follow t
 
 ## Motion
 
+The supplied Three.js aurora shader is integrated as a quiet background after the original intro, via `src/components/ui/animated-shader-background.tsx`. Its ray/noise pattern is retained, with transparent output, slow time progression and 20% layer opacity (slightly lower in dark/mobile modes). The component lazily imports the existing Three.js dependency, caps pixel count and frame rate, uses fewer rays on phones, pauses while hidden, and disposes its GPU resources. A localized pause/resume control is shown only when WebGL is available. Reduced motion, context loss or unavailable WebGL use a static backdrop. `scripts/shader.e2e.mjs` verifies real WebGL drawing, pause/resume, resizing and fallback in addition to the general landing tests.
+
 The later 17 October update requests muted intro playback as soon as hydration knows the motion preference, even before video decoding is ready. A fresh desktop/mobile browser test records a play event before any pointer or keyboard input. Browser autoplay restrictions retain a manual fallback, and reduced motion still requires manual playback.
 
 Quiz questions and IB guidance now use message bubbles with a brief three-dot cue and letter reveal (under one second). Buttons remain usable immediately. Full text is present for assistive technology and when JavaScript or animation is unavailable; CJK wrapping is supported. This is presentation of existing rule-based guidance, not simulated AI generation.

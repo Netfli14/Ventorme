@@ -142,6 +142,10 @@ try {
   await page.waitForTimeout(250);
   assert.deepEqual(await page.locator("[data-node]").evaluateAll(els => els.map(el => getComputedStyle(el).transform)), settled);
   ok("hero replay sends route signals, animates cards, then settles without an endless loop");
+  await page.waitForFunction(()=>['fallback','active'].includes(document.querySelector('[data-shader-state]')?.dataset.shaderState));
+  assert.equal(await page.locator('[data-shader-background]').getAttribute('aria-hidden'),'true');
+  assert.equal(await page.locator('[data-shader-background]').evaluate(el=>getComputedStyle(el).pointerEvents),'none');
+  ok('decorative shader falls back safely without intercepting clicks');
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.waitForFunction(() => [...document.querySelectorAll('[data-node], [data-hero-line]')].every(el => !el.style.transform));
   ok("live reduced-motion preference change cleans up active scenes without a reload");

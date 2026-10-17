@@ -1,0 +1,30 @@
+.host {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: var(--shader-intensity, 0.2);
+}
+.viewport {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+  overflow: clip;
+  background:
+    radial-gradient(ellipse at 22% 55%, #3b47ff38, transparent 64%),
+    radial-gradient(ellipse at 85% 30%, #9970ff30, transparent 58%);
+}
+.canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.canvas[hidden] { display: none; }
+:global([data-theme="dark"]) .host { opacity: calc(var(--shader-intensity, 0.2) * 0.9); }
+@media (max-width: 850px) {
+  .host { opacity: calc(var(--shader-intensity, 0.2) * 0.85); }
+}
