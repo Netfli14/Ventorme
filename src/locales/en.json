@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Ventorme · University starts with a clear plan",
-    "description": "For students in grades 10–12. Answer six questions about your situation and find three practical next steps towards university."
+    "description": "For students in grades 10–12. Answer three questions about your situation and find three practical next steps towards university."
   },
   "nav": {
     "how": "How it works",
@@ -214,8 +214,8 @@
       "text": "Work on explaining your experience and motivation."
     },
     "venti": {
-      "title": "Venti AI assistant",
-      "text": "Discuss questions about fields and next steps."
+      "title": "AI mentor",
+      "text": "Discuss fields and next steps."
     }
   },
   "faq": [
@@ -342,7 +342,7 @@
     "policy": "Cookie policy",
     "necessary": "Essential storage remembers your cookie choice for 180 days and your quiz progress for this session. Quiz answers are never added to the registration link.",
     "preferences": "Choosing “Accept” saves your theme on this device. With “Essential only”, the theme works without being saved between visits.",
-    "analytics": "The site counts registration button clicks without cookies or visitor identifiers. Contact details and quiz answers are not sent to the counter. Advertising cookies are not used. Change your choice through “Cookie settings” at the bottom of the page.",
+    "analytics": "Quiz stages, downloads and clicks are counted using a random route ID. Contacts and answers never enter analytics. Requests are stored separately on the server only with your consent. No advertising cookies.",
     "accept": "Accept",
     "essential": "Essential only",
     "settings": "Cookie settings"

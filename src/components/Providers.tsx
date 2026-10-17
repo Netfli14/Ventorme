@@ -4,6 +4,7 @@ import { MotionConfig } from 'motion/react';
 import { clearState, initialState, readState, writeState, type QuizState } from '@/lib/storage';
 import { type Answers } from '@/lib/quiz';
 import { CONSENT_EVENT, readCookieConsent, type CookieConsent } from '@/lib/cookies';
+import { RouteProvider } from './RouteProvider';
 
 type Context = { state: QuizState; ready: boolean; update: (answers: Answers, step?: number) => void; reset: () => void; theme: 'light' | 'dark'; toggleTheme: () => void };
 const AppContext = createContext<Context | null>(null);
@@ -37,6 +38,6 @@ export function Providers({ children }: { children: ReactNode }) {
       try { window.localStorage.setItem('ventorme.theme', next); } catch { /* Theme still works in memory. */ }
     }
   };
-  return <AppContext.Provider value={{ state, ready, update, reset, theme, toggleTheme }}><MotionConfig reducedMotion="user">{children}</MotionConfig></AppContext.Provider>;
+  return <AppContext.Provider value={{ state, ready, update, reset, theme, toggleTheme }}><MotionConfig reducedMotion="user"><RouteProvider>{children}</RouteProvider></MotionConfig></AppContext.Provider>;
 }
 export function useApp() { const app = useContext(AppContext); if (!app) throw new Error('App provider missing'); return app; }

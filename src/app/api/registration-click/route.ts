@@ -1,5 +1,6 @@
 import { list, put, BlobError } from '@vercel/blob';
 import { CLICK_PREFIX, countRegistrationClicks, parseClickId } from '@/lib/registration-clicks';
+import { authorized, privateHeaders, sameOrigin } from '@/lib/server-auth';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -10,7 +11,7 @@ function production() { return process.env.VERCEL_ENV === 'production'; }
 
 export async function POST(request: Request) {
   if (!production()) return new Response(null, { status: 204 });
-  if (request.headers.get('origin') !== new URL(request.url).origin) return new Response(null, { status: 403 });
+  if (!sameOrigin(request)) return new Response(null, { status: 403 });
   if (!configured()) return new Response(null, { status: 503 });
   if (Number(request.headers.get('content-length') ?? 0) > 512) return new Response(null, { status: 413 });
   let id: string | null;
@@ -37,12 +38,13 @@ export async function POST(request: Request) {
   }
 }
 
-export async function GET() {
+export async function GET(request: Request) {
+  if (!authorized(request)) return Response.json({ error: 'unauthorized' }, { status: 401, headers: privateHeaders });
   if (!production() || !configured()) return Response.json({ error: 'unavailable' }, { status: 503 });
   try {
     const stats = await countRegistrationClicks(cursor => list({ prefix: CLICK_PREFIX, cursor, limit: 1000 }));
     return Response.json(stats, { headers: {
-      'Cache-Control': 'public, max-age=0, s-maxage=30, stale-while-revalidate=30',
+      'Cache-Control': 'private, no-store',
       'X-Robots-Tag': 'noindex',
     } });
   } catch {

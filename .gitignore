@@ -7,3 +7,8 @@ out/
 .vercel/
 .openai/source-state.json
 .openai/*credential*
+
+.next-e2e/
+.test-results/
+
+.test-tools/

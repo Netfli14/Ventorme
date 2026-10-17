@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Ventorme · Universitetga yo‘l aniq rejadan boshlanadi",
-    "description": "10–12-sinf o‘quvchilari uchun. Vaziyating haqida olti savolga javob ber va universitetga kirish uchun uchta keyingi qadamni bil."
+    "description": "10–12-sinf o‘quvchilari uchun. Vaziyating haqida uch savolga javob ber va universitetga kirish uchun uchta keyingi qadamni bil."
   },
   "nav": {
     "how": "Qanday ishlaydi",
@@ -214,8 +214,8 @@
       "text": "Tajribang va motivatsiyang haqida qanday aytishni mashq qil."
     },
     "venti": {
-      "title": "Venti sun’iy intellekt yordamchisi",
-      "text": "Yo‘nalish tanlash va keyingi qadamlar haqidagi savollarni muhokama qil."
+      "title": "AI murabbiy",
+      "text": "Yo‘nalishlar va keyingi qadamlarni muhokama qil."
     }
   },
   "faq": [
@@ -342,7 +342,7 @@
     "policy": "Cookies siyosati",
     "necessary": "Zarur saqlash tizimi cookies tanlovingni 180 kun, kvizdagi jarayonni esa shu sessiya davomida saqlaydi. Kviz javoblari ro‘yxatdan o‘tish havolasiga qo‘shilmaydi.",
     "preferences": "“Qabul qilish” tanlansa, sayt shu qurilmada tanlangan mavzuni eslab qoladi. “Faqat zarurlari” bilan mavzu keyingi tashriflar uchun saqlanmaydi.",
-    "analytics": "Sayt ro‘yxatdan o‘tish tugmalari bosilishini cookies fayllarisiz va tashrif buyuruvchi identifikatorlarisiz hisoblaydi. Aloqa ma’lumotlari va viktorina javoblari hisoblagichga yuborilmaydi. Reklama cookies fayllari ishlatilmaydi. Tanlovni sahifa pastidagi “Cookies sozlamalari” orqali o‘zgartirish mumkin.",
+    "analytics": "Savol bosqichlari, yuklashlar va bosishlar tasodifiy yo‘l ID orqali sanaladi. Kontakt va javoblar analitikaga kirmaydi. So‘rov roziliging bilan serverda alohida saqlanadi. Reklama cookies yo‘q.",
     "accept": "Qabul qilish",
     "essential": "Faqat zarurlari",
     "settings": "Cookies sozlamalari"

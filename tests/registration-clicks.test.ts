@@ -81,7 +81,7 @@ test('the API rejects malformed and cross-origin clicks, and ignores previews', 
     assert.equal((await POST(request('x'.repeat(513)))).status, 413);
     delete process.env.BLOB_READ_WRITE_TOKEN; delete process.env.BLOB_STORE_ID;
     assert.equal((await POST(request(JSON.stringify({ id: ID })))).status, 503);
-    assert.equal((await GET()).status, 503);
+    assert.equal((await GET(new Request('https://ventorme.vercel.app/api/registration-click/'))).status, 401);
     process.env.VERCEL_ENV = 'preview';
     assert.equal((await POST(request(JSON.stringify({ id: ID })))).status, 204);
   } finally {

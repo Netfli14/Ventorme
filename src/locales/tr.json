@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Ventorme · Üniversite yolu net bir planla başlar",
-    "description": "10–12. sınıf öğrencileri için. Durumun hakkında altı soruyu yanıtla ve üniversite başvurusu için üç sonraki adımı öğren."
+    "description": "10–12. sınıf öğrencileri için. Durumun hakkında üç soruyu yanıtla ve üniversite başvurusu için üç sonraki adımı öğren."
   },
   "nav": {
     "how": "Nasıl çalışır",
@@ -214,8 +214,8 @@
       "text": "Deneyimini ve motivasyonunu nasıl anlatacağını geliştir."
     },
     "venti": {
-      "title": "Venti yapay zekâ asistanı",
-      "text": "Alan seçimi ve sonraki adımlarla ilgili sorularını konuş."
+      "title": "AI mentor",
+      "text": "Alanları ve sonraki adımları konuş."
     }
   },
   "faq": [
@@ -342,7 +342,7 @@
     "policy": "Çerez politikası",
     "necessary": "Gerekli depolama, çerez seçimini 180 gün ve test ilerlemeni bu oturum boyunca saklar. Test cevapları kayıt bağlantısına eklenmez.",
     "preferences": "“Kabul et” seçilirse site, seçtiğin temayı bu cihazda hatırlar. “Yalnızca gerekli” seçeneğinde tema sonraki ziyaretler için kaydedilmez.",
-    "analytics": "Site, kayıt düğmelerine yapılan tıklamaları çerez veya ziyaretçi kimliği kullanmadan sayar. İletişim bilgileri ve test yanıtları sayaca gönderilmez. Reklam çerezleri kullanılmaz. Seçimini sayfanın altındaki “Çerez ayarları” üzerinden değiştirebilirsin.",
+    "analytics": "Soru adımları, indirmeler ve tıklamalar rastgele rota ID’siyle sayılır. İletişim ve yanıtlar analize girmez. Talepler onayınla sunucuda ayrı saklanır. Reklam çerezi yok.",
     "accept": "Kabul et",
     "essential": "Yalnızca gerekli",
     "settings": "Çerez ayarları"

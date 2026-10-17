@@ -1,46 +1,404 @@
-'use client';
-import { useCallback, useEffect, useState } from 'react';
-import Link from 'next/link';
-import { ArrowLeft, RefreshCw } from 'lucide-react';
-import type { ClickStats } from '@/lib/registration-clicks';
-import styles from './RegistrationStats.module.css';
-
+"use client";
+import { useCallback, useEffect, useState, type FormEvent } from "react";
+import Link from "next/link";
+import {
+  ArrowLeft,
+  RefreshCw,
+  LockKeyhole,
+  LogOut,
+  CheckCircle2,
+  ChevronDown,
+} from "lucide-react";
+import { dictionaries } from "@/lib/i18n";
+import { routeCopy } from "@/lib/route-copy";
+import { subjects, challenges } from "@/lib/route-model";
+import type { ClickStats } from "@/lib/registration-clicks";
+import type { LeadRecord } from "@/app/api/stats/route";
+import type { buildFunnel } from "@/lib/funnel";
+import styles from "./RegistrationStats.module.css";
+type Stats = {
+  clickStats: ClickStats;
+  funnel: ReturnType<typeof buildFunnel>;
+  leads: LeadRecord[];
+  totalLeads: number;
+  offset: number;
+  nextOffset: number | null;
+  updatedAt: string;
+};
+const format = (iso: string) =>
+  new Intl.DateTimeFormat("ru-RU", {
+    timeZone: "Asia/Qyzylorda",
+    dateStyle: "short",
+    timeStyle: "short",
+  }).format(new Date(iso));
 export function RegistrationStats() {
-  const [stats, setStats] = useState<ClickStats | null>(null);
-  const [loading, setLoading] = useState(true), [error, setError] = useState(false);
-  const load = useCallback(async (signal?: AbortSignal) => {
-    setLoading(true); setError(false);
+  const [auth, setAuth] = useState<boolean | null>(null),
+    [configured, setConfigured] = useState(true),
+    [stats, setStats] = useState<Stats | null>(null),
+    [loading, setLoading] = useState(false),
+    [message, setMessage] = useState("");
+  const load = useCallback(async (offset = 0) => {
+    setLoading(true);
+    setMessage("");
     try {
-      const response = await fetch('/api/registration-click/', { signal });
-      if (!response.ok) throw new Error('Statistics unavailable');
-      setStats(await response.json() as ClickStats);
-    } catch (cause) {
-      if (cause instanceof Error && cause.name === 'AbortError') return;
-      setError(true);
-    } finally { if (!signal?.aborted) setLoading(false); }
+      const r = await fetch(`/api/stats/?offset=${offset}`, {
+        cache: "no-store",
+      });
+      if (r.status === 401) {
+        setAuth(false);
+        setStats(null);
+        return;
+      }
+      if (!r.ok) throw new Error();
+      setStats(await r.json());
+      setAuth(true);
+    } catch {
+      setMessage(
+        "Не удалось загрузить статистику. Обнови страницу чуть позже.",
+      );
+    } finally {
+      setLoading(false);
+    }
   }, []);
   useEffect(() => {
     const controller = new AbortController();
-    void load(controller.signal);
+    fetch("/api/admin/session/", {
+      signal: controller.signal,
+      cache: "no-store",
+    })
+      .then((r) => r.json())
+      .then((x) => {
+        setConfigured(x.configured);
+        setAuth(x.authenticated);
+        if (x.authenticated) void load();
+      })
+      .catch(() => {
+        if (!controller.signal.aborted) {
+          setAuth(false);
+          setMessage("Не удалось проверить доступ.");
+        }
+      });
     return () => controller.abort();
   }, [load]);
-  return <main id="main-content" className={styles.main}>
-    <Link className="text-button" href="/ru/"><ArrowLeft size={18} aria-hidden="true" />Открыть сайт</Link>
-    <p className={styles.label}>VENTORME · КОМАНДА 004</p>
-    <h1>Клики по регистрации</h1>
-    <p className={styles.lead}>Нажатия на все кнопки «Регистрация» на сайте, на любом языке.</p>
-    <div className={styles.cards} aria-live="polite" aria-busy={loading}>
-      <div className={styles.card}><span>Всего с подключения</span><strong>{stats ? stats.total.toLocaleString('ru-RU') : '—'}</strong></div>
-      <div className={styles.card}><span>Сегодня · Алматы</span><strong>{stats ? stats.today.toLocaleString('ru-RU') : '—'}</strong></div>
-    </div>
-    {error && <p role="alert">Не удалось загрузить статистику. Попробуй обновить её чуть позже.</p>}
-    <button type="button" className="button button-outline" disabled={loading} onClick={() => { void load(); }}><RefreshCw size={17} aria-hidden="true" />{loading ? 'Загрузка…' : 'Обновить'}</button>
-    {stats && <p className={styles.note}>Обновлено {new Intl.DateTimeFormat('ru-RU', { timeZone: stats.timezone, dateStyle: 'short', timeStyle: 'short' }).format(new Date(stats.updatedAt))}. Новые клики появляются в течение минуты.</p>}
-    {stats && stats.days.length > 0 && <div className={styles.tableWrap}><table className={styles.table}>
-      <caption>По дням · время Алматы</caption><thead><tr><th scope="col">Дата</th><th scope="col">Клики</th></tr></thead>
-      <tbody>{stats.days.map(day => <tr key={day.date}><th scope="row">{day.date.split('-').reverse().join('.')}</th><td>{day.clicks.toLocaleString('ru-RU')}</td></tr>)}</tbody>
-    </table></div>}
-    <p className={styles.note}>Повторные нажатия учитываются отдельно. Это число кликов, а не уникальных людей или завершённых регистраций. До подключения счётчика данные не собирались.</p>
-    <p className={styles.note}>Счётчик не сохраняет контакты, ответы квиза или идентификаторы посетителей и не использует cookies. На этой странице доступны только общие числа.</p>
-  </main>;
+  async function login(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const form = e.currentTarget,
+      password = String(new FormData(form).get("password") || "");
+    setLoading(true);
+    setMessage("");
+    try {
+      const r = await fetch("/api/admin/session/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
+      });
+      if (!r.ok) {
+        setMessage(
+          r.status === 429
+            ? "Слишком много попыток. Повтори через 15 минут."
+            : r.status === 503
+              ? "Вход пока не настроен. Нужны серверные настройки администратора."
+              : "Неверный пароль.",
+        );
+        return;
+      }
+      form.reset();
+      setAuth(true);
+      await load();
+    } catch {
+      setMessage("Не удалось войти. Повтори позже.");
+    } finally {
+      setLoading(false);
+    }
+  }
+  async function logout() {
+    const r = await fetch("/api/admin/session/", { method: "DELETE" });
+    if (r.ok) {
+      setAuth(false);
+      setStats(null);
+    } else setMessage("Не удалось выйти. Повтори позже.");
+  }
+  const labels = [
+    ["quiz_start", "Начали квиз"],
+    ["quiz_complete", "Завершили квиз"],
+    ["result_view", "Посмотрели маршрут"],
+    ["route_download", "Скачали PNG"],
+    ["lead", "Оставили заявку"],
+    ["registration_click", "Перешли к регистрации"],
+  ] as const;
+  const conversions = [
+    ["startToComplete", "Начало → завершение"],
+    ["completeToResult", "Завершение → просмотр"],
+    ["resultToDownload", "Просмотр → скачивание"],
+    ["resultToLead", "Просмотр → заявка"],
+    ["resultToRegistrationClick", "Просмотр → переход"],
+  ] as const;
+  return (
+    <main id="main-content" className={styles.main}>
+      <Link href="/ru/" className="text-button">
+        <ArrowLeft size={17} />
+        Открыть сайт
+      </Link>
+      <p className={styles.label}>VENTORME / TEAM-004 / ADMIN</p>
+      <h1>Заявки и статистика</h1>
+      <p className={styles.lead}>
+        Контакты и маршруты доступны только администратору.
+      </p>
+      {auth === null ? (
+        <p role="status">Проверяем доступ…</p>
+      ) : !auth ? (
+        <section className={styles.login}>
+          <LockKeyhole size={28} />
+          <h2>Вход администратора</h2>
+          {!configured && (
+            <p>
+              Вход ещё не настроен. Добавь VENTORME_ADMIN_PASSWORD_HASH и
+              VENTORME_SESSION_SECRET в окружение сервера. Заявки не принимаются
+              до настройки защиты.
+            </p>
+          )}
+          <form onSubmit={login} method="post" action="/api/admin/session/">
+            <label>
+              Пароль
+              <input
+                type="password"
+                name="password"
+                autoComplete="current-password"
+                required
+                maxLength={256}
+              />
+            </label>
+            <button
+              className="button button-primary"
+              disabled={loading || !configured}
+            >
+              {loading ? "Входим…" : "Войти"}
+            </button>
+          </form>
+        </section>
+      ) : (
+        <>
+          <div className={styles.toolbar}>
+            <button
+              className="button button-outline"
+              disabled={loading}
+              onClick={() => void load(stats?.offset || 0)}
+            >
+              <RefreshCw size={16} />
+              {loading ? "Загрузка…" : "Обновить"}
+            </button>
+            <button className="text-button" onClick={() => void logout()}>
+              <LogOut size={16} />
+              Выйти
+            </button>
+            {stats && <span>Обновлено {format(stats.updatedAt)}</span>}
+          </div>
+          {stats && (
+            <>
+              <div className={styles.cards}>
+                <div className={styles.card}>
+                  <span>Все клики регистрации · старый счётчик</span>
+                  <strong>{stats.clickStats.total}</strong>
+                  <small>Сегодня: {stats.clickStats.today}</small>
+                </div>
+                <div className={styles.card}>
+                  <span>Сохранённые заявки</span>
+                  <strong>{stats.totalLeads}</strong>
+                  <small>Контакт оставлен добровольно</small>
+                </div>
+                <div className={styles.card}>
+                  <span>Подтверждённые регистрации</span>
+                  <strong>—</strong>
+                  <small>Данные основной платформы не подключены</small>
+                </div>
+              </div>
+              <section className={styles.panel}>
+                <h2>Воронка маршрутов</h2>
+                <p>
+                  Каждый этап считается один раз на случайный ID маршрута. Это
+                  не количество людей. Редактирование и обновление страницы не
+                  увеличивают этап.
+                </p>
+                <div className={styles.funnel}>
+                  {labels.map(([k, l]) => (
+                    <div key={k}>
+                      <span>{l}</span>
+                      <strong>
+                        {k === "lead"
+                          ? stats.funnel.leadJourneys
+                          : stats.funnel.counts[k]}
+                      </strong>
+                    </div>
+                  ))}
+                </div>
+                <div className={styles.tableWrap}>
+                  <table className={styles.table}>
+                    <caption>
+                      Конверсия: совпавшие ID маршрутов, а не отношение
+                      несвязанных сумм
+                    </caption>
+                    <thead>
+                      <tr>
+                        <th>Этапы</th>
+                        <th>Из предыдущего этапа</th>
+                        <th>Конверсия</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {conversions.map(([k, l]) => {
+                        const v = stats.funnel.conversions[k];
+                        return (
+                          <tr key={k}>
+                            <th>{l}</th>
+                            <td>
+                              {v.to} / {v.from}
+                            </td>
+                            <td>{v.rate === null ? "—" : `${v.rate}%`}</td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+                <p className={styles.note}>
+                  Скачивание, заявка и переход — независимые действия после
+                  результата. Переходы без квиза учитываются в числе переходов,
+                  но не в конверсии результата. Подтверждённой регистрации эти
+                  данные не доказывают.
+                </p>
+              </section>
+              <section className={styles.panel}>
+                <h2>Заявки · {stats.totalLeads}</h2>
+                {stats.leads.length === 0 ? (
+                  <p>Пока нет сохранённых заявок.</p>
+                ) : (
+                  <div className={styles.leads}>
+                    {stats.leads.map((lead) => (
+                      <details key={lead.id}>
+                        <summary>
+                          <span>
+                            <strong>{lead.name}</strong>
+                            <span>{lead.email}</span>
+                          </span>
+                          <span>
+                            {format(lead.createdAt)} <ChevronDown size={15} />
+                          </span>
+                        </summary>
+                        <div className={styles.leadDetail}>
+                          <p>
+                            <CheckCircle2 size={15} />
+                            Согласие получено · {lead.source} ·{" "}
+                            {lead.locale.toUpperCase()} · {lead.consentVersion}
+                          </p>
+                          <dl>
+                            <dt>Класс</dt>
+                            <dd>{lead.answers.grade}</dd>
+                            <dt>Интересы</dt>
+                            <dd>
+                              {lead.answers.interests
+                                .map(
+                                  (i) => dictionaries.ru.choices.interests[i],
+                                )
+                                .join(", ")}
+                            </dd>
+                            <dt>Задача</dt>
+                            <dd>
+                              {
+                                routeCopy.ru.challenges[
+                                  challenges.indexOf(
+                                    lead.answers
+                                      .challenge as (typeof challenges)[number],
+                                  )
+                                ]
+                              }
+                            </dd>
+                            <dt>Программа</dt>
+                            <dd>{lead.answers.ib ? "IB" : "Общий маршрут"}</dd>
+                            {lead.answers.ib &&
+                              (["a", "b"] as const).map((k) => (
+                                <div className={styles.definition} key={k}>
+                                  <dt>
+                                    Набор {k.toUpperCase()}
+                                    {lead.answers.active === k
+                                      ? " · выбран"
+                                      : ""}
+                                  </dt>
+                                  <dd>
+                                    {lead.answers[k]
+                                      .map(
+                                        (s) =>
+                                          routeCopy.ru.subjects[
+                                            subjects.indexOf(s)
+                                          ],
+                                      )
+                                      .join(", ") || "—"}
+                                  </dd>
+                                </div>
+                              ))}
+                          </dl>
+                          <h3>{lead.route.title}</h3>
+                          <p>{lead.route.summary}</p>
+                          <ol>
+                            {lead.route.steps.map((step, i) => (
+                              <li key={step}>
+                                {i + 1}. {step}
+                              </li>
+                            ))}
+                          </ol>
+                        </div>
+                      </details>
+                    ))}
+                  </div>
+                )}
+                <div className={styles.toolbar}>
+                  <button
+                    className="text-button"
+                    disabled={loading || stats.offset === 0}
+                    onClick={() => void load(Math.max(0, stats.offset - 25))}
+                  >
+                    ← Предыдущие
+                  </button>
+                  <span>
+                    {stats.offset + 1}–
+                    {Math.min(stats.offset + 25, stats.totalLeads)}
+                  </span>
+                  <button
+                    className="text-button"
+                    disabled={loading || stats.nextOffset === null}
+                    onClick={() => void load(stats.nextOffset!)}
+                  >
+                    Следующие →
+                  </button>
+                </div>
+              </section>
+              <details className={styles.panel}>
+                <summary>Старый счётчик по дням</summary>
+                <table className={styles.table}>
+                  <thead>
+                    <tr>
+                      <th>Дата · время Казахстана</th>
+                      <th>Клики</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {stats.clickStats.days.map((day) => (
+                      <tr key={day.date}>
+                        <th>{day.date}</th>
+                        <td>{day.clicks}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </details>
+            </>
+          )}
+        </>
+      )}
+      {message && (
+        <p role="alert" className={styles.error}>
+          {message}
+        </p>
+      )}
+    </main>
+  );
 }
