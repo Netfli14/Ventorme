@@ -8,6 +8,7 @@ import { Compass, Globe2, Menu, Moon, Sun, X } from 'lucide-react';
 import { dictionaries, locales, localeNames, localeLabels, localizePath, type Locale } from '@/lib/i18n';
 import { RegistrationButton } from './Actions';
 import { useApp } from './Providers';
+import { experienceCopy } from '@/lib/experience-copy';
 
 export function LanguageSelector({ locale }: { locale: Locale }) {
   const router = useRouter(), pathname = usePathname(), d = dictionaries[locale];
@@ -37,12 +38,12 @@ export function Header({ locale }: { locale: Locale }) {
     document.addEventListener('keydown', keyboard); document.addEventListener('pointerdown', outside);
     return () => { document.body.style.overflow = old; document.removeEventListener('keydown', keyboard); document.removeEventListener('pointerdown', outside); };
   }, [open]);
-  const links = [['how', d.nav.how], ['features', d.nav.features], ['faq', d.nav.faq]];
+  const links = [[`/${locale}/#quiz`, experienceCopy[locale].navPlan], [`/${locale}/sat/`, experienceCopy[locale].navGame], [`/${locale}/#universities`, d.nav.features]];
   return <header className={`site-header${home ? ' site-header--home' : ''}`}><div className="container header-inner">
     <Link className="wordmark" href={`/${locale}/`} aria-label={`VentorMe · ${d.common.home}`}><span className="brand-symbol"><Compass size={22} strokeWidth={1.8} aria-hidden="true" /></span>VentorMe<span className="brand-period" aria-hidden="true">.</span></Link>
-    <nav className="desktop-nav" aria-label={d.common.menu}>{links.map(([id, name]) => <Link key={id} href={`/${locale}/#${id}`}>{name}</Link>)}</nav>
+    <nav className="desktop-nav" aria-label={d.common.menu}>{links.map(([id, name]) => <Link key={id} href={id}>{name}</Link>)}</nav>
     <div className="header-actions"><LanguageSelector locale={locale} /><button type="button" className="icon-button" onClick={toggleTheme} aria-label={theme === 'light' ? d.common.darkTheme : d.common.lightTheme}>{theme === 'light' ? <Moon size={19} aria-hidden="true" /> : <Sun size={19} aria-hidden="true" />}</button><span className="desktop-registration"><RegistrationButton locale={locale} /></span><button ref={toggle} type="button" className="icon-button menu-toggle" aria-label={open ? d.common.closeMenu : d.common.menu} aria-expanded={open} aria-controls="mobile-menu" onClick={() => setOpen(v => !v)}>{open ? <X size={21} aria-hidden="true" /> : <Menu size={21} aria-hidden="true" />}</button></div>
     <AnimatePresence>{open && <motion.div key="menu-backdrop" className="menu-backdrop" aria-hidden="true" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: reduce ? 0 : 0.15 }} />}</AnimatePresence>
-    <AnimatePresence>{open && <motion.div ref={panel} key="mobile-menu" id="mobile-menu" role="dialog" aria-modal="true" aria-label={d.common.menu} className="mobile-menu" initial={{ opacity: 0, y: reduce ? 0 : -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: reduce ? 0 : 0.18 }}><button type="button" className="text-button" onClick={() => { setOpen(false); toggle.current?.focus(); }}><X size={18} aria-hidden="true" />{d.common.closeMenu}</button>{links.map(([id, name]) => <Link href={`/${locale}/#${id}`} key={id} onClick={() => { setOpen(false); toggle.current?.focus(); }}>{name}</Link>)}<RegistrationButton locale={locale} /></motion.div>}</AnimatePresence>
+    <AnimatePresence>{open && <motion.div ref={panel} key="mobile-menu" id="mobile-menu" role="dialog" aria-modal="true" aria-label={d.common.menu} className="mobile-menu" initial={{ opacity: 0, y: reduce ? 0 : -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: reduce ? 0 : 0.18 }}><button type="button" className="text-button" onClick={() => { setOpen(false); toggle.current?.focus(); }}><X size={18} aria-hidden="true" />{d.common.closeMenu}</button>{links.map(([id, name]) => <Link href={id} key={id} onClick={() => { setOpen(false); toggle.current?.focus(); }}>{name}</Link>)}<RegistrationButton locale={locale} /></motion.div>}</AnimatePresence>
   </div></header>;
 }

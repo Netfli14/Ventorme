@@ -62,7 +62,7 @@
   height: 7px;
   margin-top: 21px;
   border-radius: 9px;
-  background: #dfff00;
+  background: #f5b567;
   transform: rotate(-3deg);
 }
 .heroLead {
@@ -102,7 +102,7 @@
   line-height: 1.4;
 }
 .pastelGreen {
-  background: #dff4de;
+  background: #fff0df;
   color: #245b37;
 }
 .pastelPurple {
@@ -167,7 +167,7 @@
   left: 37%;
   top: 20%;
   transform: rotate(-40deg);
-  border-top-color: #bdd200;
+  border-top-color: #e29a49;
 }
 .sceneTop {
   display: flex;
@@ -303,8 +303,8 @@
 }
 .routeNode p > span {
   display: flex;
-  background: #dfff00;
-  color: #303820;
+  background: #f5b567;
+  color: #593711;
   border-radius: 50%;
   padding: 1px;
 }
@@ -453,7 +453,7 @@
 .quizTopics button[aria-current="step"] { color: var(--accent); background: var(--selected); border-color: var(--border); }
 .quizTopics button[aria-current="step"] > span { background: var(--accent); color: white; border-color: var(--accent); }
 .quizTopics button:disabled { opacity: 0.6; cursor: default; }
-.quizTopics button > span:has(svg) { color: #315c39; background: #dff4de; border-color: #dff4de; }
+.quizTopics button > span:has(svg) { color: #315c39; background: #fff0df; border-color: #fff0df; }
 .choiceCaption { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; margin: -4px 0 12px; color: var(--muted); font-size: 11px; }
 .choiceLimit { color: var(--accent); font-size: 12px; margin-top: 12px; }
 .wideOptions { grid-template-columns: minmax(0, 1fr) !important; }
@@ -490,7 +490,7 @@
 }
 .quizDecor > span:last-child {
   transform: rotate(10deg);
-  background: #dfff00;
+  background: #f5b567;
   color: #3b3b3b;
 }
 .quizDecor > div {
@@ -981,8 +981,8 @@
   font-size: 12px;
 }
 .compareSets p > span.differentSubject {
-  background: #dfff00;
-  color: #303820;
+  background: #f5b567;
+  color: #593711;
 }
 .compareSets small {
   font-size: 8px;
@@ -1124,8 +1124,8 @@
   height: 27px;
   flex-shrink: 0;
   border-radius: 50%;
-  background: #dfff00;
-  color: #303820;
+  background: #f5b567;
+  color: #593711;
   font-size: 10px;
   font-weight: 750;
 }
@@ -1375,7 +1375,7 @@
   right: 8%;
   top: -85px;
   border: 1px solid #ffffff50;
-  border-top: 2px solid #dfff00;
+  border-top: 2px solid #f5b567;
   border-radius: 50%;
   transform: rotate(25deg);
 }
@@ -1392,11 +1392,11 @@
   top: -100px;
   font-size: 410px;
   line-height: 1;
-  color: #dfff00;
+  color: #f5b567;
   opacity: 0.35;
 }
 .final .sectionLabel {
-  color: #dfff00;
+  color: #f5b567;
 }
 .final h2 {
   font-size: clamp(28px, 3.4vw, 44px);

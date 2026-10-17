@@ -3,7 +3,7 @@ const locales = ['ru', 'en', 'kk', 'uz', 'zh', 'tr'];
 let updated = 0;
 await access('.next/BUILD_ID');
 for (const locale of locales) {
-  for (const route of ['', 'quiz/', 'result/']) {
+  for (const route of ['', 'quiz/', 'result/', 'sat/']) {
     const pathname = `${locale}${route ? `/${route.slice(0, -1)}` : ''}`;
     // Patch only HTML actually emitted by the build. A hosting adapter may keep
     // prerendered pages elsewhere; the root layout also sets lang before paint.

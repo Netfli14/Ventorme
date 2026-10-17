@@ -10,5 +10,5 @@ export function registrationUrl(teamNumber: string | undefined): string | null {
 // outdated deployment environment cannot send visitors to another team.
 export const TEAM_NUMBER = '004';
 export const REGISTER_URL = registrationUrl(TEAM_NUMBER);
-export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://ventorme-next-step.yerzhanuly-y.chatgpt.site';
+export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://ventorme.vercel.app';
 export const officialLinks = { home: 'https://ventorme.ai/', terms: 'https://ventorme.ai/terms', privacy: 'https://ventorme.ai/privacy' };

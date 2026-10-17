@@ -151,3 +151,7 @@
 @media (prefers-reduced-motion: reduce) {
   .brandReveal { transition: none; }
 }
+
+.registration{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:min(640px,calc(100% - 270px))}.registration :global(.button){font-size:12px;padding:12px;line-height:1.5;background:#f5b567;border-color:#f5b567}.registration>:global(.button):last-child{background:#1d2945;color:#fff;border-color:#6f7e99;box-shadow:none}
+@media(max-width:800px){.registration{grid-template-columns:1fr;width:min(330px,calc(100% - 230px))}.registration :global(.button){font-size:11px}}
+@media(max-width:640px){.registration{grid-template-columns:1fr;top:152px;width:calc(100% - 36px);max-width:430px}.registration :global(.button){min-height:48px;font-size:12px}.video{top:280px;height:min(52svh,calc(100svh - 315px),460px)}.brandReveal{bottom:5rem}.brandReveal h2{font-size:2.1rem}.brandReveal p{font-size:1rem}}

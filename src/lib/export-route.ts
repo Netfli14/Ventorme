@@ -62,7 +62,7 @@ export async function downloadRoute(state: RouteState, locale: Locale) {
       gap: 40,
     },
     { text: r.summary, size: 28, color: "#586173", gap: 40 },
-    ...r.steps.map((t, i) => ({
+    ...r.steps.slice(0, 2).map((t, i) => ({
       text: `0${i + 1}  ${t}`,
       size: 32,
       color: "#3B3B3B",
@@ -85,7 +85,7 @@ export async function downloadRoute(state: RouteState, locale: Locale) {
   ctx.beginPath();
   ctx.roundRect(48, 48, 1304, canvas.height - 96, 36);
   ctx.fill();
-  ctx.fillStyle = "#DFFF00";
+  ctx.fillStyle = "#F5B567";
   ctx.beginPath();
   ctx.roundRect(1160, 80, 100, 14, 7);
   ctx.fill();

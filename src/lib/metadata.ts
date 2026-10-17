@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { dictionaries, locales, type Locale } from './i18n';
 import { SITE_URL } from './config';
-export function localizedMetadata(locale: Locale, route: 'quiz' | 'result' | '' = ''): Metadata {
+export function localizedMetadata(locale: Locale, route: 'quiz' | 'result' | 'sat' | '' = ''): Metadata {
   const d = dictionaries[locale], path = `/${locale}/${route ? route + '/' : ''}`;
   const title = route === 'quiz' ? `${d.common.quiz} · Ventorme` : route === 'result' ? `${d.result.title} · Ventorme` : d.meta.title;
   const ogLocale = { ru: 'ru_RU', en: 'en_US', kk: 'kk_KZ', uz: 'uz_UZ', zh: 'zh_CN', tr: 'tr_TR' }[locale];
