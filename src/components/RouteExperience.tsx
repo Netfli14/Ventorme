@@ -8,7 +8,7 @@ import {
 } from "react";
 import { gsap } from "gsap";
 import { Flip } from "gsap/Flip";
-import { useReducedMotion } from "motion/react";
+import { useReducedMotion } from "./useMotionPreference";
 import {
   ArrowUpRight,
   ArrowRight,
@@ -41,6 +41,7 @@ import {
 import { downloadRoute } from "@/lib/export-route";
 import { useRoute } from "./RouteProvider";
 import { useRouteMotion } from "./useRouteMotion";
+import { MascotScrollIntro } from "./MascotScrollIntro";
 import { RegistrationButton, ShareButton } from "./Actions";
 import styles from "./RouteExperience.module.css";
 gsap.registerPlugin(Flip);
@@ -591,12 +592,15 @@ function IBBuilder({ locale }: { locale: Locale }) {
   useLayoutEffect(() => {
     if (reduce || !scope.current) return;
     const ctx = gsap.context(() => {
-      gsap.from("[data-builder-note]", {x: 14, opacity: 0.35, duration: 0.35, stagger: 0.05, ease: "power3.out", clearProps: "all"});
-      gsap.from("[data-set-count]", {y: -5, scale: 1.15, duration: 0.3, ease: "power3.out", clearProps: "all"});
-      gsap.from("[data-diff-chip]", {y: 10, scale: 0.88, rotation: -3, opacity: 0.2, duration: 0.38, stagger: 0.04, ease: "power3.out", clearProps: "all"});
+      const notes = scope.current!.querySelectorAll("[data-builder-note]"),
+        count = scope.current!.querySelectorAll("[data-set-count]"),
+        differences = scope.current!.querySelectorAll("[data-diff-chip]");
+      if (notes.length) gsap.from(notes, {x: 14, opacity: 0.35, duration: 0.35, stagger: 0.05, ease: "power3.out", clearProps: "all"});
+      if (count.length) gsap.from(count, {y: -5, scale: 1.15, duration: 0.3, ease: "power3.out", clearProps: "all"});
+      if (differences.length) gsap.from(differences, {y: 10, scale: 0.88, rotation: -3, opacity: 0.2, duration: 0.38, stagger: 0.04, ease: "power3.out", clearProps: "all"});
     }, scope);
     return () => ctx.revert();
-  }, [s.a, s.b, s.active, s.field, compare, reduce]);
+  }, [s.a, s.b, s.active, s.field, s.ib, compare, reduce]);
   function captureSet() {
     if (!scope.current) return;
     const targets = scope.current.querySelectorAll("[data-flip-id]");
@@ -1211,7 +1215,8 @@ export function RouteExperience({
   }, [ready, entry]);
   return (
     <main id="main-content" className={styles.root} ref={scope}>
-      <section className={`${styles.hero} container`}>
+      {entry === "home" && mascotVideoAvailable && <MascotScrollIntro locale={locale} />}
+      <section id="content-start" className={`${styles.hero} container`}>
         <div className={styles.heroCopy} data-motion-section="hero">
           <p data-hero-support className={styles.heroEyebrow}>
             <span className={styles.pastelGreen}>10—12</span>

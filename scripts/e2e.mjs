@@ -55,7 +55,7 @@ try {
   if (!logs.includes("Ready")) throw new Error(logs);
   // Compile each boundary before interactions so dev refresh cannot replace a
   // form while the browser is typing. No production requests are made here.
-  await Promise.all(["/ru/","/en/","/stats/","/api/admin/session/","/api/stats/","/api/leads/","/api/route-events/","/api/registration-click/"].map(p=>fetch(base+p)));
+  await Promise.all(["/ru/","/en/","/stats/","/api/admin/session/","/api/stats/","/api/leads/","/api/route-events/","/api/registration-click/"].map(async p=>(await fetch(base+p)).text()));
   browser = await chromium.launch({
     executablePath: process.env.VENTORME_BROWSER_PATH || undefined,
     headless: true,
@@ -91,6 +91,17 @@ try {
   await page
     .getByRole("button", { name: "Только необходимые", exact: true })
     .click();
+  const intro = page.locator('[data-mascot-intro="video"]');
+  await intro.waitFor({state: 'visible'});
+  await page.waitForFunction(() => {const v=document.querySelector('[data-mascot-intro] video'); return v && !v.paused && v.currentTime>0;});
+  assert.ok((await intro.boundingBox()).height>=900);
+  await intro.getByRole('button',{name:'Пауза видео',exact:true}).click();
+  assert.equal(await intro.locator('video').evaluate(v=>v.paused),true);
+  await intro.getByRole('button',{name:'Воспроизвести видео',exact:true}).click();
+  await page.waitForFunction(() => !document.querySelector('[data-mascot-intro] video').paused);
+  await page.screenshot({path:'.test-tools/restored-intro-desktop.png'});
+  await page.getByRole('link',{name:'Пропустить интро',exact:false}).click();
+  ok('original uploaded video is restored as the first screen, with pause, play and skip');
   const reg =
     "https://ventorme.ai/register?utm_source=hacknext&utm_campaign=team-004";
   assert.ok(
@@ -111,6 +122,10 @@ try {
   await page.waitForTimeout(250);
   assert.deepEqual(await page.locator("[data-node]").evaluateAll(els => els.map(el => getComputedStyle(el).transform)), settled);
   ok("hero replay sends route signals, animates cards, then settles without an endless loop");
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.waitForFunction(() => [...document.querySelectorAll('[data-node], [data-hero-line]')].every(el => !el.style.transform));
+  ok("live reduced-motion preference change cleans up active scenes without a reload");
+  await page.emulateMedia({ reducedMotion: "no-preference" });
   await page
     .getByRole("button", { name: "Включить тёмную тему", exact: true })
     .click();
@@ -123,8 +138,10 @@ try {
     .click();
   await page.locator("header select").selectOption("en");
   await page.waitForURL("**/en/");
+  await page.waitForFunction(() => document.documentElement.lang === "en" && document.querySelector('header select')?.value === "en");
   await page.locator("header select").selectOption("ru");
   await page.waitForURL("**/ru/");
+  await page.waitForFunction(() => document.documentElement.lang === "ru" && document.querySelector('header select')?.value === "ru");
   ok("theme toggle and language selector work through the actual UI");
   await page
     .getByRole("button", { name: "Смотреть видео", exact: true })
@@ -364,6 +381,9 @@ try {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto(base + "/ru/", { waitUntil: "networkidle" });
   await page.waitForTimeout(1800);
+  const mobileIntro=await intro.locator('video').boundingBox();
+  assert.ok(mobileIntro.width>300&&mobileIntro.height>100);
+  await page.screenshot({path:'.test-tools/restored-intro-mobile.png'});
   await page.screenshot({
     path: "/tmp/ventorme-mobile-result.png",
     fullPage: true,
@@ -379,6 +399,8 @@ try {
   await page.locator("#my-route").scrollIntoViewIfNeeded();
   await page.screenshot({path:"/tmp/ventorme-dark.png",fullPage:false});
   await page.emulateMedia({ reducedMotion: "reduce" });
+  assert.equal(await intro.locator('video').evaluate(v=>v.paused),true);
+  await page.waitForFunction(() => [...document.querySelectorAll('[data-node], [data-hero-line]')].every(el => !el.style.transform));
   await page.goto(base + "/ru/", { waitUntil: "networkidle" });
   assert.ok(await page.locator("[data-node], [data-hero-line]").evaluateAll(els => els.every(el => !el.style.transform)), "reduced motion removes GSAP spatial animations");
   await page.locator("#faq summary").first().focus();

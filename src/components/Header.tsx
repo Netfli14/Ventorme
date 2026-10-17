@@ -2,7 +2,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
+import { AnimatePresence, motion } from 'motion/react';
+import { useReducedMotion } from './useMotionPreference';
 import { Compass, Globe2, Menu, Moon, Sun, X } from 'lucide-react';
 import { dictionaries, locales, localeNames, localeLabels, localizePath, type Locale } from '@/lib/i18n';
 import { RegistrationButton } from './Actions';

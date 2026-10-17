@@ -1,7 +1,7 @@
 "use client";
 import { useLayoutEffect, type RefObject } from "react";
 import { gsap } from "gsap";
-import { useReducedMotion } from "motion/react";
+import { useReducedMotion } from "./useMotionPreference";
 
 // Each scene runs when it is seen. Content is visible before JS and without motion.
 export function useRouteMotion(scope: RefObject<HTMLElement | null>, locale: string) {
