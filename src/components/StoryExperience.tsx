@@ -32,7 +32,7 @@ export function StoryExperience({locale}: {locale:Locale}) {
       <div className={styles.boardTop}><span>VENTORME / <span>{c.demo}</span></span><span>{complete?'03':`0${state.step+1}`} / 03</span></div>
       <ol className={styles.nodes}>
         {c.labels.map((label,i)=>{const Icon=icons[i];return <li key={i} className={`${styles.node} ${i<state.furthest?styles.connected:''}`} style={{'--tilt':`${[-6,5,-3,6,-5,4,-4][i]}deg`,'--offset':`${[7,-9,12,-4,-5,7,1][i]}px`} as CSSProperties}>
-          <button type="button" disabled={i>=STORY_OPEN_STEPS || i>state.furthest} onClick={()=>navigate(i)} aria-current={state.step===i?'step':undefined} aria-label={`${i+1}. ${label}${i>=STORY_OPEN_STEPS?`: ${c.locked}`:""}`} title={i>=STORY_OPEN_STEPS?c.unlockText:undefined}><span className={styles.nodeIcon}>{i>=STORY_OPEN_STEPS?<LockKeyhole size={18}/>:i<state.furthest?<Check size={18}/>:<Icon size={18}/>}</span><span><small>0{i+1}</small>{label}</span></button>
+          <button type="button" disabled={i>=STORY_OPEN_STEPS || i>state.furthest} onClick={()=>navigate(i)} aria-current={!complete && state.step===i?'step':undefined} aria-label={`${i+1}. ${label}${i>=STORY_OPEN_STEPS?`: ${c.locked}`:""}`} title={i>=STORY_OPEN_STEPS?c.unlockText:undefined}><span className={styles.nodeIcon}>{i>=STORY_OPEN_STEPS?<LockKeyhole size={18}/>:i<state.furthest?<Check size={18}/>:<Icon size={18}/>}</span><span><small>0{i+1}</small>{label}</span></button>
         </li>})}
       </ol>
     </div>
