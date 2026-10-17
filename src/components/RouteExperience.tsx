@@ -42,6 +42,7 @@ import { downloadRoute } from "@/lib/export-route";
 import { useRoute } from "./RouteProvider";
 import { useRouteMotion } from "./useRouteMotion";
 import { MascotScrollIntro } from "./MascotScrollIntro";
+import { MessageText } from "./MessageText";
 import { RegistrationButton, ShareButton } from "./Actions";
 import styles from "./RouteExperience.module.css";
 gsap.registerPlugin(Flip);
@@ -348,9 +349,10 @@ function Quiz({ locale }: { locale: Locale }) {
     if (reduce || !scope.current) return;
     const ctx = gsap.context(
       () => {
-        gsap.timeline({defaults: {ease: "power3.out", clearProps: "all"}})
-          .from("[data-question] > h3, [data-question] > svg", {x: 22 * direction.current, opacity: 0.25, duration: 0.35})
-          .from("[data-answer]", {y: 18, scale: 0.97, opacity: 0.3, duration: 0.35, stagger: 0.025}, 0.08);
+        const answers = scope.current!.querySelectorAll("[data-answer]");
+        const timeline = gsap.timeline({defaults: {ease: "power3.out", clearProps: "all"}})
+          .from("[data-question-message], [data-question] > svg", {x: 22 * direction.current, scale: 0.97, opacity: 0.25, duration: 0.35});
+        if (answers.length) timeline.from(answers, {y: 18, scale: 0.97, opacity: 0.3, duration: 0.35, stagger: 0.025}, 0.08);
         gsap.fromTo("[data-quiz-arrow]", {x: -12, scaleX: 0.6}, {x: 0, scaleX: 1, duration: 0.4, ease: "power3.out", clearProps: "all"});
       },
       scope,
@@ -451,10 +453,15 @@ function Quiz({ locale }: { locale: Locale }) {
               </div>
             ) : (
               <div data-question>
-                <h3 ref={heading} tabIndex={-1} id="route-question">
-                  {c.questions[s.step]}
-                </h3>
-                <p className={styles.questionHelp}>{c.help[s.step]}</p>
+                <div className={styles.questionMessage} data-question-message>
+                  <span className={styles.messageSender} aria-hidden="true">
+                    <img src="/media/ventorme-mascot-poster.jpg" alt="" /> VentorMe
+                  </span>
+                  <h3 ref={heading} tabIndex={-1} id="route-question">
+                    <MessageText text={c.questions[s.step]} />
+                  </h3>
+                  <p className={styles.questionHelp}>{c.help[s.step]}</p>
+                </div>
                 <div
                   className={`${styles.options} ${s.step === 0 ? styles.grades : ""}`}
                   role="group"
@@ -779,15 +786,18 @@ function IBBuilder({ locale }: { locale: Locale }) {
           <aside className={styles.builderNotes}>
             <span className={styles.pastelPurple}>{c.demo}</span>
             <h3>{c.checkTitle}</h3>
+            <span className={styles.messageSender} aria-hidden="true">
+              <img src="/media/ventorme-mascot-poster.jpg" alt="" /> VentorMe
+            </span>
             <ul>
               <li data-builder-note>
                 <span>01</span>
-                {fieldCheck}
+                <p><MessageText text={fieldCheck} /></p>
               </li>
               {active.slice(0, 2).map((id, i) => (
                 <li data-builder-note key={id}>
                   <span>0{i + 2}</span>
-                  {c.subjectCheck.replace("{subject}", label(id))}
+                  <p><MessageText text={c.subjectCheck.replace("{subject}", label(id))} /></p>
                 </li>
               ))}
             </ul>

@@ -64,9 +64,14 @@ export function MascotScrollIntro({ locale }: { locale: Locale }) {
     if (reduce) {
       video.pause();
       setRequiresTap(true);
-    } else if (video.readyState >= 2 && !video.ended) {
+    } else if (!video.ended) {
       const bounds = sectionRef.current?.getBoundingClientRect();
-      if (bounds && bounds.bottom > 0 && bounds.top < innerHeight) startVideo();
+      if (bounds && bounds.bottom > 0 && bounds.top < innerHeight) {
+        // play() may be requested before decoding is ready; the browser starts
+        // it as soon as media is available, without waiting for a user gesture.
+        setRequiresTap(false);
+        startVideo();
+      }
     }
   }, [reduce]);
 

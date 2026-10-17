@@ -10,6 +10,10 @@ Languages: RU, EN, KZ (`kk`), UZ, ZH, TR. Theme preferences continue to follow t
 
 ## Motion
 
+The later 17 October update requests muted intro playback as soon as hydration knows the motion preference, even before video decoding is ready. A fresh desktop/mobile browser test records a play event before any pointer or keyboard input. Browser autoplay restrictions retain a manual fallback, and reduced motion still requires manual playback.
+
+Quiz questions and IB guidance now use message bubbles with a brief three-dot cue and letter reveal (under one second). Buttons remain usable immediately. Full text is present for assistive technology and when JavaScript or animation is unavailable; CJK wrapping is supported. This is presentation of existing rule-based guidance, not simulated AI generation.
+
 The project-scoped skill is installed at `.agents/skills/motion-design/SKILL.md`, with its upstream MIT license and supporting references. Source: `LottieFiles/motion-design-skill`, commit `f9a8a041b85185ee4881b3471d3415e939aac772`.
 
 GSAP handles the route construction scene, quiz changes, IB shared-element moves and result assembly. The 17 October motion update adds travelling signals on the actual SVG route, orbit strokes, a masked headline entrance, finite counter-motion of the cards, selected-answer feedback, staggered questions, animated HL capacity indicators, FLIP movement when switching A/B, changing recommendation notes, highlighted subject differences, result-card assembly on intersection, FAQ feedback and final-call-to-action artwork.

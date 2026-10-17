@@ -1,0 +1,16 @@
+.message { position: relative; }
+.word { display: inline-block; white-space: nowrap; }
+.glyph { display: inline-block; }
+.dots {
+  position: absolute;
+  left: 0;
+  top: 0.35em;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  visibility: hidden;
+}
+.dots i { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+@media (prefers-reduced-motion: reduce) {
+  .dots { display: none; }
+}

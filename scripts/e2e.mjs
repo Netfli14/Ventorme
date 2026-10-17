@@ -74,6 +74,16 @@ try {
     acceptDownloads: true,
   });
   const page = await context.newPage();
+  const recordAutoplay = () => {
+    let interacted = false;
+    window.__introPlayback = [];
+    for (const type of ['pointerdown', 'keydown']) document.addEventListener(type, () => {interacted=true;}, {capture:true});
+    document.addEventListener('play', event => {
+      const video=event.target;
+      if(video instanceof HTMLVideoElement && video.closest('[data-mascot-intro]')) window.__introPlayback.push({unassisted:!interacted,muted:video.muted,inline:video.playsInline});
+    }, true);
+  };
+  await page.addInitScript(recordAutoplay);
   page.on("pageerror", (e) => errors.push(e.message));
   page.on("console", (m) => {
     if (
@@ -88,11 +98,14 @@ try {
   });
   await page.goto(base + "/ru/", { waitUntil: "networkidle" });
   await page.waitForTimeout(1800);
+  await page.waitForFunction(() => window.__introPlayback?.some(v=>v.unassisted&&v.muted&&v.inline));
+  ok('desktop intro autoplays muted before any click or keyboard gesture');
   await page
     .getByRole("button", { name: "Только необходимые", exact: true })
     .click();
   const intro = page.locator('[data-mascot-intro="video"]');
   await intro.waitFor({state: 'visible'});
+  if(await intro.locator('video').evaluate(v=>v.ended)) await intro.getByRole('button',{name:'Посмотреть ещё раз',exact:true}).click();
   await page.waitForFunction(() => {const v=document.querySelector('[data-mascot-intro] video'); return v && !v.paused && v.currentTime>0;});
   assert.ok((await intro.boundingBox()).height>=900);
   await intro.getByRole('button',{name:'Пауза видео',exact:true}).click();
@@ -102,6 +115,13 @@ try {
   await page.screenshot({path:'.test-tools/restored-intro-desktop.png'});
   await page.getByRole('link',{name:'Пропустить интро',exact:false}).click();
   ok('original uploaded video is restored as the first screen, with pause, play and skip');
+  const freshMobile=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
+  const mobilePage=await freshMobile.newPage();
+  await mobilePage.addInitScript(recordAutoplay);
+  await mobilePage.goto(base+'/ru/',{waitUntil:'domcontentloaded'});
+  await mobilePage.waitForFunction(() => window.__introPlayback?.some(v=>v.unassisted&&v.muted&&v.inline));
+  await freshMobile.close();
+  ok('fresh mobile session autoplays inline without a tap');
   const reg =
     "https://ventorme.ai/register?utm_source=hacknext&utm_campaign=team-004";
   assert.ok(
@@ -209,6 +229,11 @@ try {
   assert.match(compare, /Добавлено: Биология/);
   assert.match(compare, /Убрано: Химия/);
   ok("GSAP subject selection and A/B single-subject difference");
+  assert.equal(await ib.locator('[data-builder-note] [data-message]').count(),3);
+  await page.waitForFunction(() => [...document.querySelectorAll('#ib-builder [data-message-glyph]')].every(el=>Number(getComputedStyle(el).opacity)>0.99));
+  await ib.locator('aside').scrollIntoViewIfNeeded();
+  await page.screenshot({path:'.test-tools/ib-messages.png'});
+  ok('IB guidance appears as readable messages with a short typing reveal');
   await ib.getByRole("button", {name: /Набор A/}).first().click();
   await ib.getByRole("button", {name: /Набор B/}).first().click();
   await page.waitForTimeout(650);

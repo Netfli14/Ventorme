@@ -514,6 +514,32 @@
   margin-top: 12px;
   margin-bottom: 23px;
 }
+.questionMessage {
+  padding: 17px 18px;
+  margin-bottom: 23px;
+  border: 1px solid var(--border);
+  border-radius: 18px 18px 18px 4px;
+  background: var(--soft);
+  transform-origin: left bottom;
+}
+.questionMessage .questionHelp { margin-bottom: 0; }
+.messageSender {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 13px;
+  font-size: 10px;
+  color: var(--accent);
+  font-weight: 750;
+  letter-spacing: 0.02em;
+}
+.messageSender img {
+  width: 26px;
+  height: 26px;
+  object-fit: cover;
+  border-radius: 50%;
+  background: #111726;
+}
 .options {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -845,7 +871,14 @@
   font-size: 13px;
   color: var(--muted);
   line-height: 1.8;
+  padding: 14px;
+  margin-top: 10px;
+  border: 1px solid var(--border);
+  border-radius: 16px 16px 16px 4px;
+  background: var(--card);
+  transform-origin: left bottom;
 }
+.builderNotes li > p { margin: 0; min-width: 0; }
 .builderNotes li > span {
   font-size: 10px;
   color: var(--accent);
