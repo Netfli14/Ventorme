@@ -23,7 +23,6 @@ import {
   BookOpen,
   GraduationCap,
   Play,
-  Pause,
   RotateCcw,
   ShieldCheck,
   ChevronDown,
@@ -44,19 +43,9 @@ import { useRoute } from "./RouteProvider";
 import { useRouteMotion } from "./useRouteMotion";
 import { MascotScrollIntro } from "./MascotScrollIntro";
 import { MessageText } from "./MessageText";
-import AnimatedShaderBackground from "@/components/ui/animated-shader-background";
 import { RegistrationButton, ShareButton } from "./Actions";
 import styles from "./RouteExperience.module.css";
 gsap.registerPlugin(Flip);
-
-const backgroundLabels: Record<Locale, [string, string]> = {
-  ru: ["Пауза фона", "Включить фон"],
-  en: ["Pause background", "Play background"],
-  kk: ["Фонды кідірту", "Фонды қосу"],
-  uz: ["Fonni to‘xtatish", "Fonni yoqish"],
-  zh: ["暂停背景动画", "播放背景动画"],
-  tr: ["Arka planı duraklat", "Arka planı oynat"],
-};
 
 function go(id: string) {
   const section = document.getElementById(id);
@@ -1223,9 +1212,7 @@ export function RouteExperience({
 }) {
   const c = routeCopy[locale],
     { ready, track } = useRoute(),
-    scope = useRef<HTMLElement>(null),
-    [backgroundPaused, setBackgroundPaused] = useState(false),
-    [backgroundAvailable, setBackgroundAvailable] = useState(false);
+    scope = useRef<HTMLElement>(null);
   useRouteMotion(scope, locale);
   useEffect(() => {
     if (ready && entry !== "home") {
@@ -1239,9 +1226,6 @@ export function RouteExperience({
   return (
     <main id="main-content" className={styles.root} ref={scope}>
       {entry === "home" && mascotVideoAvailable && <MascotScrollIntro locale={locale} />}
-      <div className={styles.contentArea}>
-      <AnimatedShaderBackground intensity={0.2} speed={0.22} paused={backgroundPaused}
-        onAvailabilityChange={setBackgroundAvailable} />
       <section id="content-start" className={`${styles.hero} container`}>
         <div className={styles.heroCopy} data-motion-section="hero">
           <p data-hero-support className={styles.heroEyebrow}>
@@ -1273,11 +1257,6 @@ export function RouteExperience({
           <p data-hero-support className={styles.heroNote}>
             <ShieldCheck size={16} />
             {c.free}
-            {backgroundAvailable && <button type="button" className={styles.backgroundControl}
-              onClick={() => setBackgroundPaused(value => !value)} aria-pressed={backgroundPaused}>
-              {backgroundPaused ? <Play size={13} /> : <Pause size={13} />}
-              {backgroundLabels[locale][backgroundPaused ? 1 : 0]}
-            </button>}
           </p>
         </div>
         <RouteScene locale={locale} videoAvailable={mascotVideoAvailable} />
@@ -1361,7 +1340,6 @@ export function RouteExperience({
           <RegistrationButton locale={locale} />
         </div>
       </section>
-      </div>
     </main>
   );
 }
