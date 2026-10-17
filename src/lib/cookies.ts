@@ -3,7 +3,7 @@ export const CONSENT_EVENT = 'ventorme:cookie-consent';
 export const COOKIE_SETTINGS_EVENT = 'ventorme:cookie-settings';
 const CONSENT_LIFETIME = 180 * 24 * 60 * 60 * 1000;
 
-export type CookieConsent = { version: 1; preferences: boolean; updatedAt: number };
+export type CookieConsent = { version: 1; preferences: boolean; analytics: boolean; updatedAt: number };
 
 export function parseCookieConsent(raw: string | null, now = Date.now()): CookieConsent | null {
   if (!raw || raw.length > 512) return null;
@@ -14,7 +14,7 @@ export function parseCookieConsent(raw: string | null, now = Date.now()): Cookie
     if (consent.version !== 1 || typeof consent.preferences !== 'boolean' ||
         typeof consent.updatedAt !== 'number' || !Number.isFinite(consent.updatedAt) ||
         consent.updatedAt > now || now - consent.updatedAt >= CONSENT_LIFETIME) return null;
-    return { version: 1, preferences: consent.preferences, updatedAt: consent.updatedAt };
+    return { version: 1, preferences: consent.preferences, analytics: consent.analytics === true, updatedAt: consent.updatedAt };
   } catch { return null; }
 }
 
@@ -23,8 +23,8 @@ export function readCookieConsent(): CookieConsent | null {
   catch { return null; }
 }
 
-export function saveCookieConsent(preferences: boolean): void {
-  const consent: CookieConsent = { version: 1, preferences, updatedAt: Date.now() };
+export function saveCookieConsent(preferences: boolean, analytics = false): void {
+  const consent: CookieConsent = { version: 1, preferences, analytics, updatedAt: Date.now() };
   try {
     window.localStorage.setItem(CONSENT_KEY, JSON.stringify(consent));
     if (preferences) window.localStorage.setItem('ventorme.theme', document.documentElement.dataset.theme ?? 'light');

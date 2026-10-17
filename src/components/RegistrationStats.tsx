@@ -119,6 +119,15 @@ export function RegistrationStats() {
     } else setMessage("Не удалось выйти. Повтори позже.");
   }
   const labels = [
+    ["story_start", "Начали историю"],
+    ["story_step_1", "История: интересы"],
+    ["story_step_2", "История: сравнение"],
+    ["story_step_3", "История: план"],
+    ["story_step_4", "История: экзамены"],
+    ["story_step_5", "История: эссе"],
+    ["story_step_6", "История: финансирование"],
+    ["story_step_7", "История: документы"],
+    ["story_complete", "Завершили историю"],
     ["quiz_start", "Начали квиз"],
     ["quiz_complete", "Завершили квиз"],
     ["result_view", "Посмотрели маршрут"],

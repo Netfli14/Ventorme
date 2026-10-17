@@ -206,8 +206,8 @@
       "text": "Explore exam preparation if these tests are part of your route."
     },
     "grants": {
-      "title": "UNT grants",
-      "text": "Explore the UNT grant calculator if you are considering this path."
+      "title": "Scholarship search",
+      "text": "Compare funding, covered costs and eligibility."
     },
     "essays": {
       "title": "Essay support",
@@ -342,9 +342,10 @@
     "policy": "Cookie policy",
     "necessary": "Essential storage remembers your cookie choice for 180 days and your quiz progress for this session. Quiz answers are never added to the registration link.",
     "preferences": "Choosing “Accept” saves your theme on this device. With “Essential only”, the theme works without being saved between visits.",
-    "analytics": "Quiz stages, downloads and clicks are counted using a random route ID. Contacts and answers never enter analytics. Requests are stored separately on the server only with your consent. No advertising cookies.",
+    "analytics": "With separate consent, we count story and quiz stages using a random ID, without answers or contacts. The anonymous registration click counter uses no cookies. No advertising cookies.",
     "accept": "Accept",
     "essential": "Essential only",
-    "settings": "Cookie settings"
+    "settings": "Cookie settings",
+    "analyticsChoice": "Allow journey statistics (optional)"
   }
 }

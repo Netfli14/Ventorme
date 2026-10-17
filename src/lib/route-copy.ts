@@ -95,7 +95,7 @@ const ru = {
   downloadError: "Не удалось скачать карточку. Попробуй ещё раз.",
   startWith: "С чего начать в VentorMe",
   featureNote:
-    "Возможности проверены на ventorme.ai 16.10.2026. Ответы лендинга не переносятся в аккаунт автоматически.",
+    "Возможности проверены на ventorme.ai 17.10.2026. Ответы лендинга не переносятся в аккаунт автоматически.",
   leadTitle: "Продолжи со своего шага.",
   leadText:
     "Оставь заявку команде 004 на продолжение работы с маршрутом. Сохраним контакт и твой план для связи по заявке. Автоматическая отправка письма не подключена.",
@@ -390,7 +390,7 @@ const kk: Copy = {
   downloadError: "Карточка жүктелмеді. Қайта байқап көр.",
   startWith: "VentorMe-де неден бастау керек",
   featureNote:
-    "Мүмкіндіктер ventorme.ai сайтында 16.10.2026 тексерілді. Жауаптар аккаунтқа автоматты берілмейді.",
+    "Мүмкіндіктер ventorme.ai сайтында 17.10.2026 тексерілді. Жауаптар аккаунтқа автоматты берілмейді.",
   leadTitle: "Өз қадамыңнан жалғастыр.",
   leadText:
     "Жол картасымен жұмысты жалғастыру үшін 004 командасына өтінім қалдыр. Байланысу үшін контакт пен жоспарды сақтаймыз. Автоматты хат жіберу қосылмаған.",
@@ -539,7 +539,7 @@ const uz: Copy = {
   downloadError: "Yuklab bo‘lmadi. Qayta urin.",
   startWith: "VentorMe’da nimadan boshlash",
   featureNote:
-    "Funksiyalar ventorme.ai’da 16.10.2026 tekshirildi. Javoblar hisobga avtomatik uzatilmaydi.",
+    "Funksiyalar ventorme.ai’da 17.10.2026 tekshirildi. Javoblar hisobga avtomatik uzatilmaydi.",
   leadTitle: "O‘z qadamingdan davom et.",
   leadText:
     "Yo‘l xaritasi bilan davom etish uchun 004 jamoasiga so‘rov qoldir. Bog‘lanish uchun kontakt va rejangni saqlaymiz. Avtomatik email yuborish ulanmagan.",
@@ -788,7 +788,7 @@ const tr: Copy = {
   downloadError: "Kart indirilemedi. Tekrar dene.",
   startWith: "VentorMe’de nereden başlamalı",
   featureNote:
-    "Özellikler 16.10.2026 tarihinde ventorme.ai üzerinde kontrol edildi. Yanıtlar hesabına otomatik aktarılmaz.",
+    "Özellikler 17.10.2026 tarihinde ventorme.ai üzerinde kontrol edildi. Yanıtlar hesabına otomatik aktarılmaz.",
   leadTitle: "Sana uygun adımdan devam et.",
   leadText:
     "Rotan üzerinde çalışmaya devam etmek için 004 ekibine talep bırak. Yanıt vermek için iletişim bilgini ve planını kaydederiz. Otomatik e-posta gönderimi bağlı değil.",
@@ -848,3 +848,16 @@ const tr: Copy = {
   optional: "İsteğe bağlı",
 };
 export const routeCopy: Record<Locale, Copy> = { ru, en, kk, uz, zh, tr };
+
+
+routeCopy.ru.faqs[3][1] = "Нет. Квиз, результат и скачивание доступны без контактов. Для работы с платформой перейди в VentorMe и зарегистрируйся там.";
+
+routeCopy.en.faqs[3][1] = "No. The quiz, result and download require no contact details. Sign up in VentorMe to use the platform.";
+
+routeCopy.kk.faqs[3][1] = "Жоқ. Сауалнама, нәтиже және жүктеу байланыс деректерінсіз қолжетімді. Платформада жұмыс істеу үшін VentorMe-де тіркел.";
+
+routeCopy.uz.faqs[3][1] = "Yo‘q. So‘rov, natija va yuklash kontaktlarsiz ochiq. Platformadan foydalanish uchun VentorMe’da ro‘yxatdan o‘t.";
+
+routeCopy.zh.faqs[3][1] = "不需要。问卷、结果和下载无需联系方式。使用平台请前往 VentorMe 注册。";
+
+routeCopy.tr.faqs[3][1] = "Hayır. Anket, sonuç ve indirme iletişim bilgisi istemez. Platformu kullanmak için VentorMe’de kaydol.";

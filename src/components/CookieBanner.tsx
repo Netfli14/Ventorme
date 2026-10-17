@@ -9,16 +9,17 @@ export function CookieBanner({ locale }: { locale: Locale }) {
   const copy = dictionaries[locale].cookies;
   const [visible, setVisible] = useState(false);
   const [details, setDetails] = useState(false);
+  const [analytics, setAnalytics] = useState(false);
 
   useEffect(() => {
     setVisible(!readCookieConsent());
-    const reopen = () => { setDetails(true); setVisible(true); };
+    const reopen = () => { setAnalytics(readCookieConsent()?.analytics === true); setDetails(true); setVisible(true); };
     window.addEventListener(COOKIE_SETTINGS_EVENT, reopen);
     return () => window.removeEventListener(COOKIE_SETTINGS_EVENT, reopen);
   }, []);
 
   function choose(preferences: boolean) {
-    saveCookieConsent(preferences);
+    saveCookieConsent(preferences, preferences && analytics);
     setVisible(false);
     setDetails(false);
   }
@@ -31,6 +32,7 @@ export function CookieBanner({ locale }: { locale: Locale }) {
       {copy.policy}<ChevronDown size={16} className={details ? 'rotated' : ''} aria-hidden="true" />
     </button>
     {details && <div id="cookie-policy" className="cookie-banner__details"><p>{copy.necessary}</p><p>{copy.preferences}</p><p>{copy.analytics}</p></div>}
+    <label className="cookie-analytics"><input type="checkbox" checked={analytics} onChange={e => setAnalytics(e.target.checked)}/>{copy.analyticsChoice}</label>
     <div className="cookie-banner__actions">
       <button className="button button-primary" type="button" onClick={() => choose(true)}>{copy.accept}</button>
       <button className="button button-outline" type="button" onClick={() => choose(false)}>{copy.essential}</button>

@@ -6,13 +6,13 @@ import { REGISTER_URL, SITE_URL } from '@/lib/config';
 import { dictionaries, type Locale } from '@/lib/i18n';
 import { sendRegistrationClick } from '@/lib/registration-tracking';
 import { useRoute } from './RouteProvider';
-import { routeCopy } from '@/lib/route-copy';
+import { storyCopy } from '@/lib/story-copy';
 export function RegistrationButton({ locale, primary = false }: { locale: Locale; primary?: boolean }) {
   const d = dictionaries[locale], descriptionId = useId();
   const { track } = useRoute();
   const click = () => { sendRegistrationClick(); track('registration_click'); };
   if (!REGISTER_URL) return <span className="registration-unavailable"><button type="button" className={`button ${primary ? 'button-primary' : 'button-outline'}`} disabled aria-describedby={descriptionId}><LockKeyhole size={17} aria-hidden="true" />{d.common.register}</button><span className="sr-only" id={descriptionId}>{d.common.registerUnavailable}</span></span>;
-  return <a className={`button ${primary ? 'button-primary' : 'button-outline'}`} href={REGISTER_URL} onClick={click} onAuxClick={event => { if (event.button === 1) click(); }}>{routeCopy[locale].register}<ArrowUpRight size={18} aria-hidden="true" /></a>;
+  return <a className={`button ${primary ? 'button-primary' : 'button-outline'}`} href={REGISTER_URL} onClick={click} onAuxClick={event => { if (event.button === 1) click(); }}>{storyCopy[locale].register}<ArrowUpRight size={18} aria-hidden="true" /></a>;
 }
 export function QuizButton({ locale, stage, className = '' }: { locale: Locale; stage?: string; className?: string }) {
   return <Link className={`button button-primary ${className}`} href={`/${locale}/quiz/${stage ? `?stage=${stage}` : ''}`}>{dictionaries[locale].common.quiz}<ArrowRight size={18} aria-hidden="true" /></Link>;
