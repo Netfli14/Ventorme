@@ -206,8 +206,8 @@
       "text": "Bu imtihonlar kerak bo‘lsa, tayyorgarlik imkoniyatlarini o‘rgan."
     },
     "grants": {
-      "title": "Stipendiya qidirish",
-      "text": "Moliyalashtirish, xarajatlar qoplovi va ishtirok shartlarini solishtir."
+      "title": "UNT bo‘yicha grantlar",
+      "text": "Shu yo‘lni ko‘rib chiqsang, UNT grant kalkulyatorini o‘rgan."
     },
     "essays": {
       "title": "Essega yordam",
@@ -342,10 +342,9 @@
     "policy": "Cookies siyosati",
     "necessary": "Zarur saqlash tizimi cookies tanlovingni 180 kun, kvizdagi jarayonni esa shu sessiya davomida saqlaydi. Kviz javoblari ro‘yxatdan o‘tish havolasiga qo‘shilmaydi.",
     "preferences": "“Qabul qilish” tanlansa, sayt shu qurilmada tanlangan mavzuni eslab qoladi. “Faqat zarurlari” bilan mavzu keyingi tashriflar uchun saqlanmaydi.",
-    "analytics": "Alohida rozilik bilan hikoya va so‘rov bosqichlarini tasodifiy ID orqali hisoblaymiz, javob va kontaktlarsiz. Ro‘yxatdan o‘tish bosish sanog‘i cookies ishlatmaydi. Reklama cookies yo‘q.",
+    "analytics": "Savol bosqichlari, yuklashlar va bosishlar tasodifiy yo‘l ID orqali sanaladi. Kontakt va javoblar analitikaga kirmaydi. So‘rov roziliging bilan serverda alohida saqlanadi. Reklama cookies yo‘q.",
     "accept": "Qabul qilish",
     "essential": "Faqat zarurlari",
-    "settings": "Cookies sozlamalari",
-    "analyticsChoice": "O‘tish statistikasiga ruxsat (ixtiyoriy)"
+    "settings": "Cookies sozlamalari"
   }
 }

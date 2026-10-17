@@ -206,8 +206,8 @@
       "text": "Bu sınavlar rotan için gerekliyse hazırlık olanaklarını araştır."
     },
     "grants": {
-      "title": "Burs arama",
-      "text": "Finansmanı, karşılanan giderleri ve başvuru koşullarını karşılaştır."
+      "title": "UNT bursları",
+      "text": "Bu yolu düşünüyorsan UNT burs hesaplayıcısını incele."
     },
     "essays": {
       "title": "Başvuru yazısı desteği",
@@ -342,10 +342,9 @@
     "policy": "Çerez politikası",
     "necessary": "Gerekli depolama, çerez seçimini 180 gün ve test ilerlemeni bu oturum boyunca saklar. Test cevapları kayıt bağlantısına eklenmez.",
     "preferences": "“Kabul et” seçilirse site, seçtiğin temayı bu cihazda hatırlar. “Yalnızca gerekli” seçeneğinde tema sonraki ziyaretler için kaydedilmez.",
-    "analytics": "Ayrı izinle hikâye ve anket aşamalarını rastgele kimlikle sayarız; yanıt veya iletişim bilgisi gönderilmez. Anonim kayıt tıklama sayacı çerez kullanmaz. Reklam çerezi yoktur.",
+    "analytics": "Soru adımları, indirmeler ve tıklamalar rastgele rota ID’siyle sayılır. İletişim ve yanıtlar analize girmez. Talepler onayınla sunucuda ayrı saklanır. Reklam çerezi yok.",
     "accept": "Kabul et",
     "essential": "Yalnızca gerekli",
-    "settings": "Çerez ayarları",
-    "analyticsChoice": "Adım istatistiklerine izin ver (isteğe bağlı)"
+    "settings": "Çerez ayarları"
   }
 }

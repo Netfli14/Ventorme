@@ -4,6 +4,7 @@ import {
   useLayoutEffect,
   useRef,
   useState,
+  type FormEvent,
 } from "react";
 import { gsap } from "gsap";
 import { Flip } from "gsap/Flip";
@@ -43,8 +44,7 @@ import { options, limits, toggleChoice } from "@/lib/quiz";
 import { downloadRoute } from "@/lib/export-route";
 import { useRoute } from "./RouteProvider";
 import { useRouteMotion } from "./useRouteMotion";
-import { StoryExperience } from "./StoryExperience";
-import { storyCopy } from "@/lib/story-copy";
+import { MascotScrollIntro } from "./MascotScrollIntro";
 import { MessageText } from "./MessageText";
 import { RegistrationButton, ShareButton } from "./Actions";
 import styles from "./RouteExperience.module.css";
@@ -776,6 +776,151 @@ function IBBuilder({ locale }: { locale: Locale }) {
   );
 }
 
+function LeadForm({ locale }: { locale: Locale }) {
+  const c = routeCopy[locale],
+    { route: s, journey } = useRoute(),
+    [status, setStatus] = useState<
+      "idle" | "sending" | "success" | "error" | "invalid"
+    >("idle"),
+    [privacy, setPrivacy] = useState(false),
+    requestId = useRef(""),
+    payloadKey = useRef("");
+  async function submit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (status === "sending") return;
+    const form = e.currentTarget,
+      fd = new FormData(form),
+      name = String(fd.get("name") || "").trim(),
+      email = String(fd.get("email") || "").trim();
+    if (
+      !name ||
+      !email ||
+      !form.checkValidity() ||
+      fd.get("consent") !== "on"
+    ) {
+      setStatus("invalid");
+      form.reportValidity();
+      return;
+    }
+    const key = JSON.stringify({ name, email, answers: s, locale });
+    if (key !== payloadKey.current) {
+      payloadKey.current = key;
+      requestId.current = crypto.randomUUID();
+    }
+    setStatus("sending");
+    try {
+      const r = await fetch("/api/leads/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: requestId.current,
+          journeyId: journey(),
+          name,
+          email,
+          consent: true,
+          locale,
+          answers: s,
+          website: fd.get("website"),
+        }),
+      });
+      if (!r.ok) throw new Error("Not saved");
+      setStatus("success");
+      form.reset();
+    } catch {
+      setStatus("error");
+    }
+  }
+  return (
+    <aside className={styles.leadCard}>
+      <span className={styles.pastelGreen}>{c.optional}</span>
+      <h3>{c.leadTitle}</h3>
+      <p>{c.leadText}</p>
+      <form onSubmit={submit} method="post" action="/api/leads/" noValidate aria-busy={status === "sending"}>
+        <label>
+          {c.name}
+          <input
+            name="name"
+            autoComplete="given-name"
+            maxLength={80}
+            required
+            disabled={status === "success"}
+          />
+        </label>
+        <label>
+          {c.email}
+          <input
+            type="email"
+            name="email"
+            autoComplete="email"
+            maxLength={254}
+            required
+            disabled={status === "success"}
+          />
+        </label>
+        <label className={styles.honeypot} aria-hidden="true">
+          Website
+          <input name="website" tabIndex={-1} autoComplete="off" />
+        </label>
+        <label className={styles.consent}>
+          <input
+            type="checkbox"
+            name="consent"
+            required
+            disabled={status === "success"}
+          />
+          <span>{c.consent}</span>
+        </label>
+        <button
+          type="button"
+          className="text-button"
+          aria-expanded={privacy}
+          aria-controls="lead-privacy"
+          onClick={() => setPrivacy((v) => !v)}
+        >
+          {c.privacy}
+          <ChevronDown size={14} />
+        </button>
+        {privacy && (
+          <p id="lead-privacy" className={styles.smallNote}>
+            {c.privacyText}
+          </p>
+        )}
+        <button
+          className="button button-primary"
+          type="submit"
+          disabled={status === "sending" || status === "success"}
+        >
+          {status === "sending" ? (
+            c.sending
+          ) : status === "success" ? (
+            <>
+              <Check size={18} />
+              {c.done}
+            </>
+          ) : (
+            <>
+              {c.submit}
+              <ArrowUpRight size={18} />
+            </>
+          )}
+        </button>
+        <p
+          role={status === "error" || status === "invalid" ? "alert" : "status"}
+          className={styles.formStatus}
+        >
+          {status === "success"
+            ? c.success
+            : status === "error"
+              ? c.failed
+              : status === "invalid"
+                ? c.invalid
+                : ""}
+        </p>
+      </form>
+    </aside>
+  );
+}
+
 function MyRoute({ locale }: { locale: Locale }) {
   const c = routeCopy[locale],
     d = dictionaries[locale],
@@ -945,7 +1090,7 @@ function MyRoute({ locale }: { locale: Locale }) {
                 <RegistrationButton locale={locale} primary />
               </div>
             </div>
-
+            <LeadForm locale={locale} />
           </div>
         )}
       </div>
@@ -963,21 +1108,9 @@ export function RouteExperience({
   entry?: "home" | "quiz" | "result";
 }) {
   const c = routeCopy[locale],
-    { ready, track, route } = useRoute(),
-    [mode, setMode] = useState<"story" | "quiz">(entry === "home" ? "story" : "quiz"),
+    { ready, track } = useRoute(),
     scope = useRef<HTMLElement>(null);
   useRouteMotion(scope, locale);
-  const story = storyCopy[locale];
-  useEffect(() => {
-    if (entry !== "home") return;
-    try { if (sessionStorage.getItem("ventorme.experience.mode") === "quiz") setMode("quiz"); } catch {}
-  }, [entry]);
-  function openMode(next: "story" | "quiz") {
-    setMode(next);
-    try { sessionStorage.setItem("ventorme.experience.mode", next); } catch {}
-    if (next === "quiz") track("quiz_start"); else track("story_start");
-    requestAnimationFrame(() => go(next));
-  }
   useEffect(() => {
     if (ready && entry !== "home") {
       const timer = setTimeout(
@@ -989,45 +1122,90 @@ export function RouteExperience({
   }, [ready, entry]);
   return (
     <main id="main-content" className={styles.root} ref={scope}>
+      {entry === "home" && mascotVideoAvailable && <MascotScrollIntro locale={locale} />}
       <section id="content-start" className={`${styles.hero} container`}>
         <div className={styles.heroCopy} data-motion-section="hero">
           <p data-hero-support className={styles.heroEyebrow}>
             <span className={styles.pastelGreen}>10—12</span>
-            {story.eyebrow}
+            {c.eyebrow}
           </p>
           <h1>
-            <span className={styles.heroLine}><span data-hero-line>{story.title}</span></span>
-            <span className={`${styles.heroLine} ${styles.heroAccent}`}><span data-hero-line>{story.accent}</span></span>
+            <span className={styles.heroLine}><span data-hero-line>{c.title}</span></span>
+            <span className={`${styles.heroLine} ${styles.heroAccent}`}><span data-hero-line>{c.accent}</span></span>
           </h1>
           <span data-hero-underline className={styles.heroUnderline} aria-hidden="true" />
-          <p data-hero-support className={styles.heroLead}>{story.lead}</p>
+          <p data-hero-support className={styles.heroLead}>{c.lead}</p>
           <div data-hero-support className={styles.heroButtons}>
-            <button type="button" className="button button-primary" onClick={() => openMode("story")}>
-              {story.try}<ArrowUpRight size={19}/>
+            <button
+              className="button button-primary"
+              onClick={() => {
+                track("quiz_start");
+                go("quiz");
+              }}
+            >
+              {c.primary}
+              <ArrowUpRight size={19} />
             </button>
-            <RegistrationButton locale={locale}/>
+            <button className="text-button" onClick={() => go("ib-builder")}>
+              {c.secondary}
+              <ArrowRight size={17} />
+            </button>
           </div>
-          <button data-hero-support type="button" className="text-button" onClick={() => openMode("quiz")}>{story.quiz}<ArrowRight size={17}/></button>
-          <p data-hero-support className={styles.heroNote}><ShieldCheck size={16}/>{story.demo}</p>
+          <p data-hero-support className={styles.heroNote}>
+            <ShieldCheck size={16} />
+            {c.free}
+          </p>
         </div>
         <RouteScene locale={locale} videoAvailable={mascotVideoAvailable} />
       </section>
-      <section id="how" className={`${styles.scenarioChoice} container`} aria-labelledby="scenario-heading">
-        <h2 id="scenario-heading">{story.choosePath}</h2>
-        <p>{story.distinction}</p>
-        <div className={styles.scenarioButtons}>
-          <button type="button" aria-pressed={mode === "story"} aria-controls="story-panel" onClick={() => openMode("story")}>{story.storyTab}<ArrowRight size={18}/></button>
-          <button type="button" aria-pressed={mode === "quiz"} aria-controls="personal-panel" onClick={() => openMode("quiz")}>{story.quizTab}<ArrowRight size={18}/></button>
-        </div>
-      </section>
-      <div id="features">
-        <div id="story-panel" hidden={mode !== "story"}><StoryExperience locale={locale}/></div>
-        <div id="personal-panel" hidden={mode !== "quiz"}>
-          <Quiz locale={locale}/>
-          <MyRoute locale={locale}/>
-          {route.program === "ib" && route.completed && <IBBuilder locale={locale}/>}
+      <div id="how" className={styles.journeyStrip} data-motion-section="journey">
+        <div className="container">
+          {c.scene.map((t, i) => (
+            <div key={t} data-journey-step>
+              <span>0{i + 1}</span>
+              <strong>{t}</strong>
+              {i < 3 && <ArrowRight size={18} />}
+            </div>
+          ))}
         </div>
       </div>
+      <Quiz locale={locale} />
+      <IBBuilder locale={locale} />
+      <MyRoute locale={locale} />
+      <section id="features" className={`${styles.section} container`}>
+        <SectionLabel n="04">VENTORME</SectionLabel>
+        <div className={styles.sectionHeading}>
+          <h2>{c.platformTitle}</h2>
+          <p>{c.platformLead}</p>
+        </div>
+        <div className={styles.platformGrid}>
+          {c.featureTitles.map((title, i) => (
+            <div key={title} data-motion-section="feature">
+              <span
+                data-feature-number
+                className={
+                  [
+                    styles.pastelGreen,
+                    styles.pastelOrange,
+                    styles.pastelPurple,
+                  ][i]
+                }
+              >
+                0{i + 1}
+              </span>
+              <h3>{title}</h3>
+              <p>{c.featureTexts[i]}</p>
+              {i === 0 ? (
+                <Compass data-feature-icon size={50} strokeWidth={1} />
+              ) : i === 1 ? (
+                <GraduationCap data-feature-icon size={50} strokeWidth={1} />
+              ) : (
+                <BookOpen data-feature-icon size={50} strokeWidth={1} />
+              )}
+            </div>
+          ))}
+        </div>
+      </section>
       <section id="faq" className={`${styles.faq} container`}>
         <h2>{c.faqTitle}</h2>
         <div>
@@ -1052,8 +1230,8 @@ export function RouteExperience({
           <p>{c.finalText}</p>
         </div>
         <div>
-          <button className="button button-lime" onClick={() => openMode("quiz")}>
-            {story.quiz}
+          <button className="button button-lime" onClick={() => go("quiz")}>
+            {c.primary}
             <ArrowUpRight size={18} />
           </button>
           <RegistrationButton locale={locale} />

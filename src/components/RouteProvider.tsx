@@ -15,7 +15,6 @@ import {
   type RouteState,
   type RouteEvent,
 } from "@/lib/route-model";
-import { readCookieConsent } from "@/lib/cookies";
 import { readState } from "@/lib/storage";
 const KEY = "ventorme.route.v3";
 type Context = {
@@ -69,7 +68,7 @@ export function RouteProvider({ children }: { children: ReactNode }) {
   }, []);
   const track = useCallback(
     (event: RouteEvent) => {
-      if (readCookieConsent()?.analytics !== true || sent.current.has(event)) return;
+      if (sent.current.has(event)) return;
       const journeyId = journey();
       sent.current.add(event);
       // Analytics carries event names and a random route ID only: no answers or contacts.

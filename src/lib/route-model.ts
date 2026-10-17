@@ -108,9 +108,6 @@ export function makeRoute(s: RouteState, locale: Locale) {
   };
 }
 export const eventNames = [
-  "story_start",
-  "story_step_1", "story_step_2", "story_step_3", "story_step_4", "story_step_5", "story_step_6", "story_step_7",
-  "story_complete",
   "quiz_start",
   "quiz_complete",
   "result_view",
